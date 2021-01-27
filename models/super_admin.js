@@ -82,6 +82,7 @@ module.exports = function(sequelize, DataTypes) {
                         status: 401,
                         message: "Email or password is incorrect . Please make sure you enter a valid registered email with correct password"
                     });
+                    return
                 }
                 resolve(super_admin);
             }, function(e) {
@@ -94,8 +95,8 @@ module.exports = function(sequelize, DataTypes) {
     super_admin.findByToken = function(token) {
         return new Promise(function(resolve, reject) {
             try {
-                const decodedJWT = jwt.verify(token, process.env.super_admin_TOKEN_SECRET);
-                const bytes = cryptojs.AES.decrypt(decodedJWT.token, process.env.super_admin_TOKEN_CRYPTO_SECRET);
+                const decodedJWT = jwt.verify(token, process.env.TOKEN_SECRET);
+                const bytes = cryptojs.AES.decrypt(decodedJWT.token, process.env.CRYPTO_SECRET);
                 const tokenData = JSON.parse(bytes.toString(cryptojs.enc.Utf8));
 
                 super_admin.findById(tokenData.id).then(function(super_admin) {
@@ -123,10 +124,10 @@ module.exports = function(sequelize, DataTypes) {
                 id: this.get('id'),
                 type: type
             });
-            var encryptedData = cryptojs.AES.encrypt(stringData, process.env.super_admin_TOKEN_CRYPTO_SECRET).toString();
+            var encryptedData = cryptojs.AES.encrypt(stringData, process.env.CRYPTO_SECRET).toString();
             var token = jwt.sign({
                 token: encryptedData
-            }, process.env.super_admin_TOKEN_SECRET);
+            }, process.env.TOKEN_SECRET);
             return token;
         } catch (e) {
             throw e;

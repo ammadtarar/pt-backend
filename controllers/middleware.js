@@ -15,7 +15,6 @@ module.exports = function(db) {
             next();
         },
         errorHandler: function(e, req, res, next) {
-
             if (e instanceof db.Sequelize.ForeignKeyConstraintError) {
                 res.status(409).json({
                     message: "Incorrect ID passed. Please make sure the ID is valid and exists"
@@ -105,7 +104,7 @@ module.exports = function(db) {
                 })
                 .catch(function() {
                     res.status(401).send();
-                    return;
+
                 });
         }
     };

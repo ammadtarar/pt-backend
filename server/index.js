@@ -10,6 +10,11 @@ server.use(express.json());
 server.use(express.urlencoded());
 
 
+
+const super_admin_routes = require('../endpoints/super_admin/routes');
+
+server.use('/super_admin/', super_admin_routes);
+
 server.use(middleware.logger);
 server.use(middleware.errorHandler);
 

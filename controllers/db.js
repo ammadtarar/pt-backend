@@ -18,7 +18,7 @@ db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 db.Op = Sequelize.Op;
 
-db.super_admin = sequelize.import('../models/super-admin.js');
+db.super_admin = sequelize.import('../models/super_admin.js');
 
 
 module.exports = db;
