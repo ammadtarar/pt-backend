@@ -79,13 +79,15 @@ module.exports = function(db) {
             );
             next();
         },
-        optionalAuthentication: function(req, res, next) {
+        authenticateSuperAdmin: function(req, res, next) {
             var token = req.get("Authorization") || "";
             if (token === undefined || token === "") {
-                next();
+                res.status(401).send({
+                    message: "Please include token in header as Authentication"
+                });
                 return;
             }
-            db.user
+            db.super_admin
                 .findOne({
                     where: {
                         tokenHash: cryptojs.MD5(token).toString()
@@ -93,14 +95,16 @@ module.exports = function(db) {
                 })
                 .then(function(user) {
                     if (!user) {
-                        next();
+                        res.status(401).send({
+                            message: "Super admin not found , please make sure the token is valid . Re-login and try with the new login auth token."
+                        });
                         return;
                     }
                     req.user = user;
                     next();
                 })
                 .catch(function() {
-                    next();
+                    res.status(401).send();
                     return;
                 });
         }
