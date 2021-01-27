@@ -1,0 +1,49 @@
+{
+    "name": "pt_backend",
+    "version": "1.0.0",
+    "description": "Node.js backend for PushTalents",
+    "main": "backend.js",
+    "scripts": {
+        "start": "NODE_ENV=development node index.js",
+        "migrate": "npx sequelize-cli db:migrate",
+        "migrate:reset": "npx sequelize-cli db:migrate:undo:all && npm run migrate",
+        "test": "cross-env NODE_ENV=test jest --testTimeout=10000 --detectOpenHandles",
+        "pretest": "cross-env NODE_ENV=test npm run migrate:reset"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+ssh://git@bitbucket.org/sawatechnologies/pt_backend.git"
+    },
+    "keywords": [
+        "pushtalents"
+    ],
+    "dependencies": {
+        "bcrypt": "^3.0.4",
+        "body-parser": "^1.13.3",
+        "crypto": "^1.0.1",
+        "crypto-js": "^3.1.9-1",
+        "custom-env": "^2.0.1",
+        "dotenv": "^8.2.0",
+        "express": "^4.17.1",
+        "jsonwebtoken": "^8.0.1",
+        "mysql": "^2.17.1",
+        "mysql2": "^2.1.0",
+        "sequelize": "^5.19.0",
+        "sqlite3": "^4.2.0",
+        "underscore": "^1.8.3"
+    },
+    "jest": {
+        "testEnvironment": "node",
+        "coveragePathIgnorePatterns": [
+            "/node_modules/"
+        ]
+    },
+    "devDependencies": {
+        "cross-env": "^7.0.2",
+        "jest": "^26.0.1",
+        "supertest": "^4.0.2"
+    },
+    "author": "Sawa Technologies",
+    "license": "ISC",
+    "homepage": "https://bitbucket.org/sawatechnologies/pt_backend#readme"
+}
