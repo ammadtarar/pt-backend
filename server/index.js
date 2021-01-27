@@ -9,6 +9,18 @@ server.use(middleware.accessControl)
 server.use(express.json());
 server.use(express.urlencoded());
 
+const { I18n } = require('i18n');
+const i18n = new I18n();
+i18n.configure({
+    staticCatalog: {
+        en: require('../locales/en.json'),
+        fr: require('../locales/fr.json')
+    },
+    defaultLocale: 'en'
+})
+
+server.use(i18n.init)
+
 
 
 const super_admin_routes = require('../endpoints/super_admin/routes');

@@ -1,0 +1,7 @@
+{
+    "admin_created": "Super admin registered successfully",
+    "login_success": "Login successful",
+    "new_pwd_missing": "Please send new_password in request body",
+    "pwd_change_success": "Password changed successfully",
+    "pwd_change_fail": "Failed to change password"
+}

@@ -9,7 +9,7 @@ app.post('/register', middleware.authenticateSuperAdmin, (req, res, next) => {
     db.super_admin.create(body)
         .then((user) => {
             res.json({
-                message: "Super admin registered successfully",
+                message: res.__('admin_created'),
                 user: user.toPublicJSON()
             });
         })
@@ -38,7 +38,7 @@ app.post('/login', (req, res, next) => {
             var user = userInstance.toPublicJSON();
             user.token = token
             res.json({
-                message: "Login successful",
+                message: res.__('login_success'),
                 user: user
             })
         })
@@ -51,7 +51,7 @@ app.patch('/change_password', middleware.authenticateSuperAdmin, (req, res, next
     const body = underscore.pick(req.body, 'new_password');
     if (body === null || body === undefined || Object.keys(body).length === 0 || body.new_password === null || body.new_password === undefined || body.new_password.length <= 0) {
         res.status(422).send({
-            message: "Please send new_password in request body"
+            message: res.__('new_pwd_missing')
         });
         return
     }
@@ -66,11 +66,11 @@ app.patch('/change_password', middleware.authenticateSuperAdmin, (req, res, next
         .then((status) => {
             if (status) {
                 res.json({
-                    message: "Password changed successfully"
+                    message: res.__('pwd_change_success')
                 });
             } else {
                 res.json({
-                    message: "Failed to change password"
+                    message: res.__('pwd_change_fail')
                 });
             }
         })
