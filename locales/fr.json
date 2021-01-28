@@ -1,7 +1,7 @@
 {
-    "admin_created": "Super admin registered successfully",
-    "login_success": "Login successful",
-    "new_pwd_missing": "Please send new_password in request body",
-    "pwd_change_success": "Password changed successfully",
-    "pwd_change_fail": "Failed to change password"
+    "admin_created": "Super administrateur enregistré avec succès",
+    "login_success": "Connexion réussie",
+    "new_pwd_missing": "Veuillez envoyer new_password dans le corps de la demande ",
+    "pwd_change_success": "Le mot de passe a été changé avec succès",
+    "pwd_change_fail": "Échec de la modification du mot de passe"
 }
