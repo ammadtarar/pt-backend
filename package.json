@@ -4,7 +4,7 @@
     "description": "Node.js backend for PushTalents",
     "main": "backend.js",
     "scripts": {
-        "start": "NODE_ENV=development node index.js",
+        "start": "force=true NODE_ENV=development node index.js",
         "migrate": "npx sequelize-cli db:migrate",
         "migrate:reset": "npx sequelize-cli db:migrate:undo:all && npm run migrate",
         "test": "cross-env NODE_ENV=test jest --testTimeout=10000 --detectOpenHandles",
