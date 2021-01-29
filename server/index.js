@@ -21,11 +21,9 @@ i18n.configure({
 
 server.use(i18n.init)
 
-
-
-const super_admin_routes = require('../endpoints/super_admin/routes');
-
-server.use('/super_admin/', super_admin_routes);
+//ROUTES
+server.use('/super_admin/', require('../endpoints/super_admin/routes'));
+server.use('/company/', require('../endpoints/company/routes'));
 
 server.use(middleware.logger);
 server.use(middleware.errorHandler);

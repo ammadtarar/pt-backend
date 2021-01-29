@@ -35,6 +35,6 @@ db.Sequelize = Sequelize;
 db.Op = Sequelize.Op;
 
 db.super_admin = sequelize.import('../models/super_admin.js');
-
+db.company = sequelize.import('../models/company.js');
 
 module.exports = db;

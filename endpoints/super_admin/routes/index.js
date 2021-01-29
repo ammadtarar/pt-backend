@@ -80,4 +80,30 @@ app.patch('/change_password', middleware.authenticateSuperAdmin, (req, res, next
 
 });
 
+app.get('/list/all', middleware.authenticateSuperAdmin, (req, res, next) => {
+    var limit = parseInt(req.query.limit) || 10;
+    var page = parseInt(req.query.page) || 0;
+    if (page >= 1) {
+        page = page - 1;
+    }
+
+
+    db.super_admin.findAndCountAll({
+            limit: limit,
+            offset: limit * page,
+            order: [
+                ['createdAt', 'DESC']
+            ],
+            attributes: {
+                exclude: ['salt', 'password_hash', 'tokenHash']
+            },
+        })
+        .then((super_admins) => {
+            res.json(super_admins);
+        })
+        .catch((err) => {
+            next(err);
+        })
+});
+
 module.exports = app;

@@ -3,5 +3,12 @@
     "login_success": "Connexion réussie",
     "new_pwd_missing": "Veuillez envoyer new_password dans le corps de la demande ",
     "pwd_change_success": "Le mot de passe a été changé avec succès",
-    "pwd_change_fail": "Échec de la modification du mot de passe"
+    "pwd_change_fail": "Échec de la modification du mot de passe",
+    "company_name_missing": "Veuillez envoyer un nom de société dans le corps de la demande",
+    "company_created": "Entreprise créée avec succès",
+    "company_id_missing_params": "Veuillez fournir un identifiant d'entreprise dans l'URL de la demande",
+    "company_name_updated": "Le nom de l'entreprise a bien été mis à jour",
+    "company_name_update_failed": "Échec de la mise à jour du nom de l'entreprise",
+    "company_deleted_successfully": "La société a bien été supprimée",
+    "company_delete_failed": "Échec de la suppression de la société"
 }

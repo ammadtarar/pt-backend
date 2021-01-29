@@ -5,7 +5,7 @@ require('custom-env').env(true)
 const PORT = process.env.PORT || 3001;
 
 console.log(`Your port is ${PORT}`);
-const force = process.env.force || false;
+const force = process.env.FORCE || false;
 
 const app = require('./server');
 const db = require('./controllers/db.js');
@@ -17,6 +17,7 @@ db.sequelize.sync({
 }).then(function() {
     app.listen(PORT, function() {
         console.log('Express listening on PORT ' + PORT + ' ! ');
+        console.log("FORCE = ", force);
         if (force) {
             createRootAdmin();
         }

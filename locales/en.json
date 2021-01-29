@@ -3,5 +3,12 @@
     "login_success": "Login successful",
     "new_pwd_missing": "Please send new_password in request body",
     "pwd_change_success": "Password changed successfully",
-    "pwd_change_fail": "Failed to change password"
+    "pwd_change_fail": "Failed to change password",
+    "company_name_missing": "Please send a company name in the request body",
+    "company_created": "Company created successfully",
+    "company_id_missing_params": "Please provide a company ID in the request url",
+    "company_name_updated": "Company name updated successfully",
+    "company_name_update_failed": "Failed to update company name",
+    "company_deleted_successfully": "Company deleted successfully",
+    "company_delete_failed": "Failed to delete the company"
 }
