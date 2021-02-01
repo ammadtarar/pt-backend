@@ -35,6 +35,10 @@ db.Sequelize = Sequelize;
 db.Op = Sequelize.Op;
 
 db.super_admin = sequelize.import('../models/super_admin.js');
-db.company = sequelize.import('../models/company.js');
+let company = sequelize.import('../models/company.js');
+db.company = company;
+
+let hr_admin = sequelize.import('../models/hr_admin.js');
+hr_admin.belongsTo(db.company);
 
 module.exports = db;
