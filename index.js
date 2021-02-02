@@ -21,6 +21,20 @@ db.sequelize.sync({
         if (force) {
             createRootAdmin();
         }
+        // db.otp.create({
+        //     code : '123456',
+        // })
+        // .then((otp)=>{
+        //     console.log();
+        //     console.log();
+        //     console.log("================================");
+        //     console.log("=== OTP CREATE ===");
+        //     console.log("================================");
+        //     console.log(JSON.parse(JSON.stringify(otp)));
+        //     console.log("================================");
+        //     console.log();
+        //     console.log();
+        // })
     });
 });
 

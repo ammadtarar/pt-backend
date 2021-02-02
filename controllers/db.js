@@ -1,6 +1,7 @@
 require('custom-env').env(true)
 const Sequelize = require('sequelize');
 const { lastIndexOf } = require('underscore');
+const otp = require('../models/otp');
 
 
 var sequelize;
@@ -36,5 +37,44 @@ db.Op = Sequelize.Op;
 
 db.super_admin = sequelize.import('../models/super_admin.js');
 db.company = sequelize.import('../models/company.js');
+
+db.user = sequelize.import('../models/user.js');
+db.user.belongsTo(db.company);
+
+db.otp = sequelize.import('../models/otp.js');
+db.otp.belongsTo(db.user);
+
+db.job = sequelize.import('../models/jobs/job.js');
+db.candidate = sequelize.import('../models/jobs/candidate.js');
+db.job_referral = sequelize.import('../models/jobs/job_referral.js');
+db.job_share = sequelize.import('../models/jobs/job_share.js');
+
+db.job.belongsTo(db.company);
+db.job_referral.belongsTo(db.job);
+db.job_referral.belongsTo(db.user , { as : 'employee'});
+db.job_referral.belongsTo(db.candidate);
+db.job_share.belongsTo(db.user , { as : 'employee'});
+db.job_share.belongsTo(db.job);
+
+db.article = sequelize.import('../models/articles/article.js');
+db.article_share = sequelize.import('../models/articles/article_share.js');
+db.article.belongsTo(db.company);
+db.article_share.belongsTo(db.article);
+db.article_share.belongsTo(db.user , { as : 'employee'});
+
+db.quiz = sequelize.import('../models/quizzes/quiz.js');
+db.quiz_item = sequelize.import('../models/quizzes/quiz_item.js');
+db.quiz_result = sequelize.import('../models/quizzes/quiz_result.js');
+db.quiz.hasMany(db.quiz_item);
+db.quiz_result.belongsTo(db.quiz);
+db.quiz_result.belongsTo(db.user , { as : 'employee'});
+
+db.reward = sequelize.import('../models/rewards/reward.js');
+db.reward_redemption_request = sequelize.import('../models/rewards/reward_redemption_request.js');
+db.reward.belongsTo(db.company);
+db.reward.belongsTo(db.user , { as : 'hr'});
+db.reward_redemption_request.belongsTo(db.reward);
+db.reward_redemption_request.belongsTo(db.user , { as : 'employee'});
+
 
 module.exports = db;
