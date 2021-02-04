@@ -10,5 +10,19 @@
     "company_name_updated": "Company name updated successfully",
     "company_name_update_failed": "Failed to update company name",
     "company_deleted_successfully": "Company deleted successfully",
-    "company_delete_failed": "Failed to delete the company"
+    "company_delete_failed": "Failed to delete the company",
+    "company_users_list_missing": "Users list is missing from request body. Please send an array of users in the request body wrapped in an object. Example : { 'users_list' : [ {'first_name' : 'Robert'} , 'last_name' : 'Downey Jr' , 'type' : 'hr_admin or employee' , 'email' : 'robert@pushtalents.com' , 'position' : 'Manager' ]}",
+    "body_data_missing" : "Request body is missing",
+    "company_users_incorrect_data" : "Incorrect user data object. Please send first_name , last_name , position , user_type and email in user object",
+    "users_created" : "Users creaed successfully",
+    "not_a_valid_enum" : "{{value}} is not a valid value for {{field}}. Allowed values are : {{allowed_values}} ",
+    "email_missing" : "Please send the email in request body",
+    "email_not_found" : "User with email = {{email}} not found. Please make sure the email is correct. Please contact your company administration to register your email if they still haven't yet",
+    "email_otp_missing" : "Please send both email and otp in request body",
+    "incorrect_email_otp" : "Email or OTP is incorrect . Please make sure you enter a valid registered email with correct OTP",
+    "otp_expired" : "OTP expired. Please apply for a new otp and try again",
+    "token_missing" : "Please include token in header as Authentication",
+    "user_token_not_found" : "User not found, please make sure the token is valid. Re-login and try again",
+    "super_admin_not_found" : "Super admin not found , please make sure the token is valid . Re-login and try with the new login auth token",
+    "update_successful" : "Update Successful"
 }

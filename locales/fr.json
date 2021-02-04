@@ -10,5 +10,19 @@
     "company_name_updated": "Le nom de l'entreprise a bien été mis à jour",
     "company_name_update_failed": "Échec de la mise à jour du nom de l'entreprise",
     "company_deleted_successfully": "La société a bien été supprimée",
-    "company_delete_failed": "Échec de la suppression de la société"
+    "company_delete_failed": "Échec de la suppression de la société",
+    "company_users_list_missing": "La liste des utilisateurs est absente du corps de la demande. Veuillez envoyer un tableau d'utilisateurs dans le corps de la demande enveloppé dans un objet. Exemple: { 'users_list' : [ {'first_name' : 'Robert'} , 'last_name' : 'Downey Jr' , 'type' : 'hr_admin or employee' , 'email' : 'robert@pushtalents.com' , 'position' : 'Manager' ]}",
+    "body_data_missing" : "Le corps de la requête est manquant",
+    "company_users_incorrect_data" : "Objet de données utilisateur incorrect. Veuillez envoyer prénom, nom, position, type_utilisateur et e-mail dans l'objet utilisateur",
+    "users_created" : "Utilisateurs créés avec succès",
+    "not_a_valid_enum" : "{{value}} n'est pas une valeur valide pour {{field}}. Les valeurs autorisées sont: {{allowed_values}}",
+    "email_missing" : "Veuillez envoyer l'e-mail dans le corps de la demande",
+    "email_not_found" : "Utilisateur avec e-mail = {{email}} introuvable. Veuillez vous assurer que l'e-mail est correct. Veuillez contacter l'administration de votre entreprise pour enregistrer votre e-mail si ce n'est toujours pas le cas",
+    "email_otp_missing" : "Veuillez envoyer un e-mail et un otp dans le corps de la demande",
+    "incorrect_email_otp" : "L'e-mail ou OTP est incorrect. Veuillez vous assurer de saisir une adresse e-mail enregistrée valide avec le bon OTP",
+    "otp_expired" : "OTP a expiré. Veuillez demander un nouvel OTP et réessayer",
+    "token_missing" : "Veuillez inclure le jeton dans l'en-tête comme Authentication",
+    "user_token_not_found" : "Utilisateur introuvable, veuillez vous assurer que le jeton est valide. Reconnectez-vous et réessayez",
+    "super_admin_not_found" : "Super administrateur introuvable, veuillez vous assurer que le jeton est valide. Reconnectez-vous et essayez avec le nouveau jeton d'authentification de connexion",
+    "update_successful" : "Mise à jour réussie"
 }

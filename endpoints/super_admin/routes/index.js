@@ -96,7 +96,7 @@ app.get('/list/all', middleware.authenticateSuperAdmin, (req, res, next) => {
             ],
             attributes: {
                 exclude: ['salt', 'password_hash', 'tokenHash']
-            },
+            }
         })
         .then((super_admins) => {
             res.json(super_admins);

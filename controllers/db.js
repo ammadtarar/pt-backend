@@ -1,7 +1,6 @@
 require('custom-env').env(true)
 const Sequelize = require('sequelize');
 const { lastIndexOf } = require('underscore');
-const otp = require('../models/otp');
 
 
 var sequelize;
@@ -38,9 +37,6 @@ db.Op = Sequelize.Op;
 db.super_admin = sequelize.import('../models/super_admin.js');
 let company = sequelize.import('../models/company.js');
 db.company = company;
-
-let hr_admin = sequelize.import('../models/hr_admin.js');
-hr_admin.belongsTo(db.company);
 
 db.user = sequelize.import('../models/user.js');
 db.user.belongsTo(db.company);

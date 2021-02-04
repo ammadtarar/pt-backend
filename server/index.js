@@ -23,7 +23,7 @@ server.use(i18n.init)
 
 //ROUTES
 server.use('/super_admin/', require('../endpoints/super_admin/routes'));
-server.use('/company/', require('../endpoints/company/routes'));
+server.use('/company/', require('../endpoints/company'));
 
 server.use(middleware.logger);
 server.use(middleware.errorHandler);

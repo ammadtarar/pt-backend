@@ -51,12 +51,20 @@ module.exports = function(db) {
                             message = error.path + ' is required. Please complete ' + error.path + ' field';
                             break;
                         case 'not_unique':
-                            message = error.value + ' is taken. Please choose another ' + error.path;
+                            message = error.value != null ? error.value + ' is taken. Please choose another ' + error.path : error.message;
                     }
                     messages["message"] = message;
                 });
                 res.status(422).json(messages)
-            } else {
+            } else if(e instanceof EnumValidationError){
+                res.status(422).json({
+                    message: res.__('not_a_valid_enum' , {value : e.enteredValue , field : e.field , allowed_values : e.allowedValues}) 
+                })
+            }else {
+                console.log("");
+                console.log("");
+                console.log("=====");
+                console.log("instance of = " , e.name);
                 console.log(e);
                 console.log(e.status);
                 console.log(e.message);
@@ -82,7 +90,7 @@ module.exports = function(db) {
             var token = req.get("Authorization") || "";
             if (token === undefined || token === "") {
                 res.status(401).send({
-                    message: "Please include token in header as Authentication"
+                    message: res.__('token_missing')
                 });
                 return;
             }
@@ -95,7 +103,7 @@ module.exports = function(db) {
                 .then(function(user) {
                     if (!user) {
                         res.status(401).send({
-                            message: "Super admin not found , please make sure the token is valid . Re-login and try with the new login auth token."
+                            message: res.__('super_admin_not_found')
                         });
                         return;
                     }
@@ -104,8 +112,41 @@ module.exports = function(db) {
                 })
                 .catch(function() {
                     res.status(401).send();
-
                 });
+        },
+        authenticateCompanyUser: function(req , res , next){
+            console.log();
+            console.log();
+            console.log();
+            console.log("HELLLO");
+            console.log();
+            console.log();
+            console.log();
+            var token = req.get("Authorization") || "";
+            if (token === undefined || token === "") {
+                res.status(401).send({
+                    message: res.__('token_missing')
+                });
+                return;
+            }
+            db.user.findOne({
+                where : {
+                    tokenHash: cryptojs.MD5(token).toString()
+                }
+            })
+            .then(function(user){
+                if(!user){
+                    res.status(401).send({
+                        message: res.__('user_token_not_found')
+                    });
+                    return;
+                }
+                req.user = user;
+                next();
+            })
+            .catch(function() {
+                res.status(401).send();
+            });
         }
     };
 

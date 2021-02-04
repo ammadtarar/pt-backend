@@ -2,6 +2,9 @@ var bcrypt = require('bcrypt');
 var _ = require('underscore');
 var cryptojs = require('crypto-js');
 var jwt = require('jsonwebtoken');
+const db = require('../controllers/db');
+let allowed_user_types = ['hr_admin','employee'];
+const moment = require('moment');
 
 module.exports = function(sequelize, DataTypes) {
     var user = sequelize.define('user', {
@@ -26,12 +29,15 @@ module.exports = function(sequelize, DataTypes) {
             allowNull : true
         },
         user_type : {
-            type : DataTypes.ENUM,
-            values : [
-                'hr_admin',
-                'employee'
-            ],
-            defaultValue : 'hr_admin'
+            type : DataTypes.ENUM(allowed_user_types),
+            values : allowed_user_types,
+            defaultValue : allowed_user_types[0],
+            set(value){
+                if (!allowed_user_types.includes(value)) {
+                    throw new EnumValidationError('incorrect user_type' , 'user_type' , allowed_user_types , value);
+                }
+                this.setDataValue('user_type', value);
+            }
         },
         last_active_time : {
             type : DataTypes.DATE
@@ -81,32 +87,66 @@ module.exports = function(sequelize, DataTypes) {
         }
     });
 
-
-    user.authenticate = function(body) {
-        return new Promise(function(resolve, reject) {
-            if (typeof body.email !== 'string' || typeof body.password !== 'string') {;
+    user.authenticateByOtp = function(email , otp , dbOtp , res){
+        return new Promise(function(resolve , reject){
+            if(typeof email !== 'string' || typeof otp !== 'string'){
                 reject({
-                    status: 409,
-                    message: "Please send both email and password in request body"
+                    status : 409,
+                    message : res.__('email_otp_missing')
                 });
             }
             user.findOne({
-                where: {
-                    email: body.email
+                where : {
+                    email : email
                 }
-            }).then(function(user) {
-                if (!user || !bcrypt.compareSync(body.password, user.get(
-                        'password_hash'))) {
+            })
+            .then(function(user){
+                if(!user){
                     reject({
                         status: 401,
-                        message: "Email or password is incorrect . Please make sure you enter a valid registered email with correct password"
+                        message: res.__('incorrect_email_otp')
                     });
                     return
                 }
-                resolve(user);
-            }, function(e) {
-                reject();
-            });
+                dbOtp.findOne({
+                    where : {
+                        userId : user.id,
+                        already_used : false
+                    },
+                    order: [ [ 'createdAt', 'DESC' ]]
+                })
+                .then(function(otps){
+                    if(otps.code === otp){
+                        if(moment(new Date().toISOString()).diff(moment(otps.expiry) , 'days') > 30){
+                            reject({
+                                status: 404,
+                                message: res.__('otp_expired')
+                            });
+                            return
+                        }
+                        resolve(user);
+                        dbOtp.update({
+                            expiry: moment(new Date()).add(1 , 'month').toDate()
+                        }, {
+                            where : {
+                                id : otps.id
+                            }
+                        })
+                        .then(function(updateStatus){
+                            console.log("OTP Expiry update status = " , updateStatus);
+                        })
+
+                        
+                    }else{
+                        reject({
+                            status: 401,
+                            message: res.__('incorrect_email_otp')
+                        });
+                    }
+                },function(e) {
+                    reject();
+                });
+            })
         });
     };
 

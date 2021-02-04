@@ -19,7 +19,7 @@ module.exports = function(sequelize, DataTypes){
 
     otp.addHook('afterCreate', async (obj, options) => {
         await otp.update({ 
-            expiry: moment(obj.createdAt).add(15, 'm').toDate()
+            expiry: moment(obj.createdAt).add(5, 'minutes').toDate()
         }, {
           where: {
             id: obj.id

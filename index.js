@@ -1,6 +1,7 @@
 // require('dotenv').config();
 
 require('custom-env').env(true)
+require('./models/errors/custom-error');
 
 const PORT = process.env.PORT || 3001;
 
