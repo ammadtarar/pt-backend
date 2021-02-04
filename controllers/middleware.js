@@ -52,11 +52,20 @@ module.exports = function(db) {
                             break;
                         case 'not_unique':
                             message = error.value != null ? error.value + ' is taken. Please choose another ' + error.path : error.message;
+                            break;
+                        case 'isUrl':
+                            message = error.value != null ? error.value + ' is not a valid value for ' + error.path : error.message;
+                            break;
                     }
+                    console.log("=== e ===");
+                    console.log(e);
                     messages["message"] = message;
                 });
+                console.log("==e==");
+                console.log(e);
                 res.status(422).json(messages)
             } else if(e instanceof EnumValidationError){
+                
                 res.status(422).json({
                     message: res.__('not_a_valid_enum' , {value : e.enteredValue , field : e.field , allowed_values : e.allowedValues}) 
                 })
@@ -101,6 +110,7 @@ module.exports = function(db) {
                     }
                 })
                 .then(function(user) {
+                    
                     if (!user) {
                         res.status(401).send({
                             message: res.__('super_admin_not_found')
@@ -115,13 +125,6 @@ module.exports = function(db) {
                 });
         },
         authenticateCompanyUser: function(req , res , next){
-            console.log();
-            console.log();
-            console.log();
-            console.log("HELLLO");
-            console.log();
-            console.log();
-            console.log();
             var token = req.get("Authorization") || "";
             if (token === undefined || token === "") {
                 res.status(401).send({
@@ -147,6 +150,53 @@ module.exports = function(db) {
             .catch(function() {
                 res.status(401).send();
             });
+        },
+        authenticate: function(req , res , next){
+            var token = req.get("Authorization") || "";
+            if (token === undefined || token === "") {
+                res.status(401).send({
+                    message: res.__('token_missing')
+                });
+                return;
+            }
+            db.user.findOne({
+                where : {
+                    tokenHash: cryptojs.MD5(token).toString()
+                }
+            })
+            .then(function(user){
+                if(!user){
+                    db.super_admin
+                    .findOne({
+                        where: {
+                            tokenHash: cryptojs.MD5(token).toString()
+                        }
+                    })
+                    .then(function(companyUser) {
+                        
+                        if (!companyUser) {
+                            res.status(401).send({
+                                message: res.__('user_token_not_found')
+                            });
+                            return;
+                        }
+                        req.user = companyUser;
+                        req.isSuperAdmin = true;
+                        next();
+                    })
+                    .catch(function() {
+                        res.status(401).send();
+                    });
+                    return;
+                }
+                req.isSuperAdmin = false;
+                req.user = user;
+                next();
+            })
+            .catch(function() {
+                res.status(401).send();
+            });
+            
         }
     };
 

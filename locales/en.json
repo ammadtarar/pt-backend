@@ -24,5 +24,19 @@
     "token_missing" : "Please include token in header as Authentication",
     "user_token_not_found" : "User not found, please make sure the token is valid. Re-login and try again",
     "super_admin_not_found" : "Super admin not found , please make sure the token is valid . Re-login and try with the new login auth token",
-    "update_successful" : "Update Successful"
+    "update_successful" : "Update Successful",
+    "job_missing_data" : "Incomplete or incorrect data for job sent in request body. Please make sure you send {url , title , location , reward_point , companyId} in the request body",
+    "job_created_successfully" : "Job created successfully",
+    "employee_not_allowed" : "Only super admin and company hr_admin have access to this data",
+    "job_updated_successfully" : "Job updated sucessfully",
+    "job_update_failed" : "Failed to update job",
+    "job_id_missing_params" : "Please a job ID in the request url",
+    "job_share_link_generated" : "Job share link generated successfully",
+    "job_id_missing" : "Please send job ID in the url",
+    "job_share_not_found" : "No job share with ID = {{id}} was found",
+    "missing_candidate_data" : "Candidate data is missing or incomplete. Please send candidate's first_name , last_name and email in the request body",
+    "hr_admin_not_allowed" : "Company HR are not allowed to make job referrals. Only company employees can refer job via mobile app",
+    "job_referral_successful" : "Job referred successfully",
+    "referral_not_found" : "Job referral not found",
+    "job_referral_id_missing" : "Please send referral ID in request url"
 }

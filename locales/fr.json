@@ -24,5 +24,20 @@
     "token_missing" : "Veuillez inclure le jeton dans l'en-tête comme Authentication",
     "user_token_not_found" : "Utilisateur introuvable, veuillez vous assurer que le jeton est valide. Reconnectez-vous et réessayez",
     "super_admin_not_found" : "Super administrateur introuvable, veuillez vous assurer que le jeton est valide. Reconnectez-vous et essayez avec le nouveau jeton d'authentification de connexion",
-    "update_successful" : "Mise à jour réussie"
+    "update_successful" : "Mise à jour réussie",
+    "job_missing_data" : "Données incomplètes ou incorrectes pour le travail envoyé dans le corps de la demande. Veuillez vous assurer d'envoyer {url , title , location , reward_point , companyId} dans le corps de la demande",
+    "job_created_successfully" : "Emploi créé avec succès",
+    "employee_not_allowed" : "Seuls le super administrateur et la société hr_admin ont accès à ces données",
+    "job_updated_successfully" : "Travail mis à jour avec succès",
+    "job_update_failed" : "Échec de la mise à jour de la tâche",
+    "job_id_missing_params" : "Veuillez indiquer un identifiant de travail dans l'URL de la demande",
+    "job_share_link_generated" : "Lien de partage d'emploi généré avec succès",
+    "job_id_missing" : "Veuillez envoyer l'ID de partage de tâches dans l'URL",
+    "job_share_not_found" : "Aucun travail partagé avec l'ID = {{id}} n'a été trouvé",
+    "missing_candidate_data" : "Les données du candidat sont manquantes ou incomplètes. Veuillez envoyer au candidat first_name, last_name et email dans le corps de la demande ",
+    "hr_admin_not_allowed" : "Les RH de l'entreprise ne sont pas autorisés à faire des recommandations d'emploi. Seuls les employés de l'entreprise peuvent recommander un emploi via une application mobile",
+    "job_referral_successful" : "Emploi référé avec succès",
+    "referral_not_found" : "Référence d'emploi introuvable",
+    "job_referral_id_missing" : "Veuillez envoyer l'identifiant de parrainage dans l'URL de la demande"
+
 }

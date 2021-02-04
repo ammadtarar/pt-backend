@@ -19,10 +19,11 @@ module.exports = function(sequelize , DataTypes){
         },
         is_active : {
             type : DataTypes.BOOLEAN,
-            defaultValue : false
+            defaultValue : true
         },
         view_count : {
-            type : DataTypes.INTEGER
+            type : DataTypes.INTEGER,
+            defaultValue : 0
         }
     });
 
