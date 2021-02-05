@@ -512,23 +512,10 @@ async function sendCompanyUserOtp(email, otp) {
     });
 };
 
-async function sendCompanyUserOtp(candidate, employee , referralUrl) {
+async function sendJobReferral(candidate, employee , referralUrl) {
     console.log("referralUrl = referralUrl");
     new Promise((resolve, reject) => {
         
-
-
-
-
-
-
-            
-            console.log();
-            console.log();
-            console.log("__dirname = " , __dirname);
-            console.log();
-            console.log();
-
             readHTMLFile(__dirname + '/../htmls/referral_email.html', function(err, html) {
                 var template = handlebars.compile(html);
                 var replacements = {
@@ -558,20 +545,6 @@ async function sendCompanyUserOtp(candidate, employee , referralUrl) {
                     reject(err)
                 });
 
-
-
-                // var mailOptions = {
-                //     from: 'my@email.com',
-                //     to : 'some@email.com',
-                //     subject : 'test subject',
-                //     html : htmlToSend
-                //  };
-                // smtpTransport.sendMail(mailOptions, function (error, response) {
-                //     if (error) {
-                //         console.log(error);
-                //         callback(error);
-                //     }
-                // });
             });
 
 
@@ -584,5 +557,5 @@ async function sendCompanyUserOtp(candidate, employee , referralUrl) {
 
 
 module.exports.sendCompanyUserOtp = sendCompanyUserOtp;
-module.exports.sendCompanyUserOtp = sendCompanyUserOtp;
+module.exports.sendJobReferral = sendJobReferral;
 

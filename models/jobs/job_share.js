@@ -7,9 +7,6 @@ module.exports = function(sequelize , DataTypes){
     });
 
     job_share.prototype.updateViewCount = function() {
-        console.log();
-        console.log("=== updateViewCount");
-        console.log();
         job_share.update({
             view_count: (this.getDataValue('view_count') || 0) + 1
         }, {

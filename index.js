@@ -19,6 +19,16 @@ db.sequelize.sync({
     app.listen(PORT, function() {
         console.log('Express listening on PORT ' + PORT + ' ! ');
         console.log("FORCE = ", force);
+
+
+
+        
+
+
+
+
+       
+
         if (force) {
             createRootAdmin();
         }

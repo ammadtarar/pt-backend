@@ -25,7 +25,7 @@
     "user_token_not_found" : "User not found, please make sure the token is valid. Re-login and try again",
     "super_admin_not_found" : "Super admin not found , please make sure the token is valid . Re-login and try with the new login auth token",
     "update_successful" : "Update Successful",
-    "job_missing_data" : "Incomplete or incorrect data for job sent in request body. Please make sure you send {url , title , location , reward_point , companyId} in the request body",
+    "job_missing_data" : "Incomplete or incorrect data for job sent in request body. Please make sure you send {url , title , location , reward_point , companyId , referral_success_reward_type , referral_success_reward_value} in the request body",
     "job_created_successfully" : "Job created successfully",
     "employee_not_allowed" : "Only super admin and company hr_admin have access to this data",
     "job_updated_successfully" : "Job updated sucessfully",
@@ -38,5 +38,18 @@
     "hr_admin_not_allowed" : "Company HR are not allowed to make job referrals. Only company employees can refer job via mobile app",
     "job_referral_successful" : "Job referred successfully",
     "referral_not_found" : "Job referral not found",
-    "job_referral_id_missing" : "Please send referral ID in request url"
+    "job_referral_id_missing" : "Please send referral ID in request url",
+    "company_id_missing" : "Please send company ID in the request body as companyID",
+    "article_data_cannot_be_fetched" : "Unable to fetch data from the article URL. If you wish to manually add data for this article , then please send a custom=true in the request body along with title , thumb_url , companyId and is_active ",
+    "article_custom_data_missing" : "Please send article title and thumb_url in the request body",
+    "article_created_successfully" : "Article created successfully",
+    "article_url_missing" : "Article URL is missing from the request body",
+    "article_id_missing" : "Please send article ID in request body",
+    "referral_stage_updated" : "Job referral stage updated",
+    "referral_stage_update_failed" : "Failed to update job referral stage",
+    "hr_admin_no_wallet" : "Only company employees have wallet. HR Admins do not have wallets",
+    "employee_cannot_see_others_wallet" : "Company employees cannot access others wallet details",
+    "user_id_missing" : "Please send user ID in request url",
+    "user_not_found_with_id" : "No user with ID = {{id}} was found in your company. Please make sure you send the correct user ID",
+    "referral_stage_already_at" : "Nothing to update, job referral stage is already at {{stage}}"
 }

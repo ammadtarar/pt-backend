@@ -25,7 +25,7 @@
     "user_token_not_found" : "Utilisateur introuvable, veuillez vous assurer que le jeton est valide. Reconnectez-vous et réessayez",
     "super_admin_not_found" : "Super administrateur introuvable, veuillez vous assurer que le jeton est valide. Reconnectez-vous et essayez avec le nouveau jeton d'authentification de connexion",
     "update_successful" : "Mise à jour réussie",
-    "job_missing_data" : "Données incomplètes ou incorrectes pour le travail envoyé dans le corps de la demande. Veuillez vous assurer d'envoyer {url , title , location , reward_point , companyId} dans le corps de la demande",
+    "job_missing_data" : "Données incomplètes ou incorrectes pour le travail envoyé dans le corps de la demande. Veuillez vous assurer d'envoyer {url , title , location , reward_point , companyId , referral_success_reward_type , referral_success_reward_value} dans le corps de la demande",
     "job_created_successfully" : "Emploi créé avec succès",
     "employee_not_allowed" : "Seuls le super administrateur et la société hr_admin ont accès à ces données",
     "job_updated_successfully" : "Travail mis à jour avec succès",
@@ -38,6 +38,19 @@
     "hr_admin_not_allowed" : "Les RH de l'entreprise ne sont pas autorisés à faire des recommandations d'emploi. Seuls les employés de l'entreprise peuvent recommander un emploi via une application mobile",
     "job_referral_successful" : "Emploi référé avec succès",
     "referral_not_found" : "Référence d'emploi introuvable",
-    "job_referral_id_missing" : "Veuillez envoyer l'identifiant de parrainage dans l'URL de la demande"
+    "job_referral_id_missing" : "Veuillez envoyer l'identifiant de parrainage dans l'URL de la demande",
+    "company_id_missing" : "Veuillez envoyer l'ID de l'entreprise dans le corps de la demande en tant qu'ID de l'entreprise",
+    "article_data_cannot_be_fetched" : "Impossible de récupérer les données de l'URL de l'article.Si vous souhaitez ajouter manuellement des données pour cet article, veuillez envoyer un custom = true dans le corps de la requête avec title, thumb_url, companyId et is_active ",
+    "article_custom_data_missing" : "Veuillez envoyer le titre de l'article et thumb_url dans le corps de la demande",
+    "article_created_successfully" : "Article créé avec succès",
+    "article_url_missing" : "L'URL de l'article est absente du corps de la demande",
+    "article_id_missing" : "Veuillez envoyer l'ID de l'article dans le corps de la demande",
+    "referral_stage_updated" : "Mise à jour de l'étape de référence d'emploi",
+    "referral_stage_update_failed" : "Échec de la mise à jour de l'étape de référence du travail",
+    "hr_admin_no_wallet" : "Seuls les employés de l'entreprise ont un portefeuille. Les administrateurs RH n'ont pas de portefeuille",
+    "employee_cannot_see_others_wallet" : "Les employés de l'entreprise ne peuvent pas accéder aux autres détails du portefeuille",
+    "user_id_missing" : "Veuillez envoyer l'ID utilisateur dans l'URL de la demande",
+    "user_not_found_with_id" : "Aucun utilisateur avec l'ID = {{id}} n'a été trouvé dans votre entreprise. Veuillez vous assurer d'envoyer le bon ID utilisateur",
+    "referral_stage_already_at" : "Rien à mettre à jour, la phase de recommandation d'emploi est déjà à {{stage}}"
 
 }

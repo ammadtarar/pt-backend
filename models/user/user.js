@@ -2,8 +2,8 @@ var bcrypt = require('bcrypt');
 var _ = require('underscore');
 var cryptojs = require('crypto-js');
 var jwt = require('jsonwebtoken');
-const db = require('../controllers/db');
-let allowed_user_types = ['hr_admin','employee'];
+const db = require('../../controllers/db');
+let allowed_user_types = require('../constants.js').COMPANY_USER_TYPES;
 const moment = require('moment');
 
 module.exports = function(sequelize, DataTypes) {

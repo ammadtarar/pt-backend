@@ -38,7 +38,7 @@ db.super_admin = sequelize.import('../models/super_admin.js');
 let company = sequelize.import('../models/company.js');
 db.company = company;
 
-db.user = sequelize.import('../models/user.js');
+db.user = sequelize.import('../models/user/user.js');
 db.user.belongsTo(db.company);
 
 db.otp = sequelize.import('../models/otp.js');
@@ -75,6 +75,9 @@ db.reward.belongsTo(db.company);
 db.reward.belongsTo(db.user , { as : 'hr'});
 db.reward_redemption_request.belongsTo(db.reward);
 db.reward_redemption_request.belongsTo(db.user , { as : 'employee'});
+
+db.wallet_transaction = sequelize.import('../models/user/wallet_transaction.js');
+db.wallet_transaction.belongsTo(db.user);
 
 
 module.exports = db;
