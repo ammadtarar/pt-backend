@@ -170,7 +170,7 @@ app.post('/send/otp' , (req , res , next) => {
                 })
                 .then((otpRes)=>{
 
-                    emailer.sendCompanyUserOtp(user.email , otpRes.code)
+                    emailer.sendCompanyUserOtp(user.email , otpRes.code , user.first_name)
                     .then(function() {
                         res.json({
                             code : otpRes.code,
