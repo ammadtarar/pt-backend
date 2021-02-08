@@ -1,10 +1,28 @@
 const { mode } = require("crypto-js");
 
+const CONSTANTS = {
+    POINTS : 'points',
+    CASH : 'cash',
+    INCOMING : 'incoming',
+    OUTGOING : 'outgoing',
+    ARTICLE_CLICK : 'article_click',
+    JOB_REFERRAL : 'job_referral',
+    CANDIDATE_REFERRED : 'candidate_referred',
+    APPLICATION_RECEIVED: 'application_received',
+    UNDERGOING_INTERVIEW : 'undergoing_interview',
+    CANDIDATE_SELECTED : 'candidate_selected'
+
+
+}
+
+
+module.exports.CONSTANTS = CONSTANTS;
+
 module.exports.JOB_REFERRAL_STAGES = [
-    'candidate_referred',
-    'application_received',
-    'undergoing_interview',
-    'candidate_selected'
+    CONSTANTS.CANDIDATE_REFERRED,
+    CONSTANTS.APPLICATION_RECEIVED,
+    CONSTANTS.UNDERGOING_INTERVIEW,
+    CONSTANTS.CANDIDATE_SELECTED
 ];
 
 module.exports.COMPANY_USER_TYPES = [
@@ -13,8 +31,13 @@ module.exports.COMPANY_USER_TYPES = [
 ];
 
 module.exports.JOB_REFERRAL_SUCCESS_REWARD_TYPES = [
-    'points',
-    'cash'
+    CONSTANTS.POINTS,
+    CONSTANTS.CASH
+];
+
+module.exports.REWARD_TRANSACTION_SOURCE_TYPES = [
+    CONSTANTS.ARTICLE_CLICK,
+    CONSTANTS.JOB_REFERRAL
 ];
 
 module.exports.QUIZ_DIFFICULTY_LEVELS = [
@@ -29,6 +52,6 @@ module.exports.REWARD_REDEMPTION_STAUSES = [
 ];
 
 module.exports.WALLET_ACTIVITY_TYPE = [
-    'incoming',
-    'outgoing'
+    CONSTANTS.INCOMING,
+    CONSTANTS.OUTGOING
 ]

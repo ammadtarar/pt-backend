@@ -195,7 +195,7 @@ module.exports = function(sequelize, DataTypes) {
 
     user.prototype.toPublicJSON = function() {
         var json = this.toJSON();
-        return _.pick(json, 'id', 'email', 'createdAt', "first_name" , "last_name" , "position" );
+        return _.pick(json, 'id', 'email', 'createdAt', "first_name" , "last_name" , "position" , "user_type" );
     };
 
     return user;

@@ -149,8 +149,10 @@ getUserBalance = (userId)=>{
             group: ['transaction_type'],
         })
         .then((pointsResult)=>{
+            
             let points = JSON.parse(JSON.stringify(pointsResult))
-            var points_incoming , points_outgoing , cash_incoming , cash_outgoing= 0; 
+            
+            var points_incoming = 0 , points_outgoing = 0 , cash_incoming = 0 , cash_outgoing = 0; 
             points.forEach((element) => {
                 if(element.transaction_type === 'incoming'){
                     points_incoming = element.total;
@@ -158,6 +160,7 @@ getUserBalance = (userId)=>{
                     points_outgoing = element.total;
                 }
             });
+
             db.wallet_transaction.findAll({
                 where : {
                     userId : userId,
@@ -225,8 +228,66 @@ getUserWalletTransactions = (userId , query)=>{
             ],
     
             attributes : {
-                exclude : ['userId']
+                exclude : ['userId' , 'articleShareId' , 'jobReferralId']
+            },
+            include : [{
+                model : db.job_referral,
+                attributes : {
+                    exclude : ['jobId', 'companyId', 'employeeId' , 'candidateId']
+                },
+                include : [
+                    {
+                        model : db.job,
+                        as : "job",
+                        include : [
+                            {
+                                model : db.company,
+                                as : "company"
+                            }
+                        ]
+                    },
+                    {
+                        model : db.candidate,
+                        as : 'candidate',
+                        attributes : {
+                            exclude : ['is_archived']
+                        },
+                    }
+                ]
+            }, {
+                model : db.article_share,
+                 include : [
+            {
+                model : db.article,
+                as : "article",
+                attributes : {
+                    exclude : ['companyId']
+                },
+                include : [
+                    {
+                        model : db.company,
+                        as : 'company'
+                    }
+                ]
+            },
+            {
+                model : db.user,
+                as : 'employee',
+                include : [
+                    {
+                        model : db.company,
+                        as : "company"
+                    }
+                ],
+                attributes : {
+                    exclude : ['salt', 'password_hash', 'tokenHash' , 'companyId']
+                }
             }
+        ],
+        attributes : {
+            exclude : ['employeeId' , 'companyId' , 'articleId']
+        }
+            }]
         })
         .then((transactions)=>{
             resolve(transactions);

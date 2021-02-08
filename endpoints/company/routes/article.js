@@ -3,7 +3,7 @@ const app = Router();
 const underscore = require('underscore');
 const db = require('../../../controllers/db.js');
 const middleware = require('../../../controllers/middleware.js')(db);
-
+const CONSTANTS = require('../../../models/constants');
 
 
 app.post('/create' , middleware.authenticate , async (req , res , next)=>{
@@ -176,5 +176,165 @@ app.get('/:id' , (req , res , next)=>{
     })
 });
 
+app.post('/:id/generate/share/link' , middleware.authenticateCompanyUser , (req , res , next)=>{
+    var id = parseInt(req.params.id);
+    if (id === undefined || id === null || id <= 0) {
+        res.status(422).send({
+            message: res.__('article_id_missing')
+        });
+        return;
+    }
+
+    console.log(req.user);
+
+    db.article_share.findOne({
+        where : {
+            employeeId : req.user.id,
+            articleId : id
+        }
+    })
+    .then((shareRes)=>{
+        if(shareRes){
+            res.json({
+                message : res.__('article_share_link_generated'),
+                shareId : shareRes.id,
+                url : process.env.BASE_URL + 'company/article/share/' + String(shareRes.id)
+            });
+        }else{
+            db.article_share.create({
+                employeeId : req.user.id,
+                articleId : id
+            })
+            .then((response)=>{
+                res.json({
+                    message : res.__('article_share_link_generated'),
+                    shareId : response.id,
+                    url : process.env.BASE_URL + 'company/article/share/' + String(response.id)
+                });
+            })
+        }
+    })
+    .catch((err)=>{
+        next(err);
+    });
+});
+
+
+app.get('/share/:id' , (req , res , next)=>{
+    var id = parseInt(req.params.id);
+    if (id === undefined || id === null || id <= 0) {
+        res.status(422).send({
+            message: res.__('article_id_missing')
+        });
+        return;
+    }
+
+    db.article_share.findOne({
+        where : {
+            id : id
+        },
+        include : [
+            {
+                model : db.article,
+                as : "article"
+            }
+
+        ]
+    })
+    .then((response)=>{
+        if(response){
+            response.updateViewCount();
+            res.statusCode = 302;
+            res.setHeader("Location", response.article.original_url);
+            res.end();
+
+            db.wallet_transaction.create({
+                reward_type : CONSTANTS.CONSTANTS.POINTS,
+                reward_value : 1,
+                transaction_type : CONSTANTS.CONSTANTS.INCOMING,
+                userId : response.employeeId,
+                transaction_source : CONSTANTS.CONSTANTS.ARTICLE_CLICK,
+                articleShareId : response.article.id
+            })
+            .then((walletTransaction)=>{
+                console.log();
+                console.log();
+                console.log("======");
+                console.log("Article share click points added to user wallet");
+                console.log(walletTransaction);
+                console.log();
+                console.log();
+            });
+
+        }else{
+            res.status(404).json({
+                message : res.__("article_share_not_found" , {id : id})
+            });
+        }
+    })
+    .catch((err)=>{
+        next(err);
+    });
+});
+
+
+app.get('/share/:id/data' , middleware.authenticate , (req , res , next)=>{
+    var id = parseInt(req.params.id);
+    if (id === undefined || id === null || id <= 0) {
+        res.status(422).send({
+            message: res.__('article_id_missing')
+        });
+        return;
+    }
+
+    db.article_share.findOne({
+        where : {
+            id : id
+        },
+        include : [
+            {
+                model : db.article,
+                as : "article",
+                attributes : {
+                    exclude : ['companyId']
+                },
+                include : [
+                    {
+                        model : db.company,
+                        as : 'company'
+                    }
+                ]
+            },
+            {
+                model : db.user,
+                as : 'employee',
+                include : [
+                    {
+                        model : db.company,
+                        as : "company"
+                    }
+                ],
+                attributes : {
+                    exclude : ['salt', 'password_hash', 'tokenHash' , 'companyId']
+                }
+            }
+        ],
+        attributes : {
+            exclude : ['employeeId' , 'companyId' , 'articleId']
+        }
+    })
+    .then((response)=>{
+        if(response){
+            res.json(response)
+        }else{
+            res.status(404).json({
+                message : res.__("article_share_not_found" , {id : id})
+            });
+        }
+    })
+    .catch((err)=>{
+        next(err);
+    });
+});
 
 module.exports = app;

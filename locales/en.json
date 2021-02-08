@@ -51,5 +51,7 @@
     "employee_cannot_see_others_wallet" : "Company employees cannot access others wallet details",
     "user_id_missing" : "Please send user ID in request url",
     "user_not_found_with_id" : "No user with ID = {{id}} was found in your company. Please make sure you send the correct user ID",
-    "referral_stage_already_at" : "Nothing to update, job referral stage is already at {{stage}}"
+    "referral_stage_already_at" : "Nothing to update, job referral stage is already at {{stage}}",
+    "article_share_link_generated" : "Article share link generated successfully",
+    "article_share_not_found" : "Shared article not found"
 }

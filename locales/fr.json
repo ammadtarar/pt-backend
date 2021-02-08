@@ -51,6 +51,8 @@
     "employee_cannot_see_others_wallet" : "Les employés de l'entreprise ne peuvent pas accéder aux autres détails du portefeuille",
     "user_id_missing" : "Veuillez envoyer l'ID utilisateur dans l'URL de la demande",
     "user_not_found_with_id" : "Aucun utilisateur avec l'ID = {{id}} n'a été trouvé dans votre entreprise. Veuillez vous assurer d'envoyer le bon ID utilisateur",
-    "referral_stage_already_at" : "Rien à mettre à jour, la phase de recommandation d'emploi est déjà à {{stage}}"
+    "referral_stage_already_at" : "Rien à mettre à jour, la phase de recommandation d'emploi est déjà à {{stage}}",
+    "article_share_link_generated" : "Lien de partage d'article généré avec succès",
+    "article_share_not_found" : "Article partagé introuvable"
 
 }

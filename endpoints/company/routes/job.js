@@ -5,6 +5,7 @@ const db = require('../../../controllers/db.js');
 const middleware = require('../../../controllers/middleware.js')(db);
 const emailer = require('../../../controllers/emailer.js');
 const REFERRAL_STAGES = require('../../../models/constants.js').JOB_REFERRAL_STAGES;
+const CONSTANTS = require('../../../models/constants');
 
 app.post('/create' , middleware.authenticateSuperAdmin , (req , res , next)=>{
     
@@ -227,6 +228,43 @@ app.get('/share/:id' , (req , res , next)=>{
         },
         include: [
             {
+                model : db.job,
+                as : "job"
+            }
+        ]
+    })
+    .then((response)=>{
+        if(response){
+            response.updateViewCount();
+            res.statusCode = 302;
+            res.setHeader("Location", response.job.url);
+            res.end();
+        }else{
+            res.status(404).json({
+                message : res.__("job_share_not_found" , {id : id})
+            });
+        }
+        
+    })
+    .catch((err)=>{
+        next(err)
+    })
+});
+
+app.get('/share/:id/data' , middleware.authenticate , (req , res , next)=>{
+    var id = parseInt(req.params.id);
+    if (id === undefined || id === null || id <= 0) {
+        res.status(422).send({
+            message: res.__('job_id_missing')
+        });
+        return;
+    }
+    db.job_share.findOne({
+        where : {
+            id : id
+        },
+        include: [
+            {
                 model: db.user,
                 as: "employee",
                 include : [
@@ -259,8 +297,6 @@ app.get('/share/:id' , (req , res , next)=>{
     })
     .then((response)=>{
         if(response){
-            response.updateViewCount();
-            response.view_count = response.view_count + 1
             res.json(response)
         }else{
             res.status(404).json({
@@ -275,6 +311,8 @@ app.get('/share/:id' , (req , res , next)=>{
 });
 
 app.post('/:id/generate/referral' , middleware.authenticateCompanyUser , (req , res , next)=>{
+
+
     if(!req.isSuperAdmin && req.user.user_type === 'hr_admin'){
         res.status(422).send({
             message: res.__('hr_admin_not_allowed')
@@ -327,11 +365,15 @@ app.post('/:id/generate/referral' , middleware.authenticateCompanyUser , (req , 
                 referralUrl : referralUrl
             });
 
+            
+
             db.wallet_transaction.create({
-                reward_type : 'points',
+                reward_type : CONSTANTS.CONSTANTS.POINTS,
                 reward_value : 100,
-                transaction_type : 'incoming',
-                userId : req.user.id
+                transaction_type : CONSTANTS.CONSTANTS.INCOMING,
+                userId : req.user.id,
+                transaction_source : CONSTANTS.CONSTANTS.JOB_REFERRAL,
+                jobReferralId : referral[0].id
             })
             .then((transResult)=>{
                 emailer.sendJobReferral(candidate , req.user , referralUrl)
@@ -380,7 +422,6 @@ app.get('/referral/:id' , (req , res , next)=>{
     })
     .then((referral)=>{
         if(referral){
-
             res.statusCode = 302;
             res.setHeader("Location", referral.job.url);
             res.end();
@@ -515,24 +556,17 @@ app.post('/referral/:id/update/status' , middleware.authenticateCompanyUser , (r
                     message : res.__('referral_stage_update_failed')
                 });
             }
-    
-    
-            
                 var reward_type , reward_value;
-                if(body.stage.valueOf() === 'candidate_referred'){// 100 PTS
-                    console.log("STAGE 1");
-                    reward_type = "points";
+                if(body.stage.valueOf() === CONSTANTS.CONSTANTS.CANDIDATE_REFERRED){// 100 PTS
+                    reward_type = CONSTANTS.CONSTANTS.POINTS;
                     reward_value = 100;
-                }else if(body.stage.valueOf() === 'application_received'){// 300 PTS
-                    console.log("STAGE 2");
-                    reward_type = "points";
+                }else if(body.stage.valueOf() === CONSTANTS.CONSTANTS.APPLICATION_RECEIVED){// 300 PTS
+                    reward_type = CONSTANTS.CONSTANTS.POINTS;
                     reward_value = 300;
-                }else if(body.stage.valueOf() === 'undergoing_interview'){// 1000 PTS
-                    console.log("STAGE 3");
-                    reward_type = "points";
+                }else if(body.stage.valueOf() === CONSTANTS.CONSTANTS.UNDERGOING_INTERVIEW){// 1000 PTS
+                    reward_type = CONSTANTS.CONSTANTS.POINTS;
                     reward_value = 1000;
                 }else{// candidate_selected -  DEFINED IN JOB
-                    console.log("STAGE 4");
                     let job = await db.job.findOne({ where : { id : job_referral.jobId}})
                     reward_type = job.referral_success_reward_type;
                     reward_value = job.referral_success_reward_value;
@@ -541,18 +575,15 @@ app.post('/referral/:id/update/status' , middleware.authenticateCompanyUser , (r
                 db.wallet_transaction.create({
                     reward_type : reward_type,
                     reward_value : reward_value,
-                    transaction_type : 'incoming',
-                    userId : job_referral.employeeId
+                    transaction_type : CONSTANTS.CONSTANTS.INCOMING,
+                    userId : job_referral.employeeId,
+                    transaction_source : CONSTANTS.CONSTANTS.JOB_REFERRAL,
+                    jobReferralId : job_referral.id
                 })
                 .then((transResult)=>{
                     console.log(transResult);
-                })
-               
-            // TODO
-            // create wallet and add points
-        })
-
-
+                });
+        });
 
     })   
     .catch((err)=>{
