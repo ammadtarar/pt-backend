@@ -46,6 +46,8 @@ app.get('/list/all' , middleware.authenticate , (req , res , next)=>{
         return;
     }
 
+    
+
     var limit = parseInt(req.query.limit) || 10;
     var page = parseInt(req.query.page) || 0;
     if (page >= 1) {
@@ -54,10 +56,16 @@ app.get('/list/all' , middleware.authenticate , (req , res , next)=>{
 
     var where = {};
 
-    let companyId = parseInt(req.query.companyId) || 0;
-    if(companyId > 0){
-        where.companyId = companyId;
+    if(!req.isSuperAdmin){
+        where.companyId = req.user.companyId;
+    }else{
+        let companyId = parseInt(req.query.companyId) || 0;
+        if(companyId > 0){
+            where.companyId = companyId;
+        }
     }
+
+    
 
     if(req.query.hasOwnProperty("is_active")){
         where.is_active = req.query.is_active === 'true';
@@ -386,7 +394,7 @@ app.post('/:id/generate/referral' , middleware.authenticateCompanyUser , (req , 
                     console.log("=====");
 
                 })
-            })
+            });
 
             
         });

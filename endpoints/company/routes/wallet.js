@@ -1,9 +1,7 @@
 const { Router } = require('express');
 const app = Router();
-const underscore = require('underscore');
 const db = require('../../../controllers/db.js');
 const middleware = require('../../../controllers/middleware.js')(db);
-const emailer = require('../../../controllers/emailer.js');
 
 
 

@@ -53,5 +53,12 @@
     "user_not_found_with_id" : "No user with ID = {{id}} was found in your company. Please make sure you send the correct user ID",
     "referral_stage_already_at" : "Nothing to update, job referral stage is already at {{stage}}",
     "article_share_link_generated" : "Article share link generated successfully",
-    "article_share_not_found" : "Shared article not found"
+    "article_share_not_found" : "Shared article not found",
+    "reward_data_missing" : "Reward data is missing. Please send title and points_required in request body",
+    "reward_created_successfully" : "Reward created successfully",
+    "reward_id_missing" : "Reward ID is missing from the request url",
+    "reward_missing" : "Reward not found",
+    "reward_not_from_your_company" : "This reward does not belong to your company. You can only update rewards that belong to your own company",
+    "reward_updated_successfully" : "Reward updated successfully",
+    "reward_update_failed" : "Failed to update reward"
 }

@@ -53,6 +53,12 @@
     "user_not_found_with_id" : "Aucun utilisateur avec l'ID = {{id}} n'a été trouvé dans votre entreprise. Veuillez vous assurer d'envoyer le bon ID utilisateur",
     "referral_stage_already_at" : "Rien à mettre à jour, la phase de recommandation d'emploi est déjà à {{stage}}",
     "article_share_link_generated" : "Lien de partage d'article généré avec succès",
-    "article_share_not_found" : "Article partagé introuvable"
-
+    "article_share_not_found" : "Article partagé introuvable",
+    "reward_data_missing" : "Les données de récompense sont manquantes. Veuillez envoyer le titre et les points_requis dans le corps de la demande",
+    "reward_created_successfully" : "Récompense créée avec succès",
+    "reward_id_missing" : "L'ID de récompense est manquant dans l'URL de la demande",
+    "reward_missing" : "Récompense non trouvée",
+    "reward_not_from_your_company" : "Cette récompense n'appartient pas à votre entreprise. Vous ne pouvez mettre à jour que les récompenses qui appartiennent à votre propre entreprise",
+    "reward_updated_successfully" : "Récompense mise à jour avec succès",
+    "reward_update_failed" : "Échec de la mise à jour de la récompense"
 }

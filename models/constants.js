@@ -7,11 +7,15 @@ const CONSTANTS = {
     OUTGOING : 'outgoing',
     ARTICLE_CLICK : 'article_click',
     JOB_REFERRAL : 'job_referral',
+    REWARD_CLAIM : 'reward_claim',
     CANDIDATE_REFERRED : 'candidate_referred',
     APPLICATION_RECEIVED: 'application_received',
     UNDERGOING_INTERVIEW : 'undergoing_interview',
-    CANDIDATE_SELECTED : 'candidate_selected'
-
+    CANDIDATE_SELECTED : 'candidate_selected',
+    REQUESTED : 'requested',
+    APPROVED : 'approved',
+    HR_ADMIN : 'hr_admin',
+    EMPLOYEE : 'employee'
 
 }
 
@@ -26,8 +30,8 @@ module.exports.JOB_REFERRAL_STAGES = [
 ];
 
 module.exports.COMPANY_USER_TYPES = [
-    'hr_admin',
-    'employee'
+    CONSTANTS.HR_ADMIN,
+    CONSTANTS.EMPLOYEE
 ];
 
 module.exports.JOB_REFERRAL_SUCCESS_REWARD_TYPES = [
@@ -37,7 +41,8 @@ module.exports.JOB_REFERRAL_SUCCESS_REWARD_TYPES = [
 
 module.exports.REWARD_TRANSACTION_SOURCE_TYPES = [
     CONSTANTS.ARTICLE_CLICK,
-    CONSTANTS.JOB_REFERRAL
+    CONSTANTS.JOB_REFERRAL,
+    CONSTANTS.REWARD_CLAIM
 ];
 
 module.exports.QUIZ_DIFFICULTY_LEVELS = [
@@ -47,8 +52,8 @@ module.exports.QUIZ_DIFFICULTY_LEVELS = [
 ];
 
 module.exports.REWARD_REDEMPTION_STAUSES = [
-    'requested',
-    'approved'
+    CONSTANTS.REQUESTED,
+    CONSTANTS.APPROVED
 ];
 
 module.exports.WALLET_ACTIVITY_TYPE = [

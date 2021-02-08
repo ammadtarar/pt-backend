@@ -96,6 +96,10 @@ app.get('/list/all' , middleware.authenticate , (req , res , next)=>{
 
     var where = {};
 
+    if(!req.isSuperAdmin){
+        where.companyId = req.user.companyId;
+    }
+
 
     if(req.query.hasOwnProperty("is_active")){
         where.is_active = req.query.is_active === 'true';
