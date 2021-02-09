@@ -229,6 +229,17 @@ getUserWalletTransactions = (userId , query)=>{
                 exclude : ['userId' , 'articleShareId' , 'jobReferralId']
             },
             include : [{
+                model : db.reward_redemption_request,
+                attributes : {
+                    exclude : ['rewardId', 'employeeId']
+                },
+                include : [
+                    {
+                        model : db.reward,
+                        as : 'reward'
+                    }
+                ]
+            },{
                 model : db.job_referral,
                 attributes : {
                     exclude : ['jobId', 'companyId', 'employeeId' , 'candidateId']
@@ -298,3 +309,4 @@ getUserWalletTransactions = (userId , query)=>{
 
 
 module.exports = app;
+module.getUserBalance = getUserBalance;

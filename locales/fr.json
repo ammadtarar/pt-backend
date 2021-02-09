@@ -60,5 +60,13 @@
     "reward_missing" : "Récompense non trouvée",
     "reward_not_from_your_company" : "Cette récompense n'appartient pas à votre entreprise. Vous ne pouvez mettre à jour que les récompenses qui appartiennent à votre propre entreprise",
     "reward_updated_successfully" : "Récompense mise à jour avec succès",
-    "reward_update_failed" : "Échec de la mise à jour de la récompense"
+    "reward_update_failed" : "Échec de la mise à jour de la récompense",
+    "only_employee_allowed" : "Seuls les employés de l'entreprise sont autorisés à utiliser ce service",
+    "reward_already_redeemed" : "Vous avez déjà utilisé cette récompense. Vous ne pouvez pas utiliser une récompense plus d'une fois",
+    "reward_request_successful" : "Demande d'échange de récompense envoyée avec succès. Veuillez attendre que le service des ressources humaines de votre entreprise l'examine et l'approuve",
+    "only_company_hr_allowed" : "Seuls les RH de l'entreprise ont accès à ce service",
+    "reward_status_missing" : "Statut de mise à jour de la récompense manquant dans le corps de la demande. Veuillez envoyer le statut dans le corps de la demande. L'état autorisé est requested ou approved",
+    "redeem_request_not_found" : "Demande d'échange introuvable",
+    "redeem_request_already_approved" : "Cette demande d'utilisation est déjà approuvée",
+    "not_enough_points" : "Vous n'avez pas assez de points dans votre portefeuille"
 }

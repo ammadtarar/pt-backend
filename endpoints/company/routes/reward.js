@@ -1,13 +1,15 @@
 const { Router } = require('express');
 const app = Router();
 const underscore = require('underscore');
+const { reward_redemption_request } = require('../../../controllers/db.js');
 const db = require('../../../controllers/db.js');
 const middleware = require('../../../controllers/middleware.js')(db);
 const CONSTANTS = require('../../../models/constants');
+const WALLET = require('./wallet.js');
 
 app.post('/create' , middleware.authenticateCompanyUser , (req , res , next)=>{
 
-    if(!req.isSuperAdmin && req.user.user_type != 'hr_admin'){
+    if(!req.isSuperAdmin && req.user.user_type != CONSTANTS.CONSTANTS.HR_ADMIN){
         res.status(422).send({
             message: res.__('employee_not_allowed')
         });
@@ -50,7 +52,7 @@ app.post('/create' , middleware.authenticateCompanyUser , (req , res , next)=>{
 });
 
 app.patch('/:id' , middleware.authenticateCompanyUser , (req , res , next)=>{
-    if(!req.isSuperAdmin && req.user.user_type != 'hr_admin'){
+    if(!req.isSuperAdmin && req.user.user_type != CONSTANTS.CONSTANTS.HR_ADMIN){
         res.status(422).send({
             message: res.__('employee_not_allowed')
         });
@@ -173,5 +175,180 @@ app.get('/list/all' , middleware.authenticate , (req , res , next)=>{
         next(err);
     });
 });
+
+app.post('/:id/redeem' , middleware.authenticateCompanyUser , (req , res , next)=>{
+
+    if(req.isSuperAdmin || (!req.isSuperAdmin && req.user.user_type === CONSTANTS.CONSTANTS.HR_ADMIN)){
+        res.status(422).send({
+            message: res.__('only_employee_allowed')
+        });
+        return;
+    }
+
+    var id = parseInt(req.params.id);
+    if (id === undefined || id === null || id <= 0) {
+        res.status(422).send({
+            message: res.__('reward_id_missing')
+        });
+        return;
+    }
+
+    db.reward.findOne({
+        where : {
+            id : id
+        }
+    })
+    .then((reward)=>{
+        if(!reward){
+            res.status(404).json({
+                message : res.__('reward_missing')
+            });
+        }else if(reward.companyId != req.user.companyId){
+            res.status(401).json({
+                message : res.__('reward_not_from_your_company')
+            });
+        }else{
+
+            
+            getUserBalance(req.user.id)
+            .then((wallet)=>{
+
+                if(wallet.points_balance < reward.points_required){
+                    res.status(404).json({
+                        message : res.__('not_enough_points')
+                    });
+                }else{
+                    db.reward_redemption_request.findOne({
+                        where : {
+                            rewardId : id,
+                            employeeId : req.user.id
+                        }
+                    })
+                    .then((redeemRequest)=>{
+                        
+
+                        if(redeemRequest){
+                            res.status(409).json({
+                                message : res.__('reward_already_redeemed')
+                            })
+                        }else{
+                
+                            db.reward_redemption_request.create({
+                                rewardId : id,
+                                employeeId : req.user.id,
+                                status : CONSTANTS.CONSTANTS.REQUESTED
+                            })
+                            .then((reward_request)=>{
+                                res.json({
+                                    message : res.__('reward_request_successful'),
+                                    reward_request : reward_request
+                                });
+
+                                // TODO , SEND EMAIL TO HR AOBUT THE REQUEST
+
+                            });
+                        }
+                    })
+                }
+            })
+            
+
+        }
+    })
+    .catch((err)=>{
+        next(err);
+    });
+    
+});
+
+
+
+app.post('/redeem/:id/approve' , middleware.authenticateCompanyUser , (req , res , next)=>{
+    if(req.isSuperAdmin || (!req.isSuperAdmin && req.user.user_type === CONSTANTS.CONSTANTS.EMPLOYEE)){
+        res.status(422).send({
+            message: res.__('only_company_hr_allowed')
+        });
+        return;
+    }
+
+    var id = parseInt(req.params.id);
+    if (id === undefined || id === null || id <= 0) {
+        res.status(422).send({
+            message: res.__('reward_id_missing')
+        });
+        return;
+    }
+
+    db.reward_redemption_request.findOne({
+        where : {
+            id : id
+        },
+        include : [
+            {
+                model : db.reward,
+                as : 'reward'
+            }
+        ]
+    })
+    .then((redeemRequest)=>{
+        if(!redeemRequest){
+            res.status(404).json({
+                message : res.__('redeem_request_not_found')
+            });
+        }else if(redeemRequest.reward.companyId != req.user.companyId){
+            res.status(401).json({
+                message : res.__('reward_not_from_your_company')
+            });  
+        }else if(redeemRequest.status === CONSTANTS.CONSTANTS.APPROVED){
+            res.status(401).json({
+                message : res.__('redeem_request_already_approved')
+            });
+        }else{
+
+
+
+            db.reward_redemption_request.update({
+                status : CONSTANTS.CONSTANTS.APPROVED
+            } , {
+                where : {
+                    id : id
+                }
+            })
+            .then((updateRes)=>{
+
+                // TODO -  STATUS UPDATED < SEND EMAIL TO USER ABOUT IT
+                // TODO -  SUBTRACT POINTS FROM THE WALLET
+
+                db.wallet_transaction.create({
+                    reward_type : CONSTANTS.CONSTANTS.POINTS,
+                    reward_value : redeemRequest.reward.points_required,
+                    transaction_type : CONSTANTS.CONSTANTS.OUTGOING,
+                    userId : redeemRequest.employeeId,
+                    transaction_source : CONSTANTS.CONSTANTS.REWARD_CLAIM,
+                    rewardRedemptionRequestId : redeemRequest.id
+                })
+                .then((walletUpdateResponse)=>{
+                    res.json({
+                        updateRes : updateRes,
+                        walletUpdateResponse : walletUpdateResponse
+                    })
+                })
+                
+            });
+            
+        }
+    }).
+    catch((err)=>{
+        next(err);
+    });
+
+
+    
+
+    
+
+    
+});
+
 
 module.exports = app;

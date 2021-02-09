@@ -60,5 +60,13 @@
     "reward_missing" : "Reward not found",
     "reward_not_from_your_company" : "This reward does not belong to your company. You can only update rewards that belong to your own company",
     "reward_updated_successfully" : "Reward updated successfully",
-    "reward_update_failed" : "Failed to update reward"
+    "reward_update_failed" : "Failed to update reward",
+    "only_employee_allowed" : "Only company employees are allowed to use this service",
+    "reward_already_redeemed" : "You have already redeemed this reward. You cannot redeem a reward more then once",
+    "reward_request_successful" : "Reward redeem request submitted successfully. Please wait for your company HR to review and approve it",
+    "only_company_hr_allowed" : "Only company HR have acceess to this service",
+    "reward_status_missing" : "Reward update stautus missing from the request body. Please send status in request body. Allowed status is requested or approved",
+    "redeem_request_not_found" : "Redeem request not found",
+    "redeem_request_already_approved" : "This redeem request is already approved",
+    "not_enough_points" : "You dont have enought points in your wallet"
 }

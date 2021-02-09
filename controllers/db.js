@@ -80,6 +80,7 @@ db.wallet_transaction = sequelize.import('../models/user/wallet_transaction.js')
 db.wallet_transaction.belongsTo(db.user);
 db.wallet_transaction.belongsTo(db.article_share , { foreignKey  : { as : 'source'}});
 db.wallet_transaction.belongsTo(db.job_referral , { foreignKey  : { as : 'source'}});
+db.wallet_transaction.belongsTo(db.reward_redemption_request , { foreignKey  : { as : 'source'}});
 
 
 module.exports = db;

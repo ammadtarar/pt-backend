@@ -9,7 +9,7 @@ module.exports = function(sequelize , DataTypes){
                 if (!statuses.includes(value)) {
                     throw new EnumValidationError('incorrect status' , 'status' , statuses , value);
                 }
-                this.setDataValue('user_type', value);
+                this.setDataValue('status', value);
             }
         }
     });
