@@ -6,6 +6,7 @@ const db = require('../../../controllers/db.js');
 const middleware = require('../../../controllers/middleware.js')(db);
 const CONSTANTS = require('../../../models/constants');
 const WALLET = require('./wallet.js');
+const emailer = require('../../../controllers/emailer.js');
 
 app.post('/create' , middleware.authenticateCompanyUser , (req , res , next)=>{
 
@@ -244,13 +245,21 @@ app.post('/:id/redeem' , middleware.authenticateCompanyUser , (req , res , next)
                                     reward_request : reward_request
                                 });
 
-                                // TODO , SEND EMAIL TO HR AOBUT THE REQUEST
+                                db.user.findOne({
+                                    where : {
+                                        id : reward.hrId
+                                    }
+                                })
+                                .then((hr)=>{
+                                    emailer.sendRewardRequestToHR(req.user , reward , hr)
+                                });
+                                
 
                             });
                         }
                     })
                 }
-            })
+            });
             
 
         }
@@ -287,6 +296,10 @@ app.post('/redeem/:id/approve' , middleware.authenticateCompanyUser , (req , res
             {
                 model : db.reward,
                 as : 'reward'
+            },
+            {
+                model : db.user,
+                as : 'employee'
             }
         ]
     })
@@ -304,9 +317,6 @@ app.post('/redeem/:id/approve' , middleware.authenticateCompanyUser , (req , res
                 message : res.__('redeem_request_already_approved')
             });
         }else{
-
-
-
             db.reward_redemption_request.update({
                 status : CONSTANTS.CONSTANTS.APPROVED
             } , {
@@ -315,10 +325,6 @@ app.post('/redeem/:id/approve' , middleware.authenticateCompanyUser , (req , res
                 }
             })
             .then((updateRes)=>{
-
-                // TODO -  STATUS UPDATED < SEND EMAIL TO USER ABOUT IT
-                // TODO -  SUBTRACT POINTS FROM THE WALLET
-
                 db.wallet_transaction.create({
                     reward_type : CONSTANTS.CONSTANTS.POINTS,
                     reward_value : redeemRequest.reward.points_required,
@@ -331,9 +337,10 @@ app.post('/redeem/:id/approve' , middleware.authenticateCompanyUser , (req , res
                     res.json({
                         updateRes : updateRes,
                         walletUpdateResponse : walletUpdateResponse
-                    })
-                })
-                
+                    });
+
+                    emailer.sendRedeemApprovalEmailToEmployee(redeemRequest.employee , redeemRequest.reward)
+                });
             });
             
         }
@@ -342,10 +349,6 @@ app.post('/redeem/:id/approve' , middleware.authenticateCompanyUser , (req , res
         next(err);
     });
 
-
-    
-
-    
 
     
 });

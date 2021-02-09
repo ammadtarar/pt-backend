@@ -3,6 +3,7 @@ const { reject } = require("underscore");
 
 var handlebars = require('handlebars');
 var fs = require('fs');
+const { mode } = require("crypto-js");
 
 var readHTMLFile = function(path, callback) {
     fs.readFile(path, {encoding: 'utf-8'}, function (err, html) {
@@ -76,8 +77,57 @@ async function sendJobReferral(candidate, employee , referralUrl) {
 };
 
 
+async function sendRedeemApprovalEmailToEmployee(employee, reward) {
+    new Promise((resolve, reject) => {
+            readHTMLFile(__dirname + '/../htmls/reward_approval.html', function(err, html) {
+                transporter.sendMail({
+                    from: '"PushTalents" <no-reply@pushtalent.com>',
+                    to: employee.email,
+                    subject: "Your reward request has been approved",
+                    html:handlebars.compile(html)({
+                        employee: employee.first_name,
+                        reward : reward.title
+                    })
+                })
+                .then(success => {
+                    resolve(success);
+                })
+                .catch(err => {
+                    reject(err)
+                });
+            });
+    });
+};
+
+
+async function sendRewardRequestToHR(employee, reward , hr) {
+    new Promise((resolve, reject) => {
+            readHTMLFile(__dirname + '/../htmls/reward_request.html', function(err, html) {
+                transporter.sendMail({
+                    from: '"PushTalents" <no-reply@pushtalent.com>',
+                    to: hr.email,
+                    subject: "Reward redeeem request",
+                    html:handlebars.compile(html)({
+                        hr: hr.first_name,
+                        reward : reward.title,
+                        employee : employee.first_name
+                    })
+                })
+                .then(success => {
+                    resolve(success);
+                })
+                .catch(err => {
+                    reject(err)
+                });
+            });
+    });
+};
+
+
 
 
 module.exports.sendCompanyUserOtp = sendCompanyUserOtp;
 module.exports.sendJobReferral = sendJobReferral;
+module.exports.sendRedeemApprovalEmailToEmployee = sendRedeemApprovalEmailToEmployee;
+module.exports.sendRewardRequestToHR = sendRewardRequestToHR;
 
