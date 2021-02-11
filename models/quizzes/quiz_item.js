@@ -1,28 +1,33 @@
+let quiz_answers = require('../constants.js').QUIZ_ANSWERS;
+
 module.exports = function(sequelize , DataTypes){
     var quiz_item = sequelize.define('quiz_item' , {
         question : {
             type : DataTypes.STRING,
             allowNull : false
         },
-        options_one : {
+        option_one : {
             type : DataTypes.STRING,
             allowNull : false
         },
-        options_two : {
+        option_two : {
             type : DataTypes.STRING,
             allowNull : false
         },
-        options_three : {
+        option_three : {
             type : DataTypes.STRING,
             allowNull : false
         },
         answer : {
-            type : DataTypes.ENUM,
-            values : [
-                'options_one',
-                'options_two',
-                'options_three'
-            ]
+            type : DataTypes.ENUM(quiz_answers),
+            values : quiz_answers,
+            defaultValue : quiz_answers[0],
+            set(value){
+                if (!quiz_answers.includes(value)) {
+                    throw new EnumValidationError('incorrect answer' , 'answer' , quiz_answers , value);
+                }
+                this.setDataValue('answer', value);
+            }
         }
     });
 

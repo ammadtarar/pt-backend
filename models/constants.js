@@ -15,8 +15,15 @@ const CONSTANTS = {
     REQUESTED : 'requested',
     APPROVED : 'approved',
     HR_ADMIN : 'hr_admin',
-    EMPLOYEE : 'employee'
-
+    EMPLOYEE : 'employee',
+    OPTION_ONE : 'option_one',
+    OPTION_TWO : 'option_two',
+    OPTION_THREE : 'option_three',
+    EASY : 'easy',
+    MEDIUM : 'medium',
+    DIFFICULT : 'difficult',
+    IN_PROGRESS : 'in_progress',
+    COMPLETED : 'completed'
 }
 
 
@@ -46,9 +53,9 @@ module.exports.REWARD_TRANSACTION_SOURCE_TYPES = [
 ];
 
 module.exports.QUIZ_DIFFICULTY_LEVELS = [
-    'easy',
-    'medium',
-    'difficult'
+    CONSTANTS.EASY,
+    CONSTANTS.MEDIUM,
+    CONSTANTS.DIFFICULT
 ];
 
 module.exports.REWARD_REDEMPTION_STAUSES = [
@@ -59,4 +66,15 @@ module.exports.REWARD_REDEMPTION_STAUSES = [
 module.exports.WALLET_ACTIVITY_TYPE = [
     CONSTANTS.INCOMING,
     CONSTANTS.OUTGOING
+]
+
+module.exports.QUIZ_ANSWERS = [
+    CONSTANTS.OPTION_ONE,
+    CONSTANTS.OPTION_TWO,
+    CONSTANTS.OPTION_THREE
+]
+
+module.exports.QUIZ_STAGES = [
+    CONSTANTS.IN_PROGRESS,
+    CONSTANTS.COMPLETED
 ]

@@ -68,5 +68,21 @@
     "reward_status_missing" : "Reward update stautus missing from the request body. Please send status in request body. Allowed status is requested or approved",
     "redeem_request_not_found" : "Redeem request not found",
     "redeem_request_already_approved" : "This redeem request is already approved",
-    "not_enough_points" : "You dont have enought points in your wallet"
+    "not_enough_points" : "You dont have enought points in your wallet",
+    "quiz_missing_data" : "Missing the data for creating quiz. Please make sure you send title , description , level and is_active in request body",
+    "quiz_created_successfully" : "Quiz created successfully",
+    "quiz_id_missing" : "Quiz iD is missing from the request url",
+    "quiz_question_missing" : "Quiz data is missing or incorrect. Please make sure to send questiosn array in request as { 'questions' : [{'question' , 'option_one' , 'option_two' , 'option_three' , 'answer :  should be either option_one , option_two or option_three'}]]",
+    "quiz_update_successful" : "Quiz updated successfully",
+    "quiz_update_failed" : "Failed to update quiz",
+    "only_user_can_take_test" : "Only employees can take the quiz",
+    "quiz_test_stared" : "Quiz test started successfully",
+    "quiz_already_started" : "You already started this quiz before but its you didn't finish it. Please finsih the on going test first",
+    "quiz_test_id_missing" : "Please send quiz test ID in request url",
+    "only_quiz_can_add_score" : "Only employee can add score to their own quiz",
+    "quiz_test_not_found" : "No quiz test was found. Please make sure the quiz test ID is correct",
+    "quiz_alread_completed" : "You already completed this quiz. You cannot update the quiz test or its scores once its completed",
+    "quiz_score_missing" : "Please send quiz test score in request body",
+    "invalid_score" : "{{score}} is an invalid score. Please make sure you send a number as score",
+    "only_hr" : "Only HR admins can access this service"
 }

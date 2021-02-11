@@ -68,5 +68,21 @@
     "reward_status_missing" : "Statut de mise à jour de la récompense manquant dans le corps de la demande. Veuillez envoyer le statut dans le corps de la demande. L'état autorisé est requested ou approved",
     "redeem_request_not_found" : "Demande d'échange introuvable",
     "redeem_request_already_approved" : "Cette demande d'utilisation est déjà approuvée",
-    "not_enough_points" : "Vous n'avez pas assez de points dans votre portefeuille"
+    "not_enough_points" : "Vous n'avez pas assez de points dans votre portefeuille",
+    "quiz_missing_data" : "Manque les données pour créer le quiz. Veuillez vous assurer d'envoyer title, description, level et is_active dans le corps de la demande",
+    "quiz_created_successfully" : "Quiz created successfully",
+    "quiz_id_missing" : "Quiz iD est absent de l'URL de la demande",
+    "quiz_question_missing" : "Les données du quiz sont manquantes ou incorrectes. Veuillez vous assurer d'envoyer le tableau questiosn dans la requête en tant que {'questions': [{'question', 'option_one', 'option_two', 'option_three', 'answer: devrait être soit option_one, option_two ou option_three'}]]",
+    "quiz_update_successful" : "Quiz mis à jour avec succès",
+    "quiz_update_failed" : "Échec de la mise à jour du quiz",
+    "only_user_can_take_test" : "Seuls les employés peuvent répondre au quiz",
+    "quiz_test_stared" : "Le test du quiz a démarré avec succès",
+    "quiz_already_started" : "Vous avez déjà commencé ce quiz auparavant, mais vous ne l'avez pas terminé. Veuillez d'abord terminer le test en cours",
+    "quiz_test_id_missing" : "Veuillez envoyer l'ID de test du quiz dans l'URL de la demande",
+    "only_quiz_can_add_score" : "Seuls les employés peuvent ajouter un score à leur propre quiz",
+    "quiz_test_not_found" : "Aucun test de quiz n'a été trouvé. Veuillez vous assurer que l'ID du test de quiz est correct",
+    "quiz_alread_completed" : "Vous avez déjà terminé ce quiz. Vous ne pouvez pas mettre à jour le test du quiz ou ses scores une fois qu'il est terminé",
+    "quiz_score_missing" : "Veuillez envoyer le résultat du test de quiz dans le corps de la demande",
+    "invalid_score" : "{{score}} est un score invalide. Veuillez vous assurer d'envoyer un numéro comme score",
+    "only_hr" : "Seuls les administrateurs RH peuvent accéder à ce service"
 }

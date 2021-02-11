@@ -18,7 +18,7 @@ module.exports = function(sequelize , DataTypes){
                 if (!referral_success_reward_types.includes(value)) {
                     throw new EnumValidationError('incorrect level' , 'level' , referral_success_reward_types , value);
                 }
-                this.setDataValue('user_type', value);
+                this.setDataValue('level', value);
             }
         },
         is_active : {

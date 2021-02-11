@@ -64,10 +64,10 @@ db.article_share.belongsTo(db.user , { as : 'employee'});
 
 db.quiz = sequelize.import('../models/quizzes/quiz.js');
 db.quiz_item = sequelize.import('../models/quizzes/quiz_item.js');
-db.quiz_result = sequelize.import('../models/quizzes/quiz_result.js');
-db.quiz.hasMany(db.quiz_item);
-db.quiz_result.belongsTo(db.quiz);
-db.quiz_result.belongsTo(db.user , { as : 'employee'});
+db.quiz_test = sequelize.import('../models/quizzes/quiz_test.js');
+db.quiz.hasMany(db.quiz_item , { as : 'questions'});
+db.quiz_test.belongsTo(db.quiz);
+db.quiz_test.belongsTo(db.user , { as : 'employee'});
 
 db.reward = sequelize.import('../models/rewards/reward.js');
 db.reward_redemption_request = sequelize.import('../models/rewards/reward_redemption_request.js');

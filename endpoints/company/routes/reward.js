@@ -7,6 +7,7 @@ const middleware = require('../../../controllers/middleware.js')(db);
 const CONSTANTS = require('../../../models/constants');
 const WALLET = require('./wallet.js');
 const emailer = require('../../../controllers/emailer.js');
+const { resolveContent } = require('nodemailer/lib/shared');
 
 app.post('/create' , middleware.authenticateCompanyUser , (req , res , next)=>{
 
@@ -175,6 +176,62 @@ app.get('/list/all' , middleware.authenticate , (req , res , next)=>{
     .catch((err) => {
         next(err);
     });
+});
+
+
+app.get('/redeem/requests/list/all' , middleware.authenticate , (req , res , next)=>{
+    var limit = parseInt(req.query.limit) || 10;
+    var page = parseInt(req.query.page) || 0;
+    if (page >= 1) {
+        page = page - 1;
+    }
+
+    var where = {};
+
+    if(!req.isSuperAdmin){
+        where.companyId = req.user.companyId;
+        if(req.user.user_type == CONSTANTS.CONSTANTS.EMPLOYEE){
+            where.is_active = true
+        }else if(req.query.hasOwnProperty("is_active")){
+            where.is_active = req.query.is_active === 'true';
+        }
+    
+    }else{
+        if(req.query.hasOwnProperty("is_active")){
+            where.is_active = req.query.is_active === 'true';
+        }
+    }
+
+    db.reward_redemption_request.findAndCountAll({
+        where : where,
+        limit: limit,
+        offset: limit * page,
+        order: [
+            ['createdAt', 'DESC']
+        ],
+        include : [
+            {
+                model : db.user,
+                as : 'employee',
+                attributes : {
+                    exclude : ['salt', 'password_hash', 'tokenHash' , 'companyId' , 'last_active_time' ]
+                }
+            },
+            {
+                model : db.reward,
+                as : 'reward',
+                attributes : {
+                    exclude : ['hrId', 'companyId']
+                }
+            }
+        ]
+    })
+    .then((requests)=>{
+        res.json(requests);
+    })
+    .catch((err)=>{
+        next(err);
+    })
 });
 
 app.post('/:id/redeem' , middleware.authenticateCompanyUser , (req , res , next)=>{
