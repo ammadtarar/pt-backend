@@ -124,10 +124,35 @@ async function sendRewardRequestToHR(employee, reward , hr) {
 };
 
 
+async function sendUserAccountCreationEmail(user , hr) {
+    new Promise((resolve, reject) => {
+            readHTMLFile(__dirname + '/../htmls/user_account_creation.html', function(err, html) {
+                transporter.sendMail({
+                    from: '"PushTalents" <no-reply@pushtalent.com>',
+                    to: user.email,
+                    subject: "Your PushTalents Acccount Created",
+                    html:handlebars.compile(html)({
+                        hr: hr,
+                        user : user.first_name,
+                        email : user.email
+                    })
+                })
+                .then(success => {
+                    resolve(success);
+                })
+                .catch(err => {
+                    reject(err)
+                });
+            });
+    });
+};
+
+
 
 
 module.exports.sendCompanyUserOtp = sendCompanyUserOtp;
 module.exports.sendJobReferral = sendJobReferral;
 module.exports.sendRedeemApprovalEmailToEmployee = sendRedeemApprovalEmailToEmployee;
 module.exports.sendRewardRequestToHR = sendRewardRequestToHR;
+module.exports.sendUserAccountCreationEmail = sendUserAccountCreationEmail;
 

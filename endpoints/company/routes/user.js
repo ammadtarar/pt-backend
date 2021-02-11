@@ -48,6 +48,10 @@ app.post('/create', middleware.authenticateSuperAdmin, (req, res, next) => {
             message: res.__('users_created'),
             company: new_users
         });
+        new_users.forEach((user)=>{
+            console.log("user email " , user.email);
+            emailer.sendUserAccountCreationEmail(user , req.user.first_name)
+        });
     })
     .catch((err)=>{
         next(err);

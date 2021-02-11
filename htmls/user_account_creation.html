@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PushTalents - Job Referral</title>
+
+    <link rel="preconnect" href="https://fonts.gstatic.com"> 
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
+
+    <style>
+
+        body{
+            padding: 10px;
+        }
+
+        .container{
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px gray;
+            background: #1C2E3F;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo{
+            width: 40vw;
+            margin-top: 30px;
+            margin-bottom: 50px;
+        }
+
+        .title{
+            font-size: 24px;
+            color: white;
+            margin-top: 20px;
+            font-family: 'Roboto Mono', monospace;
+        }
+
+        .text-container{
+            display: flex;
+            flex-direction: column;
+            color: white;
+            font-family: 'Roboto Mono', monospace;
+            padding: 20px;
+            font-size: 14px;
+        }
+
+        .apply{
+            padding: 10px 15px;
+            font-family: 'Roboto Mono', monospace;
+            color: #1C2E3F;
+            background: #FFC107;
+            border-radius: 5px;
+            margin-top: 10px;
+            margin-bottom: 30px;
+            font-size: 20px;
+            box-shadow: 0px 0px 10px 0px rgb(87, 83, 83);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        a{
+            text-decoration : none; color : #1C2E3F;
+        }
+
+        .disclaimer{
+            font-size: 12px;
+            color: white;
+            font-weight: bold;
+        }
+
+        .divder{
+            height: 0.5px;
+            width: 100%;
+            background: rgb(180, 148, 42);
+            margin-top: 50px;
+            margin-bottom: 20px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <img src="https://www.pushtalents.com/logo_long_for_blue_background.8d861bde.png" class="logo">
+
+
+        <div class="text-container">
+            <label>
+                Dear {{user}},
+                </br></br>
+                Your account was created by {{hr}} on the PushTalents platform. Please go to https://www.pushtalents/com to login and activate your account using your email : {{email}}.
+            </label>
+        </div>
+
+
+        
+
+    </div>
+    
+</body>
+</html>
