@@ -59,6 +59,41 @@ app.post('/create', middleware.authenticateSuperAdmin, (req, res, next) => {
 
 });
 
+app.patch('/:id/update/status' , middleware.authenticateSuperAdmin  , (req , res , next)=>{
+    var id = parseInt(req.params.id);
+    if (id === undefined || id === null || id <= 0) {
+        res.status(422).send({
+            message: res.__('quiz_id_missing')
+        });
+        return;
+    }
+
+    var body = underscore.pick(req.body , 'status');
+    if(!body || Object.keys(body).length === 0){
+        res.status(422).json({
+            message : res.__('user_status_missing')
+        })
+        return
+    }
+
+
+    db.user.update({
+        status : body.status
+    }, {
+        where : {
+            id : id
+        }
+    })
+    .then((response)=>{
+        res.json({
+            message : res.__('user_status_updated')
+        });
+    })
+    .catch((err)=>{
+        next(err);
+    })
+});
+
 app.get('/list/all' , middleware.authenticateSuperAdmin , (req , res , next)=>{
     var limit = parseInt(req.query.limit) || 10;
     var page = parseInt(req.query.page) || 0;

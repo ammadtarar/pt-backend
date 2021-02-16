@@ -14,7 +14,7 @@
     "company_users_list_missing": "Users list is missing from request body. Please send an array of users in the request body wrapped in an object. Example : { 'users_list' : [ {'first_name' : 'Robert'} , 'last_name' : 'Downey Jr' , 'type' : 'hr_admin or employee' , 'email' : 'robert@pushtalents.com' , 'position' : 'Manager' ]}",
     "body_data_missing" : "Request body is missing",
     "company_users_incorrect_data" : "Incorrect user data object. Please send first_name , last_name , position , user_type and email in user object",
-    "users_created" : "Users creaed successfully",
+    "users_created" : "Users created successfully",
     "not_a_valid_enum" : "{{value}} is not a valid value for {{field}}. Allowed values are : {{allowed_values}} ",
     "email_missing" : "Please send the email in request body",
     "email_not_found" : "User with email = {{email}} not found. Please make sure the email is correct. Please contact your company administration to register your email if they still haven't yet",
@@ -84,5 +84,7 @@
     "quiz_alread_completed" : "You already completed this quiz. You cannot update the quiz test or its scores once its completed",
     "quiz_score_missing" : "Please send quiz test score in request body",
     "invalid_score" : "{{score}} is an invalid score. Please make sure you send a number as score",
-    "only_hr" : "Only HR admins can access this service"
+    "only_hr" : "Only HR admins can access this service",
+    "user_status_missing" : "User status missing in request body. Allowed user statuses are active or archived",
+    "user_status_updated" : "User status updated successfully"
 }

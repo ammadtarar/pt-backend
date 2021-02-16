@@ -4,6 +4,7 @@ var cryptojs = require('crypto-js');
 var jwt = require('jsonwebtoken');
 const db = require('../../controllers/db');
 let allowed_user_types = require('../constants.js').COMPANY_USER_TYPES;
+let users_statuses = require('../constants.js').USER_STATUSES;
 const moment = require('moment');
 
 module.exports = function(sequelize, DataTypes) {
@@ -27,6 +28,17 @@ module.exports = function(sequelize, DataTypes) {
         position : {
             type : DataTypes.STRING,
             allowNull : true
+        },
+        status : {
+            type : DataTypes.ENUM(users_statuses),
+            values : users_statuses,
+            defaultValue : users_statuses[0],
+            set(value){
+                if (!users_statuses.includes(value)) {
+                    throw new EnumValidationError('incorrect status' , 'status' , users_statuses , value);
+                }
+                this.setDataValue('status', value);
+            }
         },
         user_type : {
             type : DataTypes.ENUM(allowed_user_types),
@@ -101,6 +113,13 @@ module.exports = function(sequelize, DataTypes) {
                 }
             })
             .then(function(user){
+                if(user.status === 'archived'){
+                    reject({
+                        status: 401,
+                        message: res.__('user_token_not_found')
+                    });
+                    return
+                }
                 if(!user){
                     reject({
                         status: 401,
@@ -195,7 +214,7 @@ module.exports = function(sequelize, DataTypes) {
 
     user.prototype.toPublicJSON = function() {
         var json = this.toJSON();
-        return _.pick(json, 'id', 'email', 'createdAt', "first_name" , "last_name" , "position" , "user_type" );
+        return _.pick(json, 'id', 'email', 'createdAt', "first_name" , "last_name" , "position" , "user_type" , "status" );
     };
 
     return user;

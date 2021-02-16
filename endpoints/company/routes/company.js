@@ -1,4 +1,5 @@
 const { Router } = require('express');
+const { include } = require('underscore');
 const app = Router();
 const underscore = require('underscore');
 const db = require('../../../controllers/db.js');
@@ -32,12 +33,21 @@ app.get('/list/all', middleware.authenticateSuperAdmin, (req, res, next) => {
     }
 
 
+    var where = {};
+    let name = req.query.name;
+    if(name !== null && name !== undefined){
+        where.name = {
+            [db.Op.like]: '%' + name + '%'
+        }
+    }
+
     db.company.findAndCountAll({
             limit: limit,
             offset: limit * page,
             order: [
                 ['createdAt', 'DESC']
-            ]
+            ],
+            where : where
         })
         .then((companoies) => {
             res.json(companoies);
@@ -45,6 +55,34 @@ app.get('/list/all', middleware.authenticateSuperAdmin, (req, res, next) => {
         .catch((err) => {
             next(err);
         })
+});
+
+app.get('/:id' , middleware.authenticate , (req , res , next)=>{
+    var id = parseInt(req.params.id);
+    if (id === undefined || id === null || id <= 0) {
+        res.status(422).send({
+            message: res.__('company_id_missing_params')
+        });
+        return;
+    }
+
+    db.company.findOne({
+        where : {
+            id : id
+        },
+        include : [
+            {
+                model : db.user,
+                as : 'users'
+            }
+        ]
+    })
+    .then(response =>{
+        res.json(response)
+    })
+    .catch(err => {
+        next(err);
+    })
 });
 
 app.patch('/:id/update', middleware.authenticateSuperAdmin, (req, res, next) => {

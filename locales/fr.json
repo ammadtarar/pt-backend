@@ -84,5 +84,7 @@
     "quiz_alread_completed" : "Vous avez déjà terminé ce quiz. Vous ne pouvez pas mettre à jour le test du quiz ou ses scores une fois qu'il est terminé",
     "quiz_score_missing" : "Veuillez envoyer le résultat du test de quiz dans le corps de la demande",
     "invalid_score" : "{{score}} est un score invalide. Veuillez vous assurer d'envoyer un numéro comme score",
-    "only_hr" : "Seuls les administrateurs RH peuvent accéder à ce service"
+    "only_hr" : "Seuls les administrateurs RH peuvent accéder à ce service",
+    "user_status_missing" : "Statut utilisateur manquant dans le corps de la requête. Les statuts utilisateur autorisés sont active ou archived",
+    "user_status_updated" : "Statut de l'utilisateur mis à jour avec succès"
 }

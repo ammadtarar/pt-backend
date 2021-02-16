@@ -4,7 +4,9 @@ const middleware = require('../controllers/middleware.js')(db);
 
 const server = express();
 
-server.use(middleware.accessControl)
+let cors = require('cors')
+
+server.use(cors());
 
 server.use(express.json());
 server.use(express.urlencoded());

@@ -2,6 +2,7 @@ var cryptojs = require('crypto-js');
 const {
     lastIndexOf
 } = require('underscore');
+const CONST = require("../models/constants").CONSTANTS;
 
 module.exports = function(db) {
     return {
@@ -143,6 +144,11 @@ module.exports = function(db) {
                         message: res.__('user_token_not_found')
                     });
                     return;
+                }else if(user.status === 'archived'){
+                    res.status(401).send({
+                        message: res.__('user_token_not_found')
+                    });
+                    return;
                 }
                 req.user = user;
                 next();
@@ -186,6 +192,11 @@ module.exports = function(db) {
                     })
                     .catch(function() {
                         res.status(401).send();
+                    });
+                    return;
+                }else if(user.status === 'archived'){
+                    res.status(401).send({
+                        message: res.__('user_token_not_found')
                     });
                     return;
                 }

@@ -23,7 +23,9 @@ const CONSTANTS = {
     MEDIUM : 'medium',
     DIFFICULT : 'difficult',
     IN_PROGRESS : 'in_progress',
-    COMPLETED : 'completed'
+    COMPLETED : 'completed',
+    ACTIVE : 'active',
+    ARCHIVED : 'archived'
 }
 
 
@@ -77,4 +79,9 @@ module.exports.QUIZ_ANSWERS = [
 module.exports.QUIZ_STAGES = [
     CONSTANTS.IN_PROGRESS,
     CONSTANTS.COMPLETED
+]
+
+module.exports.USER_STATUSES = [
+    CONSTANTS.ACTIVE,
+    CONSTANTS.ARCHIVED
 ]

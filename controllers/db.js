@@ -40,6 +40,7 @@ db.company = company;
 
 db.user = sequelize.import('../models/user/user.js');
 db.user.belongsTo(db.company);
+db.company.hasMany(db.user , { as : 'users'});
 
 db.otp = sequelize.import('../models/otp.js');
 db.otp.belongsTo(db.user);
