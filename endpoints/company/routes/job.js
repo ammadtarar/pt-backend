@@ -17,8 +17,8 @@ app.post('/create' , middleware.authenticateSuperAdmin , (req , res , next)=>{
         return;
     }
 
-    var job = underscore.pick(body , 'url' , 'title' , 'location' , 'reward_point' , 'companyId' , 'referral_success_reward_type' , 'referral_success_reward_value');
-    if(job === null || job === undefined  || Object.keys(job).length != 7){
+    var job = underscore.pick(body , 'url' , 'title' , 'location' , 'companyId' , 'referral_success_reward_type' , 'referral_success_reward_value');
+    if(job === null || job === undefined  || Object.keys(job).length != 6){
         res.status(422).send({
             message: res.__('job_missing_data')
         });

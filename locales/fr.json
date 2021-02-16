@@ -25,7 +25,7 @@
     "user_token_not_found" : "Utilisateur introuvable, veuillez vous assurer que le jeton est valide. Reconnectez-vous et réessayez",
     "super_admin_not_found" : "Super administrateur introuvable, veuillez vous assurer que le jeton est valide. Reconnectez-vous et essayez avec le nouveau jeton d'authentification de connexion",
     "update_successful" : "Mise à jour réussie",
-    "job_missing_data" : "Données incomplètes ou incorrectes pour le travail envoyé dans le corps de la demande. Veuillez vous assurer d'envoyer {url , title , location , reward_point , companyId , referral_success_reward_type , referral_success_reward_value} dans le corps de la demande",
+    "job_missing_data" : "Données incomplètes ou incorrectes pour le travail envoyé dans le corps de la demande. Veuillez vous assurer d'envoyer {url , title , location , companyId , referral_success_reward_type , referral_success_reward_value} dans le corps de la demande",
     "job_created_successfully" : "Emploi créé avec succès",
     "employee_not_allowed" : "Seuls le super administrateur et la société hr_admin ont accès à ces données",
     "job_updated_successfully" : "Travail mis à jour avec succès",
