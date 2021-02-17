@@ -86,5 +86,7 @@
     "invalid_score" : "{{score}} est un score invalide. Veuillez vous assurer d'envoyer un numéro comme score",
     "only_hr" : "Seuls les administrateurs RH peuvent accéder à ce service",
     "user_status_missing" : "Statut utilisateur manquant dans le corps de la requête. Les statuts utilisateur autorisés sont active ou archived",
-    "user_status_updated" : "Statut de l'utilisateur mis à jour avec succès"
+    "user_status_updated" : "Statut de l'utilisateur mis à jour avec succès",
+    "article_status_updated" : "Statut de l'article mis à jour",
+    "questions_added" : "Questions ajoutées avec succès au quiz"
 }

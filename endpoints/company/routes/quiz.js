@@ -132,7 +132,9 @@ app.post('/:id/add/questions' , middleware.authenticateSuperAdmin , (req , res ,
 
     db.quiz_item.bulkCreate(parsedQuestions)
     .then((response)=>{
-        res.json(response);
+        res.json({
+            message : res.__('questions_added')
+        });
     })
     .catch((err)=>{
         next(err);

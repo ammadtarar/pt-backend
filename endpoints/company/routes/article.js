@@ -55,8 +55,8 @@ app.post('/create' , middleware.authenticate , async (req , res , next)=>{
     }else{
 
         let url_data = await require('html-metadata-parser').parser(data.original_url);
-        if(url_data.err){
-            res.status(404).json({
+        if(url_data.err || !data.title){
+            res.status(432).json({
                 message : res.__('article_data_cannot_be_fetched')
             })
         }else{
@@ -66,6 +66,17 @@ app.post('/create' , middleware.authenticate , async (req , res , next)=>{
         }
 
     }
+
+    console.log();
+    console.log();
+    console.log();
+    console.log();
+    console.log("==== DATA");
+    console.log(data);
+    console.log();
+    console.log();
+    console.log();
+    console.log();
 
     db.article.create(data)
     .then((createdArticle)=>{
@@ -96,7 +107,9 @@ app.get('/list/all' , middleware.authenticate , (req , res , next)=>{
 
     var where = {};
 
-    if(!req.isSuperAdmin){
+    if(req.isSuperAdmin && req.query.hasOwnProperty("companyId")){
+        where.companyId = req.query.companyId;
+    }else if(!req.isSuperAdmin){
         where.companyId = req.user.companyId;
     }
 
@@ -116,6 +129,13 @@ app.get('/list/all' , middleware.authenticate , (req , res , next)=>{
     if(url){
         where.url = {
             [db.Op.like]: '%' + url + '%'
+        }
+    }
+
+    let original_url = req.query.original_url;
+    if(original_url){
+        where.original_url = {
+            [db.Op.like]: '%' + original_url + '%'
         }
     }
 
@@ -179,6 +199,49 @@ app.get('/:id' , (req , res , next)=>{
         next(err);
     })
 });
+
+
+app.patch("/:id/update/status" , middleware.authenticate , (req , res , next)=>{
+    var id = parseInt(req.params.id);
+    if (id === undefined || id === null || id <= 0) {
+        res.status(422).send({
+            message: res.__('article_id_missing')
+        });
+        return;
+    }
+    
+    if(!req.isSuperAdmin && req.user.user_type != 'hr_admin'){
+        res.status(422).send({
+            message: res.__('employee_not_allowed')
+        });
+        return;
+    }
+
+    let body = underscore.pick(req.body , 'is_active');
+    if(!body || Object.keys(body).length != 1){
+        res.status(422).send({
+            message : res.__('body_data_missing')
+        });
+        return
+    }
+
+    db.article.update({
+        is_active : body.is_active
+    }, {
+        where : {
+            id : id
+        }
+    })
+    .then(response=>{
+        res.json({
+            message : res.__('article_status_updated')
+        })
+    })
+    .catch(err =>{
+        next(err);
+    })
+});
+
 
 app.post('/:id/generate/share/link' , middleware.authenticateCompanyUser , (req , res , next)=>{
     var id = parseInt(req.params.id);
