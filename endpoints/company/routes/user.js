@@ -204,7 +204,7 @@ app.post('/send/otp' , (req , res , next) => {
             })
             .then((us)=>{
                 db.otp.create({
-                    code : String(Math.floor(1000 + Math.random() * 9000)),
+                    code : String(Math.floor(100000 + Math.random() * 900000)),
                     userId : user.id
                 })
                 .then((otpRes)=>{
