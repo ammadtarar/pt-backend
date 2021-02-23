@@ -1,6 +1,7 @@
 const { Router } = require('express');
 const app = Router();
 const underscore = require('underscore');
+const { article_share } = require('../../../controllers/db.js');
 const db = require('../../../controllers/db.js');
 const middleware = require('../../../controllers/middleware.js')(db);
 const CONSTANTS = require('../../../models/constants');
@@ -38,10 +39,13 @@ app.post('/create' , middleware.authenticate , async (req , res , next)=>{
     }
 
 
-
+    console.log();
+    console.log();
+    console.log();
+    console.log();
     
     if(req.body.hasOwnProperty("custom") && req.body.custom){
-
+        console.log(" ==== INSIDE CUSTOM");
         if(!req.body.title || !req.body.thumb_url){
             res.status(422).send({
                 message : res.__('article_custom_data_missing')
@@ -53,18 +57,22 @@ app.post('/create' , middleware.authenticate , async (req , res , next)=>{
         data.is_active = req.body.hasOwnProperty('is_active') ? (req.query.is_active === 'true') : true
 
     }else{
-
+        console.log(" ==== INSIDE AUTO");
         let url_data = await require('html-metadata-parser').parser(data.original_url);
-        if(url_data.err || !data.title){
+        console.log(url_data);
+        if(url_data.err || !url_data.og){
             res.status(432).json({
                 message : res.__('article_data_cannot_be_fetched')
             })
+            return
         }else{
             data.title = url_data.og.title;
             data.thumb_url = url_data.og.image;
             data.is_active = req.body.hasOwnProperty('is_active') ? (req.query.is_active === 'true') : true
         }
 
+
+        
     }
 
     console.log();
@@ -72,7 +80,7 @@ app.post('/create' , middleware.authenticate , async (req , res , next)=>{
     console.log();
     console.log();
     console.log("==== DATA");
-    console.log(data);
+    console.log(JSON.stringify(data));
     console.log();
     console.log();
     console.log();
@@ -193,6 +201,8 @@ app.get('/:id' , (req , res , next)=>{
         }
     })
     .then((article)=>{
+        article.updateViewCount();
+        article.view_count = article.view_count + 1
         res.json(article);
     })
     .catch((err)=>{
