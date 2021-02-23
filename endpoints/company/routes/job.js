@@ -1,4 +1,4 @@
-const { Router } = require('express');
+const { Router, response } = require('express');
 const app = Router();
 const underscore = require('underscore');
 const db = require('../../../controllers/db.js');
@@ -102,6 +102,9 @@ app.get('/list/all' , middleware.authenticate , (req , res , next)=>{
             include: [{
                 model: db.company,
                 as: "company"
+            } , {
+                model : db.job_referral,
+                as : 'referrals'
             }]
         })
         .then((companies) => {
@@ -113,7 +116,43 @@ app.get('/list/all' , middleware.authenticate , (req , res , next)=>{
     
 });
 
-app.patch('/:id' , middleware.authenticateSuperAdmin ,(req , res , next)=>{
+app.post('/referral/:id/archive' , middleware.authenticate , (req , res , next)=>{
+    if(!req.isSuperAdmin && req.user.user_type != 'hr_admin'){
+        res.status(422).send({
+            message: res.__('employee_not_allowed')
+        });
+        return;
+    }
+
+    var id = parseInt(req.params.id);
+    if (id === undefined || id === null || id <= 0) {
+        res.status(422).send({
+            message: res.__('job_id_missing_params')
+        });
+        return;
+    }
+
+    db.job_referral.update({
+        archive : true
+    } , {
+        where : {
+            id : id
+        }
+    })
+    .then(response =>{
+        res.json({
+            message : res.__('referral_archived')
+        })
+    })
+});
+
+app.patch('/:id' , middleware.authenticate ,(req , res , next)=>{
+    if(!req.isSuperAdmin && req.user.user_type != 'hr_admin'){
+        res.status(422).send({
+            message: res.__('employee_not_allowed')
+        });
+        return;
+    }
     var id = parseInt(req.params.id);
     if (id === undefined || id === null || id <= 0) {
         res.status(422).send({
@@ -242,6 +281,7 @@ app.get('/share/:id' , (req , res , next)=>{
         ]
     })
     .then((response)=>{
+        response.job.updateViewCount();
         if(response){
             response.updateViewCount();
             res.statusCode = 302;
@@ -362,7 +402,8 @@ app.post('/:id/generate/referral' , middleware.authenticateCompanyUser , (req , 
             where : {
                 candidateId : candidate.id,
                 jobId : id,
-                employeeId : req.user.id
+                employeeId : req.user.id,
+                companyId : req.user.companyId
             }
         })
         .then((referral)=>{
@@ -406,6 +447,69 @@ app.post('/:id/generate/referral' , middleware.authenticateCompanyUser , (req , 
 
 });
 
+app.get('/referral/list/all' , middleware.authenticateCompanyUser , (req , res , next)=>{
+    if(!req.isSuperAdmin && req.user.user_type != 'hr_admin'){
+        res.status(422).send({
+            message: res.__('employee_not_allowed')
+        });
+        return;
+    }
+
+
+    var where = {
+        companyId : req.user.companyId
+    };
+
+    if(req.query.hasOwnProperty("archive")){
+        console.log("HAVE");
+        where.archive = req.query.archive === "true" ? true : false;
+    }
+
+    console.log();
+    console.log();
+    console.log();
+    console.log();
+    console.log("where");
+    console.log(where);
+
+    db.job_referral.findAll({
+        where : where,
+        attributes : {
+            exclude : ['jobId', 'companyId', 'employeeId' , 'candidateId']
+        },
+        include : [
+            {
+                model : db.job,
+                as : "job"
+            },
+            {
+                model : db.candidate,
+                as : 'candidate'
+            },
+            {
+                model : db.user,
+                as : "employee",
+                attributes : {
+                    exclude : ['salt', 'password_hash', 'tokenHash' , 'companyId']
+                }
+            }
+        ]
+    })
+    .then(response=>{
+        console.log(JSON.parse(JSON.stringify(response)));
+        console.log();
+        console.log();
+        console.log();
+        console.log();
+        console.log("====");
+        res.json(response)
+    })
+    .catch(err =>{
+        console.log(err);
+        console.log("####");
+        next(err)
+    })
+});
 
 app.get('/referral/:id' , (req , res , next)=>{
 
@@ -429,6 +533,8 @@ app.get('/referral/:id' , (req , res , next)=>{
         ]
     })
     .then((referral)=>{
+        // res.json(referral)
+        // return
         if(referral){
             res.statusCode = 302;
             res.setHeader("Location", referral.job.url);

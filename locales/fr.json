@@ -88,5 +88,6 @@
     "user_status_missing" : "Statut utilisateur manquant dans le corps de la requête. Les statuts utilisateur autorisés sont active ou archived",
     "user_status_updated" : "Statut de l'utilisateur mis à jour avec succès",
     "article_status_updated" : "Statut de l'article mis à jour",
-    "questions_added" : "Questions ajoutées avec succès au quiz"
+    "questions_added" : "Questions ajoutées avec succès au quiz",
+    "referral_archived" : "Référence d'emploi archivée avec succès"
 }

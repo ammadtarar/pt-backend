@@ -88,5 +88,6 @@
     "user_status_missing" : "User status missing in request body. Allowed user statuses are active or archived",
     "user_status_updated" : "User status updated successfully",
     "article_status_updated" : "Article status updated",
-    "questions_added" : "Questions added successfully to the quiz"
+    "questions_added" : "Questions added successfully to the quiz",
+    "referral_archived" : "Job referral archived successfully"
 }

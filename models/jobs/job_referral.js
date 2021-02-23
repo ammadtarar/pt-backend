@@ -11,6 +11,10 @@ module.exports = function(sequelize , DataTypes){
                 }
                 this.setDataValue('stage', value);
             }
+        },
+        archive : {
+            type :  DataTypes.BOOLEAN,
+            defaultValue : false
         }
     });
     return job_referral;
