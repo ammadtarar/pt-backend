@@ -42,16 +42,29 @@ app.post('/create', middleware.authenticateSuperAdmin, (req, res, next) => {
         return
     }
 
-    db.user.bulkCreate(formatted_users)
-    .then((new_users)=>{
-        res.json({
-            message: res.__('users_created'),
-            company: new_users
-        });
-        new_users.forEach((user)=>{
-            console.log("user email " , user.email);
-            emailer.sendUserAccountCreationEmail(user , req.user.first_name)
-        });
+
+    db.company.findOne({
+        where : {
+            id : formatted_users[0].companyId
+        }
+    })
+    .then(company => {
+        db.user.bulkCreate(formatted_users)
+        .then((new_users)=>{
+            res.json({
+                message: res.__('users_created'),
+                company: new_users
+            });
+            new_users.forEach((user)=>{
+                if(user.user_type === 'hr_admin'){
+                    emailer.sendHrAccountCreationEmail(user , company)    
+                }else{
+                    emailer.sendUserAccountCreationEmail(user , company)    
+                }
+                console.log("user email " , user.email);
+                
+            });
+        })
     })
     .catch((err)=>{
         next(err);

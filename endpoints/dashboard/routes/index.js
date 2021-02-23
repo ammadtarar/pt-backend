@@ -16,51 +16,168 @@ app.get('' , middleware.authenticateCompanyUser , async (req , res , next)=>{
     let companyUsersIds = await getCompanyUsersIdsArray(req.user.companyId);
 
     res.json({
+        users : {
+            count : await getUsersCount(req.user.companyId),
+            total_points_earned : await getUsersPoints(companyUsersIds)
+        },
         jobs : {
             count : await getJobsCounts(req.user.companyId),
-            shares_views_count : await getJobsShareCounts(companyUsersIds),
-            referrals_count : await getJobReferrals(companyUsersIds)
+            views_counts : await getJobsViewCounts(req.user.companyId),
+            candidates : await getCandidatesCounts(req.user.companyId)
         },
         article : {
             count : await getArticlesCount(req.user.companyId),
-            share_views_count : await getArticlesViewsCount(companyUsersIds)
+            views_counts : await getArticlesViewsCount(req.user.companyId)
         },
         reward : {
             count : await getRewardsCount(req.user.companyId),
             redeem_requests_counts : await getRewardRedeemCounts(companyUsersIds),
         },
-        quiz_test : await getQuizTestsCount(companyUsersIds)
+        quiz :{
+            total : await getQuizCount(),
+            average_score : await getQuizTestsCount(companyUsersIds).average_score || 0
+        } 
+        
     });
 
 
 
 });
 
-getJobsCounts = async (companyId) =>{
+
+getQuizCount = async () =>{
     return new Promise((resolve , reject)=>{
-        db.job.count({
+        db.quiz.count({
             where : {
-                companyId : companyId
-            }
+                is_active : true
+            },
         })
-        .then((jobsCount)=>{
-            resolve(jobsCount);
+        .then((count)=>{
+            resolve(count);
         }).
         catch((err)=>{
             reject(err);
         });
     });
+
 };
 
 
-getJobsShareCounts = async (companyUsersIds) =>{
+getUsersCount = async (companyId) =>{
     return new Promise((resolve , reject)=>{
-        db.job_share.findAll({
+        db.user.count({
+            where : {
+                companyId : companyId
+            },
+            group : ['status']
+        })
+        .then((articlesCount)=>{
+            let active = articlesCount[0] ? articlesCount[0].count : 0;
+            let inactive = articlesCount[1] ? articlesCount[1].count : 0;
+            resolve({
+                total : active + inactive,
+                active : active,
+                inactive : inactive
+            });
+        }).
+        catch((err)=>{
+            reject(err);
+        });
+    });
+
+};
+
+getUsersPoints = async (companyUsersIds) =>{
+    return new Promise((resolve , reject)=>{
+        db.wallet_transaction.findAll({
+            attributes: [
+                [db.sequelize.fn('SUM', db.sequelize.col('reward_value')), 'count'],
+            ],
+            where : {
+                userId : companyUsersIds,
+                transaction_type : 'incoming',
+                reward_type : 'points'
+            }
+        })
+        .then((response)=>{
+            resolve(JSON.parse(JSON.stringify(response))[0].count || 0);
+        }).
+        catch((err)=>{
+            reject(err);
+        });
+    });
+
+};
+
+getJobsCounts = async (companyId) =>{
+    return new Promise((resolve , reject)=>{
+        db.job.count({
+            where : {
+                companyId : companyId
+            },
+            group : ['is_active']
+        })
+        .then((articlesCount)=>{
+            let active = articlesCount[0] ? articlesCount[0].count : 0;
+            let inactive = articlesCount[1] ? articlesCount[1].count : 0;
+            resolve({
+                total : active + inactive,
+                active : active,
+                inactive : inactive
+            });
+        }).
+        catch((err)=>{
+            reject(err);
+        });
+    });
+
+};
+
+getCandidatesCounts = async(companyId) =>{
+    return new Promise((resolve , reject)=>{
+        db.job_referral.count({
+            where : {
+                companyId : companyId
+            }
+        })
+        .then((totalsCandidates)=>{
+
+            db.job_referral.count({
+                where : {
+                    companyId : companyId,
+                    stage : 'candidate_referred'
+                }
+            })
+            .then(referredCount =>{
+                resolve({
+                    total : totalsCandidates,
+                    referred_count : referredCount
+                })
+            })
+            
+            return
+            let active = articlesCount[0] ? articlesCount[0].count : 0;
+            let inactive = articlesCount[1] ? articlesCount[1].count : 0;
+            resolve({
+                total : active + inactive,
+                active : active,
+                inactive : inactive
+            });
+        }).
+        catch((err)=>{
+            reject(err);
+        });
+    });
+}
+
+getJobsViewCounts = async (companyId) =>{
+    return new Promise((resolve , reject)=>{
+        db.job.findAll({
             attributes: [
                 [db.sequelize.fn('SUM', db.sequelize.col('view_count')), 'count'],
             ],
             where : {
-                employeeId :companyUsersIds
+                companyId :companyId
             }
         })
         .then((count)=>{
@@ -94,10 +211,17 @@ getArticlesCount = async (companyId) =>{
         db.article.count({
             where : {
                 companyId : companyId
-            }
+            },
+            group : ['is_active']
         })
         .then((articlesCount)=>{
-            resolve(articlesCount);
+            let active = articlesCount[0] ? articlesCount[0].count : 0;
+            let inactive = articlesCount[1] ? articlesCount[1].count : 0;
+            resolve({
+                total : active + inactive,
+                active : active,
+                inactive : inactive
+            });
         }).
         catch((err)=>{
             reject(err);
@@ -106,14 +230,14 @@ getArticlesCount = async (companyId) =>{
 };
 
 
-getArticlesViewsCount = async (usersIdsArray) =>{
+getArticlesViewsCount = async (companyId) =>{
     return new Promise((resolve , reject)=>{
-        db.article_share.count({
+        db.article.count({
             attributes: [
                 [db.sequelize.fn('SUM', db.sequelize.col('view_count')), 'count'],
             ],
             where : {
-                employeeId :usersIdsArray
+                companyId :companyId
             }
         })
         .then((count)=>{
@@ -151,8 +275,8 @@ getRewardRedeemCounts = async (usersIdsArray) =>{
             group : ['status']
         })
         .then((redeems)=>{
-            let requested = redeems[0].count || 0;
-            let approved = redeems[1].count || 0;
+            let requested = redeems[0] ? redeems[0].count : 0;
+            let approved = redeems[1] ? redeems[1].count : 0;
             resolve({
                 total : requested + approved,
                 requested : requested,
@@ -176,8 +300,8 @@ getQuizTestsCount = async (usersIds) =>{
         })
         .then((counts)=>{
 
-            let completed = counts[0].count || 0;
-            let in_progress = counts[1].count || 0;
+            let completed = counts[0] ? counts[0].count : 0;
+            let in_progress = counts[1] ? counts[1].count : 0;
             var data = {
                 total : completed + in_progress,
                 completed : completed,

@@ -13,7 +13,7 @@ if (process.env.NODE_ENV == 'development') {
             dialect: process.env.DB_DIALECT,
             storage: process.env.DB_FILE_PATH,
             operatorsAliases: false,
-            logging: false
+            logging: true
         });
 } else {
     sequelize = new Sequelize(
@@ -51,7 +51,9 @@ db.job_referral = sequelize.import('../models/jobs/job_referral.js');
 db.job_share = sequelize.import('../models/jobs/job_share.js');
 
 db.job.belongsTo(db.company);
-db.job_referral.belongsTo(db.job);
+db.job_referral.belongsTo(db.job , {as : 'job'});
+db.job_referral.belongsTo(db.company);
+db.job.hasMany(db.job_referral , {as : 'referrals'});
 db.job_referral.belongsTo(db.user , { as : 'employee'});
 db.job_referral.belongsTo(db.candidate);
 db.job_share.belongsTo(db.user , { as : 'employee'});
@@ -76,6 +78,7 @@ db.reward.belongsTo(db.company);
 db.reward.belongsTo(db.user , { as : 'hr'});
 db.reward_redemption_request.belongsTo(db.reward);
 db.reward_redemption_request.belongsTo(db.user , { as : 'employee'});
+db.reward_redemption_request.belongsTo(db.company);
 
 db.wallet_transaction = sequelize.import('../models/user/wallet_transaction.js');
 db.wallet_transaction.belongsTo(db.user);

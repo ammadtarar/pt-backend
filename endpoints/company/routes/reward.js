@@ -294,7 +294,8 @@ app.post('/:id/redeem' , middleware.authenticateCompanyUser , (req , res , next)
                             db.reward_redemption_request.create({
                                 rewardId : id,
                                 employeeId : req.user.id,
-                                status : CONSTANTS.CONSTANTS.REQUESTED
+                                status : CONSTANTS.CONSTANTS.REQUESTED,
+                                companyId : req.user.companyId
                             })
                             .then((reward_request)=>{
                                 res.json({
@@ -391,11 +392,7 @@ app.post('/redeem/:id/approve' , middleware.authenticateCompanyUser , (req , res
                     rewardRedemptionRequestId : redeemRequest.id
                 })
                 .then((walletUpdateResponse)=>{
-                    res.json({
-                        updateRes : updateRes,
-                        walletUpdateResponse : walletUpdateResponse
-                    });
-
+                    res.json();
                     emailer.sendRedeemApprovalEmailToEmployee(redeemRequest.employee , redeemRequest.reward)
                 });
             });

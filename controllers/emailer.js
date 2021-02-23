@@ -123,8 +123,29 @@ async function sendRewardRequestToHR(employee, reward , hr) {
     });
 };
 
+async function sendHrAccountCreationEmail(user , company) {
+    new Promise((resolve, reject) => {
+            readHTMLFile(__dirname + '/../htmls/hr_account_creation.html', function(err, html) {
+                transporter.sendMail({
+                    from: '"PushTalents" <no-reply@pushtalent.com>',
+                    to: user.email,
+                    subject: "Your PushTalents Acccount Created",
+                    html:handlebars.compile(html)({
+                        user : user.first_name,
+                        company : company.name
+                    })
+                })
+                .then(success => {
+                    resolve(success);
+                })
+                .catch(err => {
+                    reject(err)
+                });
+            });
+    });
+};
 
-async function sendUserAccountCreationEmail(user , hr) {
+async function sendUserAccountCreationEmail(user , company) {
     new Promise((resolve, reject) => {
             readHTMLFile(__dirname + '/../htmls/user_account_creation.html', function(err, html) {
                 transporter.sendMail({
@@ -132,9 +153,8 @@ async function sendUserAccountCreationEmail(user , hr) {
                     to: user.email,
                     subject: "Your PushTalents Acccount Created",
                     html:handlebars.compile(html)({
-                        hr: hr,
                         user : user.first_name,
-                        email : user.email
+                        company : company.name
                     })
                 })
                 .then(success => {
@@ -155,4 +175,5 @@ module.exports.sendJobReferral = sendJobReferral;
 module.exports.sendRedeemApprovalEmailToEmployee = sendRedeemApprovalEmailToEmployee;
 module.exports.sendRewardRequestToHR = sendRewardRequestToHR;
 module.exports.sendUserAccountCreationEmail = sendUserAccountCreationEmail;
+module.exports.sendHrAccountCreationEmail = sendHrAccountCreationEmail;
 
