@@ -142,6 +142,32 @@ app.post('/:id/add/questions' , middleware.authenticateSuperAdmin , (req , res ,
 
 });
 
+
+app.patch('/question/:id' , middleware.authenticateSuperAdmin , (req , res , next)=>{
+    var id = parseInt(req.params.id);
+    if (id === undefined || id === null || id <= 0) {
+        res.status(422).send({
+            message: res.__('quiz_id_missing')
+        });
+        return;
+    }
+
+    var body = underscore.pick(req.body , 'question' , 'option_one' , 'option_two' , 'option_three' , 'answer');
+    db.quiz_item.update(body , {
+        where : {
+            id : id
+        }
+    })
+    .then(response => {
+        res.json({
+            message : res.__('question_updated')
+        });
+    })
+    .catch(err =>{
+        next(err);
+    })
+})
+
 app.get('/:id' , middleware.authenticate , (req , res , next)=>{
     var id = parseInt(req.params.id);
     if (id === undefined || id === null || id <= 0) {

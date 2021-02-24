@@ -16,13 +16,12 @@
 
         .container{
             border-radius: 10px;
-            box-shadow: 0px 0px 10px gray;
-            background: #1C2E3F;
             display: flex;
             justify-content: center;
             align-items: center;
             display: flex;
             flex-direction: column;
+            padding-bottom: 20px;
         }
 
         .logo{
@@ -31,55 +30,15 @@
             margin-bottom: 50px;
         }
 
-        .title{
-            font-size: 24px;
-            color: white;
-            margin-top: 20px;
-            font-family: 'Roboto Mono', monospace;
-        }
+    
 
         .text-container{
             display: flex;
             flex-direction: column;
-            color: white;
-            font-family: 'Roboto Mono', monospace;
+            font-family:  Helvetica, sans-serif;
             padding: 20px;
             font-size: 14px;
         }
-
-        .apply{
-            padding: 10px 15px;
-            font-family: 'Roboto Mono', monospace;
-            color: #1C2E3F;
-            background: #FFC107;
-            border-radius: 5px;
-            margin-top: 10px;
-            margin-bottom: 30px;
-            font-size: 20px;
-            box-shadow: 0px 0px 10px 0px rgb(87, 83, 83);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        a{
-            text-decoration : none; color : #1C2E3F;
-        }
-
-        .disclaimer{
-            font-size: 12px;
-            color: white;
-            font-weight: bold;
-        }
-
-        .divder{
-            height: 0.5px;
-            width: 100%;
-            background: rgb(180, 148, 42);
-            margin-top: 50px;
-            margin-bottom: 20px;
-        }
-
     </style>
 </head>
 <body>
@@ -94,16 +53,12 @@
                 Dear {{candidate}},
                 </br></br>
                 Please use the code below to login to PushTalents.
-                </br>
+                </br></br>
                 <b>Code : {{otp}}</b>
             </label>
 
 
-            <div class="divder"></div>
 
-            <label class="disclaimer">
-                For your account safety, please do not share this code with anyone else.
-            </label>
         </div>
 
 

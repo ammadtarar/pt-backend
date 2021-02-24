@@ -89,5 +89,6 @@
     "user_status_updated" : "Statut de l'utilisateur mis à jour avec succès",
     "article_status_updated" : "Statut de l'article mis à jour",
     "questions_added" : "Questions ajoutées avec succès au quiz",
-    "referral_archived" : "Référence d'emploi archivée avec succès"
+    "referral_archived" : "Référence d'emploi archivée avec succès",
+    "question_updated" : "Question mise à jour avec succès"
 }

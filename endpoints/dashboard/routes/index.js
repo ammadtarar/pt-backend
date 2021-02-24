@@ -117,9 +117,16 @@ getJobsCounts = async (companyId) =>{
             },
             group : ['is_active']
         })
-        .then((articlesCount)=>{
-            let active = articlesCount[0] ? articlesCount[0].count : 0;
-            let inactive = articlesCount[1] ? articlesCount[1].count : 0;
+        .then((count)=>{
+            var inactive = 0 , active = 0;
+            count.forEach(item =>{
+                console.log(item);
+                if(!item.is_active){
+                    inactive = item.count
+                }else{
+                    active = item.count
+                }
+            })
             resolve({
                 total : active + inactive,
                 active : active,
@@ -154,15 +161,6 @@ getCandidatesCounts = async(companyId) =>{
                     referred_count : referredCount
                 })
             })
-            
-            return
-            let active = articlesCount[0] ? articlesCount[0].count : 0;
-            let inactive = articlesCount[1] ? articlesCount[1].count : 0;
-            resolve({
-                total : active + inactive,
-                active : active,
-                inactive : inactive
-            });
         }).
         catch((err)=>{
             reject(err);
@@ -214,9 +212,16 @@ getArticlesCount = async (companyId) =>{
             },
             group : ['is_active']
         })
-        .then((articlesCount)=>{
-            let active = articlesCount[0] ? articlesCount[0].count : 0;
-            let inactive = articlesCount[1] ? articlesCount[1].count : 0;
+        .then((count)=>{
+            var inactive = 0 , active = 0;
+            count.forEach(item =>{
+                console.log(item);
+                if(!item.is_active){
+                    inactive = item.count
+                }else{
+                    active = item.count
+                }
+            })
             resolve({
                 total : active + inactive,
                 active : active,
