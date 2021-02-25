@@ -86,6 +86,10 @@ module.exports = function(db) {
             }
         },
         logger: function(req, res, next) {
+            console.log("");
+            console.log("");
+            console.log("");
+            console.log("===== NEW REQUEST =====");
             console.log(
                 "Request : " +
                 new Date().toString() +
@@ -94,6 +98,10 @@ module.exports = function(db) {
                 " " +
                 req.originalUrl
             );
+            console.log("");
+            console.log("");
+            console.log("");
+            console.log("");
             next();
         },
         authenticateSuperAdmin: function(req, res, next) {
@@ -121,7 +129,9 @@ module.exports = function(db) {
                     req.user = user;
                     next();
                 })
-                .catch(function() {
+                .catch(function(err) {
+                    console.log("admin error");
+                    console.log(err);
                     res.status(401).send();
                 });
         },

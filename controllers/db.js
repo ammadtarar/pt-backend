@@ -49,6 +49,7 @@ db.job = sequelize.import('../models/jobs/job.js');
 db.candidate = sequelize.import('../models/jobs/candidate.js');
 db.job_referral = sequelize.import('../models/jobs/job_referral.js');
 db.job_share = sequelize.import('../models/jobs/job_share.js');
+db.settings = sequelize.import('../models/settings.js');
 
 db.job.belongsTo(db.company);
 db.job_referral.belongsTo(db.job , {as : 'job'});

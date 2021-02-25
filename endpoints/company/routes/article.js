@@ -5,7 +5,7 @@ const { article_share } = require('../../../controllers/db.js');
 const db = require('../../../controllers/db.js');
 const middleware = require('../../../controllers/middleware.js')(db);
 const CONSTANTS = require('../../../models/constants');
-
+const pointsController = require('../../../controllers/pointsController');
 
 app.post('/create' , middleware.authenticate , async (req , res , next)=>{
 
@@ -318,16 +318,18 @@ app.get('/share/:id' , (req , res , next)=>{
 
         ]
     })
-    .then((response)=>{
+    .then(async (response)=>{
         if(response){
             response.updateViewCount();
             res.statusCode = 302;
             res.setHeader("Location", response.article.original_url);
             res.end();
 
+
+            const pointsData = await require('../../../controllers/pointsController').getPointsData();
             db.wallet_transaction.create({
                 reward_type : CONSTANTS.CONSTANTS.POINTS,
-                reward_value : 1,
+                reward_value : pointsData.points_for_article_view,
                 transaction_type : CONSTANTS.CONSTANTS.INCOMING,
                 userId : response.employeeId,
                 transaction_source : CONSTANTS.CONSTANTS.ARTICLE_CLICK,

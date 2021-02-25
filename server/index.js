@@ -10,6 +10,7 @@ server.use(cors());
 
 server.use(express.json());
 server.use(express.urlencoded());
+server.use(middleware.logger);
 
 const { I18n } = require('i18n');
 const i18n = new I18n();
@@ -27,8 +28,9 @@ server.use(i18n.init)
 server.use('/super_admin/', require('../endpoints/super_admin/routes'));
 server.use('/company/', require('../endpoints/company'));
 server.use('/dashbaord', require('../endpoints/dashboard/routes'));
+server.use('/settings', require('../endpoints/settings/routes'));
 
-server.use(middleware.logger);
+
 server.use(middleware.errorHandler);
 
 module.exports = server;

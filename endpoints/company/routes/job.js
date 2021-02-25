@@ -6,7 +6,7 @@ const middleware = require('../../../controllers/middleware.js')(db);
 const emailer = require('../../../controllers/emailer.js');
 const REFERRAL_STAGES = require('../../../models/constants.js').JOB_REFERRAL_STAGES;
 const CONSTANTS = require('../../../models/constants');
-
+const pointsController = require('../../../controllers/pointsController')
 app.post('/create' , middleware.authenticateSuperAdmin , (req , res , next)=>{
     
     let body = req.body;
@@ -406,7 +406,7 @@ app.post('/:id/generate/referral' , middleware.authenticateCompanyUser , (req , 
                 companyId : req.user.companyId
             }
         })
-        .then((referral)=>{
+        .then(async (referral)=>{
             let referralUrl = process.env.BASE_URL + 'company/job/referral/' + String(referral[0].id);
             res.json({
                 message : res.__('job_referral_successful'),
@@ -415,10 +415,10 @@ app.post('/:id/generate/referral' , middleware.authenticateCompanyUser , (req , 
             });
 
             
-
+            const pointsData = await pointsController.getPointsData();
             db.wallet_transaction.create({
                 reward_type : CONSTANTS.CONSTANTS.POINTS,
-                reward_value : 100,
+                reward_value : pointsData.points_for_job_referral,
                 transaction_type : CONSTANTS.CONSTANTS.INCOMING,
                 userId : req.user.id,
                 transaction_source : CONSTANTS.CONSTANTS.JOB_REFERRAL,
@@ -670,16 +670,18 @@ app.post('/referral/:id/update/status' , middleware.authenticateCompanyUser , (r
                     message : res.__('referral_stage_update_failed')
                 });
             }
+
+                const pointsData = await pointsController.getPointsData();
                 var reward_type , reward_value;
                 if(body.stage.valueOf() === CONSTANTS.CONSTANTS.CANDIDATE_REFERRED){// 100 PTS
                     reward_type = CONSTANTS.CONSTANTS.POINTS;
-                    reward_value = 100;
+                    reward_value = pointsData.points_for_job_referral;
                 }else if(body.stage.valueOf() === CONSTANTS.CONSTANTS.APPLICATION_RECEIVED){// 300 PTS
                     reward_type = CONSTANTS.CONSTANTS.POINTS;
-                    reward_value = 300;
+                    reward_value = pointsData.points_for_job_application_received;
                 }else if(body.stage.valueOf() === CONSTANTS.CONSTANTS.UNDERGOING_INTERVIEW){// 1000 PTS
                     reward_type = CONSTANTS.CONSTANTS.POINTS;
-                    reward_value = 1000;
+                    reward_value = pointsData.points_for_job_candidate_interview_inprogress;
                 }else{// candidate_selected -  DEFINED IN JOB
                     let job = await db.job.findOne({ where : { id : job_referral.jobId}})
                     reward_type = job.referral_success_reward_type;
