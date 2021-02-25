@@ -99,6 +99,7 @@ module.exports = function(sequelize, DataTypes) {
         }
     });
 
+
     user.authenticateByOtp = function(email , otp , dbOtp , res){
         return new Promise(function(resolve , reject){
             if(typeof email !== 'string' || typeof otp !== 'string'){
@@ -115,8 +116,8 @@ module.exports = function(sequelize, DataTypes) {
             .then(function(user){
                 if(user.status === 'archived'){
                     reject({
-                        status: 401,
-                        message: res.__('user_token_not_found')
+                        status: 408,
+                        message: res.__('user_archived')
                     });
                     return
                 }
@@ -136,14 +137,16 @@ module.exports = function(sequelize, DataTypes) {
                 })
                 .then(function(otps){
                     if(otps.code === otp){
-                        if(moment(new Date().toISOString()).diff(moment(otps.expiry) , 'days') > 30){
+                        if(moment(new Date().toISOString()).diff(moment(otps.expiry) , 'minutes') > 5){
                             reject({
-                                status: 404,
+                                status: 405,
                                 message: res.__('otp_expired')
                             });
                             return
                         }
+                        user.updateLastActiveTime();
                         resolve(user);
+
                         dbOtp.update({
                             expiry: moment(new Date()).add(1 , 'month').toDate()
                         }, {
@@ -158,7 +161,7 @@ module.exports = function(sequelize, DataTypes) {
                         
                     }else{
                         reject({
-                            status: 401,
+                            status: 402,
                             message: res.__('incorrect_email_otp')
                         });
                     }
@@ -167,6 +170,27 @@ module.exports = function(sequelize, DataTypes) {
                 });
             })
         });
+    };
+
+
+    user.prototype.updateLastActiveTime = async function() {
+        return new Promise((resolve , reject)=>{
+            user.update({
+                last_active_time : new Date()
+            }, {
+              where: {
+                id: this.getDataValue('id')
+              }
+            })
+            .then((result)=>{
+                resolve(result)
+            })
+            .catch((err)=>{
+                reject(err);
+            })
+            
+        })
+       
     };
 
 

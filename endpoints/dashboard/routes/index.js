@@ -67,7 +67,8 @@ getUsersCount = async (companyId) =>{
     return new Promise((resolve , reject)=>{
         db.user.count({
             where : {
-                companyId : companyId
+                companyId : companyId,
+                user_type : 'employee'
             },
             group : ['status']
         })

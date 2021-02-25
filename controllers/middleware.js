@@ -1,8 +1,28 @@
 var cryptojs = require('crypto-js');
-const {
-    lastIndexOf
-} = require('underscore');
 const CONST = require("../models/constants").CONSTANTS;
+const moment = require('moment');
+
+setUserLastActiveTime = (db , userId) =>{
+    return new Promise((resolve , reject)=>{
+        db.user.update({
+            last_active_time : new Date()
+        }, {
+            where : {
+                id : userId
+            }
+        })
+        .then(response => {
+            resolve(response);
+        })
+        .catch(err => {
+            console.log("=== ERROR");
+            console.log(err);
+            reject(err);
+        })
+    });
+};
+
+
 
 module.exports = function(db) {
     return {
@@ -150,17 +170,23 @@ module.exports = function(db) {
             })
             .then(function(user){
                 if(!user){
-                    res.status(401).send({
-                        message: res.__('user_token_not_found')
+                    res.status(409).send({
+                        message: res.__('user_logged_in_elsewhere')
                     });
                     return;
                 }else if(user.status === 'archived'){
-                    res.status(401).send({
-                        message: res.__('user_token_not_found')
+                    res.status(408).send({
+                        message: res.__('user_archived')
+                    });
+                    return;
+                }else if(moment(new Date().toISOString()).diff(moment(user.last_active_time || new Date().toISOString()) , 'days') > 30){
+                    res.status(406).send({
+                        message: res.__('session_time_out')
                     });
                     return;
                 }
                 req.user = user;
+                setUserLastActiveTime(db , user.id)
                 next();
             })
             .catch(function() {
@@ -181,6 +207,8 @@ module.exports = function(db) {
                 }
             })
             .then(function(user){
+                console.log("=== user");
+                console.log(user.email);
                 if(!user){
                     db.super_admin
                     .findOne({
@@ -205,13 +233,19 @@ module.exports = function(db) {
                     });
                     return;
                 }else if(user.status === 'archived'){
-                    res.status(401).send({
-                        message: res.__('user_token_not_found')
+                    res.status(408).send({
+                        message: res.__('user_archived')
+                    });
+                    return;
+                }else if(moment(new Date().toISOString()).diff(moment(user.last_active_time || new Date().toISOString()) , 'days') > 30){
+                    res.status(406).send({
+                        message: res.__('session_time_out')
                     });
                     return;
                 }
-                req.isSuperAdmin = false;
+                setUserLastActiveTime(db , user.id)
                 req.user = user;
+                req.isSuperAdmin = false;
                 next();
             })
             .catch(function() {

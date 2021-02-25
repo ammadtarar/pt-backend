@@ -131,7 +131,7 @@ async function sendHrAccountCreationEmail(user , company) {
                     to: user.email,
                     subject: "Your PushTalents Acccount Created",
                     html:handlebars.compile(html)({
-                        user : user.first_name,
+                        user : `${user.first_name} ${user.last_name}`,
                         company : company.name
                     })
                 })

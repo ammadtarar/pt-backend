@@ -91,5 +91,8 @@
     "questions_added" : "Questions added successfully to the quiz",
     "referral_archived" : "Job referral archived successfully",
     "question_updated" : "Question updated successfully",
-    "settings_updated" : "Settings updated successfully"
+    "settings_updated" : "Settings updated successfully",
+    "session_time_out" : "Session timeout. You haven't logged onto PushTalents for over 30 days. Please login again using a new OTP",
+    "user_archived" : "Your account has been disabled by the PushTalents admin. Please contact PushTalents admin for further details",
+    "user_logged_in_elsewhere" : "Your logged in from somewher else before. Please login again"
 }

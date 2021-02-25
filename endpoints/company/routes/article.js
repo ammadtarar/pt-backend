@@ -289,6 +289,9 @@ app.post('/:id/generate/share/link' , middleware.authenticateCompanyUser , (req 
                     url : process.env.BASE_URL + 'company/article/share/' + String(response.id)
                 });
             })
+            .catch(err =>{
+                next(err)
+            })
         }
     })
     .catch((err)=>{

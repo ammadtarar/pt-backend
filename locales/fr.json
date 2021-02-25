@@ -91,5 +91,8 @@
     "questions_added" : "Questions ajoutées avec succès au quiz",
     "referral_archived" : "Référence d'emploi archivée avec succès",
     "question_updated" : "Question mise à jour avec succès",
-    "settings_updated" : "Paramètres mis à jour avec succès"
+    "settings_updated" : "Paramètres mis à jour avec succès",
+    "session_time_out" : "Expiration de la session. Vous n'êtes pas connecté à PushTalents depuis plus de 30 jours. Veuillez vous reconnecter en utilisant un nouveau OTP",
+    "user_archived" : "Votre compte a été désactivé par l'administrateur PushTalents. Veuillez contacter l'administrateur PushTalents pour plus de détails",
+    "user_logged_in_elsewhere" : "Vous êtes déjà connecté ailleurs. Veuillez vous reconnecter"
 }
