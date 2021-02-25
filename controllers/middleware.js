@@ -207,8 +207,6 @@ module.exports = function(db) {
                 }
             })
             .then(function(user){
-                console.log("=== user");
-                console.log(user.email);
                 if(!user){
                     db.super_admin
                     .findOne({
