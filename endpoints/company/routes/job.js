@@ -7,7 +7,21 @@ const emailer = require('../../../controllers/emailer.js');
 const REFERRAL_STAGES = require('../../../models/constants.js').JOB_REFERRAL_STAGES;
 const CONSTANTS = require('../../../models/constants');
 const pointsController = require('../../../controllers/pointsController')
-app.post('/create' , middleware.authenticateSuperAdmin , (req , res , next)=>{
+
+const metascraper = require('metascraper')([
+    require('metascraper-author')(),
+    require('metascraper-date')(),
+    require('metascraper-description')(),
+    require('metascraper-image')(),
+    require('metascraper-logo')(),
+    require('metascraper-clearbit')(),
+    require('metascraper-publisher')(),
+    require('metascraper-title')(),
+    require('metascraper-url')()
+  ]);
+const got = require('got');
+
+app.post('/create' , middleware.authenticateSuperAdmin , async (req , res , next)=>{
     
     let body = req.body;
     if (body === null || body === undefined || Object.keys(body).length === 0) {
@@ -17,12 +31,35 @@ app.post('/create' , middleware.authenticateSuperAdmin , (req , res , next)=>{
         return;
     }
 
-    var job = underscore.pick(body , 'url' , 'title' , 'location' , 'companyId' , 'referral_success_reward_type' , 'referral_success_reward_value');
-    if(job === null || job === undefined  || Object.keys(job).length != 6){
-        res.status(422).send({
-            message: res.__('job_missing_data')
-        });
-        return;
+    // var job = underscore.pick(body , 'url' , 'title' , 'location' , 'companyId' , 'referral_success_reward_type' , 'referral_success_reward_value');
+    
+    var job = {};
+
+
+    if(!req.body.hasOwnProperty("custom") || req.body.custom == false){
+        var data = underscore.pick(body , 'url' , 'title' , 'location' , 'companyId' , 'referral_success_reward_type' , 'referral_success_reward_value');
+        if(data === null || data === undefined  || Object.keys(data).length != 6){
+            res.status(422).send({
+                message: res.__('job_missing_data')
+            });
+            return;
+        }
+        job = data;
+    }else{
+        var data = underscore.pick(body , 'url' , 'location' , 'companyId' , 'referral_success_reward_type' , 'referral_success_reward_value');
+        try{
+            const { body: html, url } = await got(data.url);
+            const metadata = await metascraper({ html, url });
+            data.title = metadata.title;
+            job = data;
+        }catch(e){
+            console.log("FETCHING ERROR");
+            console.log(e);
+            res.status(432).json({
+                message : res.__('cannot_fetch_job_data_from_url')
+            })
+            return
+        }
     }
 
     db.job.create(job)

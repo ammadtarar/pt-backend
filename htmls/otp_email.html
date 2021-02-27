@@ -3,67 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PushTalents - Job Referral</title>
+    <title>PushTalents - OTP</title>
 
     <link rel="preconnect" href="https://fonts.gstatic.com"> 
 <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
-
-    <style>
-
-        body{
-            padding: 10px;
-        }
-
-        .container{
-            border-radius: 10px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            display: flex;
-            flex-direction: column;
-            padding-bottom: 20px;
-        }
-
-        .logo{
-            width: 40vw;
-            margin-top: 30px;
-            margin-bottom: 50px;
-        }
-
-    
-
-        .text-container{
-            display: flex;
-            flex-direction: column;
-            font-family:  Helvetica, sans-serif;
-            padding: 20px;
-            font-size: 14px;
-        }
-    </style>
 </head>
 <body>
+    <div>
+        <ul style="list-style-type: none;">
 
-    <div class="container">
+            <li style="margin-top : 10px ">
+                <label>
+                    Dear {{candidate}},
+                </label>
+            </li>
 
-        <img src="https://www.pushtalents.com/logo_long_for_blue_background.8d861bde.png" class="logo">
+            <li style="margin-top : 10px ">
+                <label>
+                    Please use the code below to login to PushTalents.
+                </label>
+            </li>
+
+            <li style="margin-top : 10px ">
+                <label>
+                    <b>Code : {{otp}}</b>
+                </label>
+            </li>
+
+            <li style="margin-top : 10px ">
+                <label>
+
+                </label>
+            </li>
+
+            <li style="margin-top : 10px ">
+                <label>
+
+                </label>
+            </li>
+
+            <li style="margin-top : 10px ">
+                <label>
+                    Une question ? écrivez-nous à : contact@pushtalents.com
+                </label>
+            </li>
 
 
-        <div class="text-container">
-            <label>
-                Dear {{candidate}},
-                </br></br>
-                Please use the code below to login to PushTalents.
-                </br></br>
-                <b>Code : {{otp}}</b>
-            </label>
+            <li style="margin-top : 10px ">
+                <label>
+                    A vous de jouer !
+                </label>
+            </li>
 
 
+            <li style="margin-top : 10px ">
+                <label>
+                    PUSHTALENTS
+                </label>
+            </li>
 
-        </div>
-
-
-        
-
+            <li style="margin-bottom : 10px; margin-top : 10px ; width: 100px;"><img src="cid:logo" class="logo"></li>
+        </ul>
     </div>
     
 </body>

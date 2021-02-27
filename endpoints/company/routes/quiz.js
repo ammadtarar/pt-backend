@@ -168,6 +168,31 @@ app.patch('/question/:id' , middleware.authenticateSuperAdmin , (req , res , nex
     })
 })
 
+
+app.delete('/question/:id' , middleware.authenticateSuperAdmin , (req , res , next)=>{
+    var id = parseInt(req.params.id);
+    if (id === undefined || id === null || id <= 0) {
+        res.status(422).send({
+            message: res.__('quiz_id_missing')
+        });
+        return;
+    }
+
+    db.quiz_item.destroy({
+        where : {
+            id : id
+        }
+    })
+    .then(response => {
+        res.json({
+            message : res.__('question_deleted')
+        });
+    })
+    .catch(err =>{
+        next(err);
+    })
+})
+
 app.get('/:id' , middleware.authenticate , (req , res , next)=>{
     var id = parseInt(req.params.id);
     if (id === undefined || id === null || id <= 0) {

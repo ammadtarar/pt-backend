@@ -7,6 +7,20 @@ const middleware = require('../../../controllers/middleware.js')(db);
 const CONSTANTS = require('../../../models/constants');
 const pointsController = require('../../../controllers/pointsController');
 
+
+const metascraper = require('metascraper')([
+    require('metascraper-author')(),
+    require('metascraper-date')(),
+    require('metascraper-description')(),
+    require('metascraper-image')(),
+    require('metascraper-logo')(),
+    require('metascraper-clearbit')(),
+    require('metascraper-publisher')(),
+    require('metascraper-title')(),
+    require('metascraper-url')()
+  ]);
+const got = require('got');
+
 app.post('/create' , middleware.authenticate , async (req , res , next)=>{
 
     if(!req.body){
@@ -38,14 +52,8 @@ app.post('/create' , middleware.authenticate , async (req , res , next)=>{
         data.companyId = req.user.companyId;
     }
 
-
-    console.log();
-    console.log();
-    console.log();
-    console.log();
     
-    if(req.body.hasOwnProperty("custom") && req.body.custom){
-        console.log(" ==== INSIDE CUSTOM");
+    if(!req.body.hasOwnProperty("custom") || req.body.custom == false){
         if(!req.body.title || !req.body.thumb_url){
             res.status(422).send({
                 message : res.__('article_custom_data_missing')
@@ -57,34 +65,19 @@ app.post('/create' , middleware.authenticate , async (req , res , next)=>{
         data.is_active = req.body.hasOwnProperty('is_active') ? (req.query.is_active === 'true') : true
 
     }else{
-        console.log(" ==== INSIDE AUTO");
-        let url_data = await require('html-metadata-parser').parser(data.original_url);
-        console.log(url_data);
-        if(url_data.err || !url_data.og){
+        try{
+            const { body: html, url } = await got(data.original_url);
+            const metadata = await metascraper({ html, url });
+            data.title = metadata.title;
+            data.thumb_url = metadata.image;
+            data.is_active = req.body.hasOwnProperty('is_active') ? (req.query.is_active === 'true') : true
+        }catch(e){
             res.status(432).json({
                 message : res.__('article_data_cannot_be_fetched')
             })
             return
-        }else{
-            data.title = url_data.og.title;
-            data.thumb_url = url_data.og.image;
-            data.is_active = req.body.hasOwnProperty('is_active') ? (req.query.is_active === 'true') : true
         }
-
-
-        
     }
-
-    console.log();
-    console.log();
-    console.log();
-    console.log();
-    console.log("==== DATA");
-    console.log(JSON.stringify(data));
-    console.log();
-    console.log();
-    console.log();
-    console.log();
 
     db.article.create(data)
     .then((createdArticle)=>{

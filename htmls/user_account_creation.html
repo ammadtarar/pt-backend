@@ -8,77 +8,83 @@
     <link rel="preconnect" href="https://fonts.gstatic.com"> 
 <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
 
-    <style>
-
-        body{
-            padding: 10px;
-        }
-
-        .container{
-            border-radius: 10px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .logo{
-            width: 40vw;
-            margin-top: 30px;
-            margin-bottom: 50px;
-        }
-
-
-        .text-container{
-            display: flex;
-            flex-direction: column;
-            font-family: Arial, Helvetica, sans-serif;
-            padding: 20px;
-            font-size: 14px;
-        }
-
-
-    </style>
 </head>
 <body>
 
-    <div class="container">
 
-        <img src="https://www.pushtalents.com/logo_long_for_blue_background.8d861bde.png" class="logo">
+    <div>
+        <ul style="list-style-type: none;">
 
+            <li style="margin-top : 10px ">
+                <label>
+                    Bonjour "{{user}}",
+                </label>
+            </li>
 
-        <div class="text-container">
-            <label>
-                Bonjour "{{user}}",
-            </br></br>
-                Votre compte d'Ambassadeur pour "{{company}}" vient d'être créé sur PUSHTALENTS
-            </br></br>
-                Voici la procédure afin d'activer votre compte et vous connecter à l'application mobile :
-            </br></br>
-                Etape 1. Téléchargez l'application mobile PUSHTALENTS en cliquant sur ce lien à partir de votre téléphone mobile:
-                · pour les Iphone: https://itunes.apple.com/fr/app/pushtalents/id1267787180?mt=8
-                · pour les autres modèles : https://play.google.com/store/apps/details?id=com.pushtalents
-            </br></br>
-                Etape 2. Une fois téléchargée, ouvrez l'application et saisissez votre adresse email afin de recevoir votre code d'activation. Vous recevrez un email contenant un code personnel et confidentiel à 6 chiffres.
-                nb : si vous ne recevez pas d'email, pensez à regarder dans votre courrier indésirable / spam
-            </br></br>
-                Etape 3. Entrez ce code dans la case prévue à cet effet. Votre compte est activé et vous êtes automatiquement connecté(e) à votre espace Ambassadeur "NAME OF THE COMPANY"
-            </br></br>
-                C'est fait !
-                Devenez Ambassadeur de votre entreprise : recommandez des candidats, partagez des offres et des articles sur vos réseaux, suivez votre activité, testez nos formations et gagnez des récompenses !
-            </br></br>
-                A vous de jouer !
-                L'équipe PUSHTALENTS
-            </br></br>
-                Une question ?
-                Envoyez-nous un email : contact@pushtalents.com
-            </label>
-        </div>
+            <li style="margin-top : 10px ">
+                <label>
+                    Votre compte d'Ambassadeur pour "{{company}}" vient d'être créé sur PUSHTALENTS
+                </label>
+            </li>
 
 
-        
+            <li style="margin-top : 10px ">
+                <label>
+                    Voici la procédure afin d'activer votre compte et vous connecter à la plateforme : 
+                </label>
+            </li>
 
+            <li style="margin-top : 10px ">
+                <label>
+                    Etape 1. Téléchargez l'application mobile PUSHTALENTS en cliquant sur ce lien à partir de votre téléphone mobile:
+· pour les Iphone: https://itunes.apple.com/fr/app/pushtalents/id1267787180?mt=8
+· pour les autres modèles : https://play.google.com/store/apps/details?id=com.pushtalents
+                </label>
+            </li>
+
+
+            <li style="margin-top : 10px ">
+                <label>
+                    Etape 2. Une fois téléchargée, ouvrez l'application et saisissez votre adresse email afin de recevoir votre code d'activation.
+Vous recevrez un email contenant un code personnel et confidentiel à 6 chiffres.
+nb : si vous ne recevez pas d'email, pensez à regarder dans votre courrier indésirable / spam
+                </label>
+            </li>
+
+
+            <li style="margin-top : 10px ">
+                <label>
+                    Etape 3. Saisissez ce code puis validez.
+Vous voilà Ambassadeur de votre entreprise : recommandez des candidats, partagez des offres et des articles sur vos réseaux, suivez votre activité, testez nos formations et gagnez des récompenses !
+                </label>
+            </li>
+
+
+            <li style="margin-top : 10px ">
+                <label>
+                    A vous de jouer ! 
+                </label>
+            </li>
+
+
+
+            <li style="margin-top : 10px ">
+                <label>
+                    Une question ? écrivez-nous à : contact@pushtalents.com
+                </label>
+            </li>
+
+
+
+            <li style="margin-top : 10px ">
+                <label>
+                    A bientôt,
+L'équipe PUSHTALENTS pour {{company}}
+                </label>
+            </li>
+
+            <li style="margin-bottom : 10px; margin-top : 10px ; width: 100px;"><img src="cid:logo" class="logo"></li>
+        </ul>
     </div>
     
 </body>

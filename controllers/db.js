@@ -13,7 +13,7 @@ if (process.env.NODE_ENV == 'development') {
             dialect: process.env.DB_DIALECT,
             storage: process.env.DB_FILE_PATH,
             operatorsAliases: false,
-            logging: true
+            logging: false
         });
 } else {
     sequelize = new Sequelize(
@@ -23,7 +23,7 @@ if (process.env.NODE_ENV == 'development') {
             host: process.env.DB_HOST,
             dialect: process.env.DB_DIALECT,
             port: process.env.DB_PORT,
-            logging: true
+            logging: false
         });
 }
 

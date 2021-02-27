@@ -7,78 +7,75 @@
 
     <link rel="preconnect" href="https://fonts.gstatic.com"> 
 <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
-
-    <style>
-
-        body{
-            padding: 10px;
-        }
-
-        .container{
-            border-radius: 10px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .logo{
-            width: 40vw;
-            margin-top: 30px;
-            margin-bottom: 50px;
-        }
-
-
-        .text-container{
-            display: flex;
-            flex-direction: column;
-            font-family: Arial, Helvetica, sans-serif;
-            padding: 20px;
-            font-size: 14px;
-        }
-
-        .apply{
-            padding: 10px 15px;
-            font-family: Arial, Helvetica, sans-serif;
-            color: #1C2E3F;
-            background: #FFC107;
-            border-radius: 5px;
-            margin-top: 10px;
-            margin-bottom: 30px;
-            font-size: 16px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        a{
-            text-decoration : none; 
-        }
-
-    </style>
 </head>
 <body>
+    <div>
+        <ul style="list-style-type: none;">
 
-    <div class="container">
+            <li style="margin-top : 10px ">
+                <label>
+                    Dear {{candidate}},
+                </label>
+            </li>
 
-        <img src="https://www.pushtalents.com/logo_long_for_blue_background.8d861bde.png" class="logo">
+
+            <li style="margin-top : 10px ">
+                <label>
+                    You have been referred to a new job opening by {{employee}}. Please click the button below to consult and apply for the job online
+                </label>
+            </li>
 
 
-        <div class="text-container">
+            <li style="margin-top : 10px ">
+                <label>
+                    <div 
+                    style="padding: 10px 15px;
+                    font-family: Arial, Helvetica, sans-serif;
+                    color: #1C2E3F;
+                    background: #FFC107;
+                    border-radius: 5px;
+                    margin-top: 10px;
+                    margin-bottom: 30px;
+                    font-size: 16px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;"
+                > <a style="text-decoration : none; " href="{{url}}">APPLY NOW</a> </div>
+                </label>
+            </li>
+            
+            <li style="margin-top : 10px ">
+                <label>
 
-            <label>
-                Dear {{candidate}},
-                </br></br>
-                You have been referred to a new job opening by {{employee}}. Please click the button below to consult and apply for the job online
-            </label>
+                </label>
+            </li>
+            <li style="margin-top : 10px ">
+                <label>
 
-        </div>
+                </label>
+            </li>
 
-        <div class="apply"> <a href="{{url}}">APPLY NOW</a> </div>
+            <li style="margin-top : 10px ">
+                <label>
+                    Une question ? écrivez-nous à : contact@pushtalents.com
+                </label>
+            </li>
 
-        
+            <li style="margin-top : 10px ">
+                <label>
+                    A vous de jouer !
+                </label>
+            </li>
 
+            <li style="margin-top : 10px ">
+                <label>
+                    PUSHTALENTS
+                </label>
+            </li>
+
+
+            <li style="margin-bottom : 10px; margin-top : 10px ; width: 100px;"><img src="cid:logo" class="logo"></li>
+        </ul>
     </div>
     
 </body>
