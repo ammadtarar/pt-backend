@@ -166,7 +166,13 @@ module.exports = function(db) {
             db.user.findOne({
                 where : {
                     tokenHash: cryptojs.MD5(token).toString()
-                }
+                },
+                include : [
+                    {
+                        model : db.company,
+                        as : 'company'
+                    }
+                ]
             })
             .then(function(user){
                 if(!user){

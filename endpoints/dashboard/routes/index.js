@@ -6,7 +6,7 @@ const middleware = require('../../../controllers/middleware.js')(db);
 const CONSTANTS = require('../../../models/constants');
 
 app.get('' , middleware.authenticateCompanyUser , async (req , res , next)=>{
-    if(req.user.user_type != CONSTANTS.CONSTANTS.HR_ADMIN){
+    if(req.user.user_type === CONSTANTS.CONSTANTS.EMPLOYEE){
         res.status(422).json({
             message : res.__('only_hr')
         });

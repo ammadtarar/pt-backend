@@ -76,7 +76,7 @@ app.post('/create' , middleware.authenticateSuperAdmin , async (req , res , next
 
 app.get('/list/all' , middleware.authenticate , (req , res , next)=>{
   
-    if(!req.isSuperAdmin && req.user.user_type != 'hr_admin'){
+    if(!req.isSuperAdmin && (req.user.user_type != CONSTANTS.CONSTANTS.HR_ADMIN || req.user.user_type != CONSTANTS.CONSTANTS.BOTH)){
         res.status(422).send({
             message: res.__('employee_not_allowed')
         });
@@ -154,7 +154,7 @@ app.get('/list/all' , middleware.authenticate , (req , res , next)=>{
 });
 
 app.post('/referral/:id/archive' , middleware.authenticate , (req , res , next)=>{
-    if(!req.isSuperAdmin && req.user.user_type != 'hr_admin'){
+    if(!req.isSuperAdmin && (req.user.user_type != CONSTANTS.CONSTANTS.HR_ADMIN || req.user.user_type != CONSTANTS.CONSTANTS.BOTH)){
         res.status(422).send({
             message: res.__('employee_not_allowed')
         });
@@ -184,7 +184,7 @@ app.post('/referral/:id/archive' , middleware.authenticate , (req , res , next)=
 });
 
 app.patch('/:id' , middleware.authenticate ,(req , res , next)=>{
-    if(!req.isSuperAdmin && req.user.user_type != 'hr_admin'){
+    if(!req.isSuperAdmin && (req.user.user_type != CONSTANTS.CONSTANTS.HR_ADMIN || req.user.user_type != CONSTANTS.CONSTANTS.BOTH)){
         res.status(422).send({
             message: res.__('employee_not_allowed')
         });
@@ -398,7 +398,7 @@ app.get('/share/:id/data' , middleware.authenticate , (req , res , next)=>{
 app.post('/:id/generate/referral' , middleware.authenticateCompanyUser , (req , res , next)=>{
 
 
-    if(!req.isSuperAdmin && req.user.user_type === 'hr_admin'){
+    if(!req.isSuperAdmin && req.user.user_type === CONSTANTS.CONSTANTS.HR_ADMIN){
         res.status(422).send({
             message: res.__('hr_admin_not_allowed')
         });
@@ -485,7 +485,7 @@ app.post('/:id/generate/referral' , middleware.authenticateCompanyUser , (req , 
 });
 
 app.get('/referral/list/all' , middleware.authenticateCompanyUser , (req , res , next)=>{
-    if(!req.isSuperAdmin && req.user.user_type != 'hr_admin'){
+    if(!req.isSuperAdmin && (req.user.user_type != CONSTANTS.CONSTANTS.HR_ADMIN || req.uer.user_type != CONSTANTS.CONSTANTS.BOTH)){
         res.status(422).send({
             message: res.__('employee_not_allowed')
         });

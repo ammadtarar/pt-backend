@@ -4,6 +4,7 @@ const underscore = require('underscore');
 const db = require('../../../controllers/db.js');
 const middleware = require('../../../controllers/middleware.js')(db);
 const emailer = require('../../../controllers/emailer.js');
+const CONSTANTS = require('../../../models/constants');
 
 app.post('/create', middleware.authenticateSuperAdmin, (req, res, next) => {
 
@@ -56,13 +57,14 @@ app.post('/create', middleware.authenticateSuperAdmin, (req, res, next) => {
                 company: new_users
             });
             new_users.forEach((user)=>{
-                if(user.user_type === 'hr_admin'){
+                if(user.user_type === CONSTANTS.CONSTANTS.HR_ADMIN){
                     emailer.sendHrAccountCreationEmail(user , company)    
-                }else{
+                }else if(user.user_type === CONSTANTS.CONSTANTS.EMPLOYEE){
                     emailer.sendUserAccountCreationEmail(user , company)    
+                }else{
+                    emailer.sendHrAccountCreationEmail(user , company)    
+                    emailer.sendUserAccountCreationEmail(user , company)  
                 }
-                console.log("user email " , user.email);
-                
             });
         })
         .catch(err=>{
@@ -208,7 +210,13 @@ app.post('/send/otp' , (req , res , next) => {
     db.user.findOne({
         where : {
             email : email
-        }
+        },
+        include : [
+            {
+                model : db.company,
+                as : 'company'
+            }
+        ]
     })
     .then((user)=>{
         if(user){
@@ -226,13 +234,28 @@ app.post('/send/otp' , (req , res , next) => {
                 })
                 .then((otpRes)=>{
 
-                    emailer.sendCompanyUserOtp(user.email , otpRes.code , user.first_name)
-                    .then(function() {
-                        res.json({
-                            code : otpRes.code,
-                            id : otpRes.id
+                    let platform = req.body.platform || 'phone_app';
+
+                    if(platform === 'hr_admin_web' && (user.user_type === CONSTANTS.CONSTANTS.BOTH || user.user_type === CONSTANTS.CONSTANTS.HR_ADMIN)){
+                        emailer.sendHrOtp(otpRes.code , user )
+                        .then(function() {
+                            res.json({
+                                code : otpRes.code,
+                                id : otpRes.id
+                            });
                         });
-                    });
+                    }else{
+                        emailer.sendCompanyUserOtp(otpRes.code , user)
+                        .then(function() {
+                            res.json({
+                                code : otpRes.code,
+                                id : otpRes.id
+                            });
+                        });
+                    }
+
+                    
+                    
 
                 });
             });

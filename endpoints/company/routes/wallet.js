@@ -6,7 +6,7 @@ const CONSTANTS = require('../../../models/constants');
 
 
 app.get('/my/wallet/balance' , middleware.authenticateCompanyUser , (req , res , next)=>{
-    if(req.user.user_type == CONSTANTS.CONSTANTS.HR_ADMIN){
+    if(req.user.user_type === CONSTANTS.CONSTANTS.HR_ADMIN){
         res.status(422).json({
             message : res.__('hr_admin_no_wallet')
         });
@@ -31,7 +31,7 @@ app.get('/:id/wallet/balance' , middleware.authenticateCompanyUser , (req , res 
         return;
     }
 
-    if(req.user.user_type != CONSTANTS.CONSTANTS.HR_ADMIN){
+    if(req.user.user_type === CONSTANTS.CONSTANTS.EMPLOYEE){
         res.status(422).json({
             message : res.__('employee_cannot_see_others_wallet')
         });
@@ -67,7 +67,7 @@ app.get('/:id/wallet/balance' , middleware.authenticateCompanyUser , (req , res 
 });
 
 app.get('/my/wallet/transactions/list/all' , middleware.authenticateCompanyUser , (req , res , next)=>{
-    if(req.user.user_type == CONSTANTS.CONSTANTS.HR_ADMIN){
+    if(req.user.user_type === CONSTANTS.CONSTANTS.HR_ADMIN){
         res.status(422).json({
             message : res.__('hr_admin_no_wallet')
         });
@@ -94,7 +94,7 @@ app.get('/:id/wallet/transactions/list/all' , middleware.authenticateCompanyUser
         return;
     }
 
-    if(req.user.user_type != CONSTANTS.CONSTANTS.HR_ADMIN){
+    if(req.user.user_type === CONSTANTS.CONSTANTS.EMPLOYEE){
         res.status(422).json({
             message : res.__('employee_cannot_see_others_wallet')
         });

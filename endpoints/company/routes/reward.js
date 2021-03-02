@@ -11,7 +11,7 @@ const { resolveContent } = require('nodemailer/lib/shared');
 
 app.post('/create' , middleware.authenticateCompanyUser , (req , res , next)=>{
 
-    if(!req.isSuperAdmin && req.user.user_type != CONSTANTS.CONSTANTS.HR_ADMIN){
+    if(!req.isSuperAdmin && req.user.user_type === CONSTANTS.CONSTANTS.EMPLOYEE){
         res.status(422).send({
             message: res.__('employee_not_allowed')
         });
@@ -54,7 +54,7 @@ app.post('/create' , middleware.authenticateCompanyUser , (req , res , next)=>{
 });
 
 app.patch('/:id' , middleware.authenticateCompanyUser , (req , res , next)=>{
-    if(!req.isSuperAdmin && req.user.user_type != CONSTANTS.CONSTANTS.HR_ADMIN){
+    if(!req.isSuperAdmin && req.user.user_type === CONSTANTS.CONSTANTS.EMPLOYEE){
         res.status(422).send({
             message: res.__('employee_not_allowed')
         });
@@ -129,7 +129,7 @@ app.get('/list/all' , middleware.authenticate , (req , res , next)=>{
 
     if(!req.isSuperAdmin){
         where.companyId = req.user.companyId;
-        if(req.user.user_type == CONSTANTS.CONSTANTS.EMPLOYEE){
+        if(req.user.user_type === CONSTANTS.CONSTANTS.EMPLOYEE){
             where.is_active = true
         }else if(req.query.hasOwnProperty("is_active")){
             where.is_active = req.query.is_active === 'true';
@@ -190,7 +190,7 @@ app.get('/redeem/requests/list/all' , middleware.authenticate , (req , res , nex
 
     if(!req.isSuperAdmin){
         where.companyId = req.user.companyId;
-        if(req.user.user_type == CONSTANTS.CONSTANTS.EMPLOYEE){
+        if(req.user.user_type === CONSTANTS.CONSTANTS.EMPLOYEE){
             where.is_active = true
         }else if(req.query.hasOwnProperty("is_active")){
             where.is_active = req.query.is_active === 'true';

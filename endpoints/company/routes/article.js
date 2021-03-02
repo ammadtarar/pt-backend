@@ -213,7 +213,7 @@ app.patch("/:id/update/status" , middleware.authenticate , (req , res , next)=>{
         return;
     }
     
-    if(!req.isSuperAdmin && req.user.user_type != 'hr_admin'){
+    if(!req.isSuperAdmin && (req.user.user_type != CONSTANTS.CONSTANTS.HR_ADMIN || req.user_type != CONSTANTS.CONSTANTS.BOTH)){
         res.status(422).send({
             message: res.__('employee_not_allowed')
         });

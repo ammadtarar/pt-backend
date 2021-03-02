@@ -16,6 +16,7 @@ const CONSTANTS = {
     APPROVED : 'approved',
     HR_ADMIN : 'hr_admin',
     EMPLOYEE : 'employee',
+    BOTH : 'hr_admin_and_employee',
     OPTION_ONE : 'option_one',
     OPTION_TWO : 'option_two',
     OPTION_THREE : 'option_three',
@@ -40,7 +41,8 @@ module.exports.JOB_REFERRAL_STAGES = [
 
 module.exports.COMPANY_USER_TYPES = [
     CONSTANTS.HR_ADMIN,
-    CONSTANTS.EMPLOYEE
+    CONSTANTS.EMPLOYEE,
+    CONSTANTS.BOTH
 ];
 
 module.exports.JOB_REFERRAL_SUCCESS_REWARD_TYPES = [

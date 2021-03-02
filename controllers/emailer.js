@@ -27,14 +27,14 @@ let transporter = nodemailer.createTransport({
   },
 });
 
-async function sendCompanyUserOtp(email, otp, first_name) {
+async function sendCompanyUserOtp(otp , user) {
   new Promise((resolve, reject) => {
     readHTMLFile(__dirname + "/../htmls/otp_email.html", function (err, html) {
       transporter
         .sendMail({
           from: '"PushTalents" <no-reply@pushtalent.com>',
-          to: email,
-          subject: "PushTalents Login OTP || OTP de connexion PushTalents",
+          to: user.email,
+          subject: "Votre code personnel PUSHTALENTS",
           attachments: [
             {
               filename: "logo.png",
@@ -44,7 +44,8 @@ async function sendCompanyUserOtp(email, otp, first_name) {
           ],
           html: handlebars.compile(html)({
             otp: otp,
-            candidate: first_name,
+            candidate: `${user.first_name} ${user.last_name}`,
+            company: user.company.name
           }),
         })
         .then((success) => {
@@ -57,7 +58,37 @@ async function sendCompanyUserOtp(email, otp, first_name) {
   });
 }
 
-async function sendJobReferral(candidate, employee, referralUrl) {
+async function sendHrOtp(otp, user) {
+  new Promise((resolve, reject) => {
+    readHTMLFile(__dirname + "/../htmls/hr_otp_email.html", function (err, html) {
+      transporter
+        .sendMail({
+          from: '"PushTalents" <no-reply@pushtalent.com>',
+          to: user.email,
+          subject: "Votre code personnel d'Administration PUSHTALENTS",
+          attachments: [
+            {
+              filename: "logo.png",
+              path: __dirname + "/logo.png",
+              cid: "logo",
+            },
+          ],
+          html: handlebars.compile(html)({
+            code: otp,
+            user: `${user.first_name} ${user.last_name}`,
+          }),
+        })
+        .then((success) => {
+          resolve(success);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  });
+}
+
+async function sendJobReferral(candidate , employee, referralUrl) {
   new Promise((resolve, reject) => {
     readHTMLFile(
       __dirname + "/../htmls/referral_email.html",
@@ -66,7 +97,7 @@ async function sendJobReferral(candidate, employee, referralUrl) {
           .sendMail({
             from: '"PushTalents" <no-reply@pushtalent.com>',
             to: candidate.email,
-            subject: employee.first_name + " referred you for a job",
+            subject: "Vous avez été recommandé pour une offre d'emploi !",
             attachments: [
               {
                 filename: "logo.png",
@@ -76,8 +107,9 @@ async function sendJobReferral(candidate, employee, referralUrl) {
             ],
             html: handlebars.compile(html)({
               url: referralUrl,
-              candidate: candidate.first_name,
-              employee: employee.first_name,
+              company: employee.company.name,
+              employee: `${employee.first_name} ${employee.last_name}`,
+              candidate : candidate.first_name
             }),
           })
           .then((success) => {
@@ -230,3 +262,4 @@ module.exports.sendRedeemApprovalEmailToEmployee = sendRedeemApprovalEmailToEmpl
 module.exports.sendRewardRequestToHR = sendRewardRequestToHR;
 module.exports.sendUserAccountCreationEmail = sendUserAccountCreationEmail;
 module.exports.sendHrAccountCreationEmail = sendHrAccountCreationEmail;
+module.exports.sendHrOtp = sendHrOtp;
