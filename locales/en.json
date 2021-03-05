@@ -96,5 +96,6 @@
     "user_archived" : "Your account has been disabled by the PushTalents admin. Please contact PushTalents admin for further details",
     "user_logged_in_elsewhere" : "Your logged in from somewher else before. Please login again",
     "cannot_fetch_job_data_from_url" : "Cannot fetch job data from the url. Please send job 'title' , 'url' , 'location' , 'companyId' , 'referral_success_reward_type' , 'referral_success_reward_value' and 'custom' = false in request body and try again",
-    "question_deleted" : "Question deleted successfully"
+    "question_deleted" : "Question deleted successfully",
+    "only_mobile" : "Only employees can access this service"
 }

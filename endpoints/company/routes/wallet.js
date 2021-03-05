@@ -308,5 +308,30 @@ getUserWalletTransactions = (userId , query)=>{
 };
 
 
+
+getUserTotalPoints = (userId)=>{
+    return new Promise((resolve , rejcet)=>{
+        db.wallet_transaction.findAll({
+            where : {
+                userId : userId,
+                reward_type : 'points',
+                transaction_type : 'incoming'
+            },
+            attributes: [
+                [db.sequelize.fn('SUM', db.sequelize.col('reward_value')), 'total']
+            ]
+        })
+        .then(res => {
+            var total = 0
+            try{
+                total = JSON.parse(JSON.stringify(res))[0].total
+            }catch(e){
+                console.log(e);
+            }
+            resolve(total)
+        })
+    });
+}
 module.exports = app;
 module.getUserBalance = getUserBalance;
+module.getUserTotalPoints = getUserTotalPoints;

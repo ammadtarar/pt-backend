@@ -96,5 +96,6 @@
     "user_archived" : "Votre compte a été désactivé par l'administrateur PushTalents. Veuillez contacter l'administrateur PushTalents pour plus de détails",
     "user_logged_in_elsewhere" : "Vous êtes déjà connecté ailleurs. Veuillez vous reconnecter",
     "cannot_fetch_job_data_from_url" : "Impossible de récupérer les données de la tâche à partir de l'URL. Veuillez envoyer l'intitulé du poste, l'URL, le «lieu», l'ID de la société, le type de referral_success_reward_type, le referral_success_reward_value et custom = false dans le corps de la demande et réessayer",
-    "question_deleted" : "Question supprimée avec succès"
+    "question_deleted" : "Question supprimée avec succès",
+    "only_mobile" : "Seuls les employés peuvent accéder à ce service"
 }

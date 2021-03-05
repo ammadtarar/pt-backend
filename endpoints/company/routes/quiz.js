@@ -311,7 +311,7 @@ app.post('/:id/take/test' , middleware.authenticateCompanyUser , (req , res , ne
         let questions = await getQuizQuestionsInRandomOrder(id);
 
         if(existingQuiz){
-            res.status(409).json({
+            res.status(201).json({
                 message : res.__('quiz_already_started'),
                 quiz_test_id : existingQuiz.id,
                 questions : questions

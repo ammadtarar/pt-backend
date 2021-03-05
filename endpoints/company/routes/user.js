@@ -300,7 +300,7 @@ app.post('/login', (req, res, next) => {
         });
 });
 
-app.patch('/' , middleware.authenticateCompanyUser , (req , res , next)=>{
+app.patch('/:id' , middleware.authenticate , (req , res , next)=>{
     var body = req.body;
     if(body === null || body === undefined || Object.keys(body).length <= 0){
         res.status(422).send({
@@ -317,9 +317,15 @@ app.patch('/' , middleware.authenticateCompanyUser , (req , res , next)=>{
         newData.last_name = body.last_name
     }
 
+    if(body.position && body.position !== '' && body.position ){
+        newData.position = body.position
+    }
+
+    var id = parseInt(req.params.id);
+
     db.user.update(newData , {
         where : {
-            id : req.user.id
+            id : id
         }
     })
     .then((status)=>{

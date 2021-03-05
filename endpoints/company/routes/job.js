@@ -445,14 +445,17 @@ app.post('/:id/generate/referral' , middleware.authenticateCompanyUser , (req , 
         })
         .then(async (referral)=>{
             let referralUrl = process.env.BASE_URL + 'company/job/referral/' + String(referral[0].id);
+            const pointsData = await pointsController.getPointsData();
+            
             res.json({
                 message : res.__('job_referral_successful'),
                 referralId : referral[0].id,
-                referralUrl : referralUrl
+                referralUrl : referralUrl,
+                points_earned : pointsData.points_for_job_referral
             });
 
             
-            const pointsData = await pointsController.getPointsData();
+            
             db.wallet_transaction.create({
                 reward_type : CONSTANTS.CONSTANTS.POINTS,
                 reward_value : pointsData.points_for_job_referral,

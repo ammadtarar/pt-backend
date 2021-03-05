@@ -16,14 +16,24 @@ var readHTMLFile = function (path, callback) {
   });
 };
 
+// let transporter = nodemailer.createTransport({
+//   host: "smtp.sendgrid.net",
+//   port: 465,
+//   secure: true,
+//   auth: {
+//     user: "apikey",
+//     pass:
+//       "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",
+//   },
+// });
+
 let transporter = nodemailer.createTransport({
-  host: "smtp.sendgrid.net",
-  port: 465,
-  secure: true,
+  host: "smtp-relay.sendinblue.com",
+  port: 587,
+  secure: false,
   auth: {
-    user: "apikey",
-    pass:
-      "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",
+    user: "sebastien.aumaitre@pushtalents.com",
+    pass:"Fqz5JtKgwyHx7j6n",
   },
 });
 
