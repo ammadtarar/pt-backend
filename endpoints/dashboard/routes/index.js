@@ -145,18 +145,24 @@ getQuizCount = async () =>{
 
 getUsersCount = async (companyId) =>{
     return new Promise((resolve , reject)=>{
-        db.user.count({
+        db.user.findAll({
             where : {
                 companyId : companyId,
                 user_type : 'employee'
-            },
-            group : ['status']
+            }
         })
-        .then((articlesCount)=>{
-            let active = articlesCount[0] ? articlesCount[0].count : 0;
-            let inactive = articlesCount[1] ? articlesCount[1].count : 0;
+        .then((usersCount)=>{
+            var active = 0;
+            var inactive = 0;
+            usersCount.forEach(user => {
+                if(user.last_active_time){
+                    active++;
+                }else{
+                    inactive++
+                }
+            });
             resolve({
-                total : active + inactive,
+                total : usersCount.length,
                 active : active,
                 inactive : inactive
             });

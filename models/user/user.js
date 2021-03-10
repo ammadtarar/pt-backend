@@ -130,14 +130,21 @@ module.exports = function(sequelize, DataTypes) {
                 }
                 dbOtp.findOne({
                     where : {
-                        userId : user.id,
-                        already_used : false
+                        userId : user.id
                     },
                     order: [ [ 'createdAt', 'DESC' ]]
                 })
                 .then(function(otps){
                     if(otps.code === otp){
-                        if(moment(new Date().toISOString()).diff(moment(otps.expiry) , 'minutes') > 5){
+                        if(otps.already_used){
+                            reject({
+                                status: 406,
+                                message: res.__('otp_expired')
+                            });
+                            return
+                        }
+                        let expired = moment(new Date().getTime()).isAfter(moment(otps.expiry));
+                        if(expired){
                             reject({
                                 status: 405,
                                 message: res.__('otp_expired')
@@ -146,9 +153,9 @@ module.exports = function(sequelize, DataTypes) {
                         }
                         user.updateLastActiveTime();
                         resolve(user);
-
                         dbOtp.update({
-                            expiry: moment(new Date()).add(1 , 'month').toDate()
+                            // expiry: moment(new Date()).add(1 , 'month').toDate()
+                            already_used : true
                         }, {
                             where : {
                                 id : otps.id

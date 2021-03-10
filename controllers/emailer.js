@@ -46,7 +46,7 @@ async function sendCompanyUserOtp(otp , user) {
     readHTMLFile(__dirname + "/../htmls/otp_email.html", function (err, html) {
       transporter
         .sendMail({
-          from: '"PushTalents" <no-reply@pushtalent.com>',
+          from: '"PushTalents" <no-reply@pushtalents.com>',
           to: user.email,
           subject: "Votre code personnel PUSHTALENTS",
           attachments: [
@@ -77,7 +77,7 @@ async function sendHrOtp(otp, user) {
     readHTMLFile(__dirname + "/../htmls/hr_otp_email.html", function (err, html) {
       transporter
         .sendMail({
-          from: '"PushTalents" <no-reply@pushtalent.com>',
+          from: '"PushTalents" <no-reply@pushtalents.com>',
           to: user.email,
           subject: "Votre code personnel d'Administration PUSHTALENTS",
           attachments: [
@@ -109,7 +109,7 @@ async function sendJobReferral(candidate , employee, referralUrl) {
       function (err, html) {
         transporter
           .sendMail({
-            from: '"PushTalents" <no-reply@pushtalent.com>',
+            from: '"PushTalents" <no-reply@pushtalents.com>',
             to: candidate.email,
             subject: "Vous avez été recommandé pour une offre d'emploi !",
             attachments: [
@@ -144,7 +144,7 @@ async function sendRedeemApprovalEmailToEmployee(employee, reward) {
       function (err, html) {
         transporter
           .sendMail({
-            from: '"PushTalents" <no-reply@pushtalent.com>',
+            from: '"PushTalents" <no-reply@pushtalents.com>',
             to: employee.email,
             subject: "Your reward request has been approved",
             attachments: [
@@ -177,7 +177,7 @@ async function sendRewardRequestToHR(employee, reward, hr) {
       function (err, html) {
         transporter
           .sendMail({
-            from: '"PushTalents" <no-reply@pushtalent.com>',
+            from: '"PushTalents" <no-reply@pushtalents.com>',
             to: hr.email,
             subject: "Reward redeeem request",
             attachments: [
@@ -211,7 +211,7 @@ async function sendHrAccountCreationEmail(user, company) {
       function (err, html) {
         transporter
           .sendMail({
-            from: '"PushTalents" <no-reply@pushtalent.com>',
+            from: '"PushTalents" <no-reply@pushtalents.com>',
             to: user.email,
             subject: "Activez votre compte d'Administration PUSHTALENTS",
             attachments: [
@@ -246,7 +246,7 @@ async function sendUserAccountCreationEmail(user, company) {
       function (err, html) {
         transporter
           .sendMail({
-            from: '"PushTalents" <no-reply@pushtalent.com>',
+            from: '"PushTalents" <no-reply@pushtalents.com>',
             to: user.email,
             subject: "Activez votre compte mobile PUSHTALENTS",
             attachments: [
