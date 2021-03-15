@@ -76,7 +76,7 @@ app.post('/create' , middleware.authenticateSuperAdmin , async (req , res , next
 
 app.get('/list/all' , middleware.authenticate , (req , res , next)=>{
   
-    if(!req.isSuperAdmin && (req.user.user_type != CONSTANTS.CONSTANTS.HR_ADMIN || req.user.user_type != CONSTANTS.CONSTANTS.BOTH)){
+    if(!req.isSuperAdmin && req.user.user_type === CONSTANTS.CONSTANTS.EMPLOYEE){
         res.status(422).send({
             message: res.__('employee_not_allowed')
         });
@@ -154,7 +154,7 @@ app.get('/list/all' , middleware.authenticate , (req , res , next)=>{
 });
 
 app.post('/referral/:id/archive' , middleware.authenticate , (req , res , next)=>{
-    if(!req.isSuperAdmin && (req.user.user_type != CONSTANTS.CONSTANTS.HR_ADMIN || req.user.user_type != CONSTANTS.CONSTANTS.BOTH)){
+    if(!req.isSuperAdmin && req.user.user_type === CONSTANTS.CONSTANTS.EMPLOYEE){
         res.status(422).send({
             message: res.__('employee_not_allowed')
         });
@@ -184,7 +184,7 @@ app.post('/referral/:id/archive' , middleware.authenticate , (req , res , next)=
 });
 
 app.patch('/:id' , middleware.authenticate ,(req , res , next)=>{
-    if(!req.isSuperAdmin && (req.user.user_type != CONSTANTS.CONSTANTS.HR_ADMIN || req.user.user_type != CONSTANTS.CONSTANTS.BOTH)){
+    if(!req.isSuperAdmin && req.user.user_type === CONSTANTS.CONSTANTS.EMPLOYEE){
         res.status(422).send({
             message: res.__('employee_not_allowed')
         });
@@ -488,7 +488,10 @@ app.post('/:id/generate/referral' , middleware.authenticateCompanyUser , (req , 
 });
 
 app.get('/referral/list/all' , middleware.authenticateCompanyUser , (req , res , next)=>{
-    if(!req.isSuperAdmin && (req.user.user_type != CONSTANTS.CONSTANTS.HR_ADMIN || req.uer.user_type != CONSTANTS.CONSTANTS.BOTH)){
+
+    console.log(`req.user.user_type = ${req.user.user_type}`);
+    console.log(`CONSTANTS.CONSTANTS.HR_ADMIN = ${CONSTANTS.CONSTANTS.HR_ADMIN}`);
+    if(!req.isSuperAdmin && req.user.user_type === CONSTANTS.CONSTANTS.EMPLOYEE){
         res.status(422).send({
             message: res.__('employee_not_allowed')
         });

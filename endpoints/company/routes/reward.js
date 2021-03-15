@@ -276,46 +276,49 @@ app.post('/:id/redeem' , middleware.authenticateCompanyUser , (req , res , next)
                         message : res.__('not_enough_points')
                     });
                 }else{
-                    db.reward_redemption_request.findOne({
-                        where : {
-                            rewardId : id,
-                            employeeId : req.user.id
-                        }
+
+
+                    db.reward_redemption_request.create({
+                        rewardId : id,
+                        employeeId : req.user.id,
+                        status : CONSTANTS.CONSTANTS.REQUESTED,
+                        companyId : req.user.companyId
                     })
-                    .then((redeemRequest)=>{
+                    .then((reward_request)=>{
                         
 
-                        if(redeemRequest){
-                            res.status(409).json({
-                                message : res.__('reward_already_redeemed')
-                            })
-                        }else{
-                
-                            db.reward_redemption_request.create({
-                                rewardId : id,
-                                employeeId : req.user.id,
-                                status : CONSTANTS.CONSTANTS.REQUESTED,
-                                companyId : req.user.companyId
-                            })
-                            .then((reward_request)=>{
-                                res.json({
-                                    message : res.__('reward_request_successful'),
-                                    reward_request : reward_request
-                                });
 
-                                db.user.findOne({
-                                    where : {
-                                        id : reward.hrId
-                                    }
-                                })
-                                .then((hr)=>{
-                                    emailer.sendRewardRequestToHR(req.user , reward , hr)
-                                });
-                                
+                        db.wallet_transaction.create({
+                            reward_type : CONSTANTS.CONSTANTS.POINTS,
+                            reward_value : reward.points_required,
+                            transaction_type : CONSTANTS.CONSTANTS.OUTGOING,
+                            userId : req.user.id,
+                            transaction_source : CONSTANTS.CONSTANTS.REWARD_CLAIM,
+                            rewardRedemptionRequestId : reward_request.id
+                        })
+                        .then(wtRes => {
 
+                            res.json({
+                                message : res.__('reward_request_successful'),
+                                reward_request : reward_request
                             });
-                        }
-                    })
+                            
+                            db.user.findOne({
+                                where : {
+                                    id : reward.hrId
+                                }
+                            })
+                            .then((hr)=>{
+                                emailer.sendRewardRequestToHR(req.user , reward , hr)
+                            });
+
+                        })
+
+                        
+                        
+
+                    });
+
                 }
             });
             
@@ -383,18 +386,7 @@ app.post('/redeem/:id/approve' , middleware.authenticateCompanyUser , (req , res
                 }
             })
             .then((updateRes)=>{
-                db.wallet_transaction.create({
-                    reward_type : CONSTANTS.CONSTANTS.POINTS,
-                    reward_value : redeemRequest.reward.points_required,
-                    transaction_type : CONSTANTS.CONSTANTS.OUTGOING,
-                    userId : redeemRequest.employeeId,
-                    transaction_source : CONSTANTS.CONSTANTS.REWARD_CLAIM,
-                    rewardRedemptionRequestId : redeemRequest.id
-                })
-                .then((walletUpdateResponse)=>{
-                    res.json();
-                    emailer.sendRedeemApprovalEmailToEmployee(redeemRequest.employee , redeemRequest.reward)
-                });
+                res.json();
             });
             
         }

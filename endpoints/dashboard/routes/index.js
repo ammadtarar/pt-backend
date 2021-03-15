@@ -56,25 +56,17 @@ app.get('/mobile' , middleware.authenticateCompanyUser , async (req , res , next
 
     let company = req.user.company;
     let companyUsersIds = await getCompanyUsersIdsArray(company.id);
-    let jobs_count = await getJobsCounts(company.id);
     let referrals = await getJobReferrals(companyUsersIds);
     let balance = await getUserBalance(req.user.id)
-    let totalBalance = await getUserTotalPoints(req.user.id)
     let jobslist = await getCompanyJobs(company.id);
-
-    // company.jobs = jobslist
-    // company.visitors = 0;
-    // company.articles = [];
-    // company.trainings = {
-    //     data : [],
-    //     average : "0%"
-    // };
-    // company.rewards = [];
-
     let candidates = await getUserReferredCandidates(req.user.id);
     let rewards = await getCompanyRewards(company.id);
     let articles = await getCompanyArticles(company.id);
     let quizzes = await getCompanyQuizzes();
+    let userTrainings = await getUserTrainings(req.user.id);
+    let userTrainigsAvg = await getUserQuizAverage(req.user.id);
+    let companyQuizAvg = await await getCompanyQuizAvg(companyUsersIds) || 0
+
 
     var comp = {
         username : `${req.user.first_name} ${req.user.last_name}`,
@@ -91,7 +83,7 @@ app.get('/mobile' , middleware.authenticateCompanyUser , async (req , res , next
             articles : articles,
             trainings : {
                 data : quizzes,
-                average: '60%'
+                average: `${companyQuizAvg}%`
             },
             rewards : rewards
         },
@@ -100,7 +92,8 @@ app.get('/mobile' , middleware.authenticateCompanyUser , async (req , res , next
             seen: 125,
             points: 225,
         },
-        trainings : [],
+        trainings : userTrainings,
+        trainingsAvg : userTrainigsAvg,
         app: {
             cguUrl:
               'https://medium.com/@numaparis/startups-pourquoi-r%C3%A9diger-vos-cgu-cgv-et-charte-de-confidentialit%C3%A9-e4f0d655b1e0',
@@ -451,7 +444,8 @@ getCompanyJobs = async (companyId) => {
     return new Promise((resolve , reject) => {
         db.job.findAll({
             where : {
-                companyId : companyId
+                companyId : companyId,
+                is_active : true
             }
         })
         .then(rawJobs => {
@@ -508,7 +502,7 @@ getUserReferredCandidates = async (userId) => {
             var referrals = [];
             for(const item of rawReferrals){
                 console.log("started");
-                let stepAndReward = await getStageNumber(item.stage);
+                let stepAndReward = await getStageNumber(item.job.id , item.stage);
                 referrals.push({
                     id : item.id,
                     name : `${item.candidate.first_name} ${item.candidate.last_name}`,
@@ -531,7 +525,8 @@ getUserReferredCandidates = async (userId) => {
 }
 
 
-getStageNumber = async (stage) => {
+getStageNumber = async (jobId , stage) => {
+    console.log(`jobId = ${jobId}`);
     return new Promise(async (resolve , reject) => {
         const pointsData = await pointsController.getPointsData();
         var currentStep , reward_value;
@@ -539,14 +534,14 @@ getStageNumber = async (stage) => {
             currentStep = 1;
             reward_value = pointsData.points_for_job_referral;
         }else if(stage === CONSTANTS.CONSTANTS.APPLICATION_RECEIVED){// 300 PTS
-            currentStep = CONSTANTS.CONSTANTS.POINTS;
+            currentStep = 2;
             reward_value = pointsData.points_for_job_application_received;
         }else if(stage === CONSTANTS.CONSTANTS.UNDERGOING_INTERVIEW){// 1000 PTS
-            currentStep = CONSTANTS.CONSTANTS.POINTS;
+            currentStep = 3;
             reward_value = pointsData.points_for_job_candidate_interview_inprogress;
         }else{// candidate_selected -  DEFINED IN JOB
-            let job = await db.job.findOne({ where : { id : job_referral.jobId}})
-            currentStep = job.referral_success_reward_type;
+            let job = await db.job.findOne({ where : { id : jobId}})
+            currentStep = 4;
             reward_value = job.referral_success_reward_value;
         }
         console.log("done inside");
@@ -612,6 +607,82 @@ getCompanyArticles = async (companyId) => {
         })
         .catch(err => {
             resolve([]);
+        })
+    });
+};
+
+getUserTrainings = async (userId) =>{
+    return new Promise((resolve , reject)=>{
+        db.quiz_test.findAll({
+            where : {
+                employeeId : userId,
+                stage : 'completed'
+            }
+        })
+        .then(res => {
+            resolve(res);
+        })
+        .catch(err => {
+            console.log("avg err =");
+            console.log(err);
+        })
+    });
+};
+
+getUserQuizAverage = async (userId) =>{
+    return new Promise((resolve , reject)=>{
+        db.quiz_test.findAll({
+            where : {
+                employeeId : userId,
+                stage : 'completed'
+            },
+            attributes: [[db.sequelize.fn('AVG', db.sequelize.col('score')), 'avg']],
+        })
+        .then(res => {
+            var avg=0;
+            try {
+                var scoresParsed = JSON.parse(JSON.stringify(res));
+                avg = scoresParsed[0].avg;    
+            } catch (error) {
+                avg = 0;
+            }
+            if(!avg || avg === null || avg === 'avg'){
+                avg = 0;
+            }
+            resolve(avg);
+        })
+        .catch(err => {
+            console.log("avg err =");
+            console.log(err);
+        })
+    });
+};
+
+getCompanyQuizAvg = async (usersIds) => {
+    return new Promise((resolve , reject)=>{
+        db.quiz_test.findAll({
+            where : {
+                employeeId : usersIds,
+                stage : 'completed'
+            },
+            attributes: [[db.sequelize.fn('AVG', db.sequelize.col('score')), 'avg']],
+        })
+        .then(res => {
+            var avg=0;
+            try {
+                var scoresParsed = JSON.parse(JSON.stringify(res));
+                avg = scoresParsed[0].avg;    
+            } catch (error) {
+                avg = 0;
+            }
+            if(!avg || avg === null || avg === 'avg'){
+                avg = 0;
+            }
+            resolve(avg);
+        })
+        .catch(err => {
+            console.log("avg err =");
+            console.log(err);
         })
     });
 };
