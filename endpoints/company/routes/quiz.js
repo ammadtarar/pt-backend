@@ -360,13 +360,15 @@ app.post('/test/:id/update/score' , middleware.authenticateCompanyUser , (req , 
         return;
     }
     
-    var score = score = parseFloat(body.score);
-    if(!score){
-        res.status(402).json({
-            message : res.__('invalid_score' , {score : body.score})
-        });
-        return
-    }
+    var score  = parseFloat(body.score);
+    // console.log("score = " , score);
+    // console.log("score = " , !score);
+    // if(!score){
+    //     res.status(402).json({
+    //         message : res.__('invalid_score' , {score : body.score})
+    //     });
+    //     return
+    // }
    
     db.quiz_test.findOne({
         where : {
@@ -379,11 +381,13 @@ app.post('/test/:id/update/score' , middleware.authenticateCompanyUser , (req , 
             res.status(404).json({
                 message : res.__('quiz_test_not_found')
             });
-        }else if(existingTest.stage === CONSTANTS.CONSTANTS.COMPLETED){
-            res.status(404).json({
-                message : res.__('quiz_alread_completed')
-            });
-        }else{
+        }
+        // else if(existingTest.stage === CONSTANTS.CONSTANTS.COMPLETED){
+        //     res.status(404).json({
+        //         message : res.__('quiz_alread_completed')
+        //     });
+        // }
+        else{
             db.quiz_test.update({
                 stage : CONSTANTS.CONSTANTS.COMPLETED,
                 score : body.score

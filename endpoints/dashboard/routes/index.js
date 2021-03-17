@@ -54,6 +54,10 @@ app.get('/mobile' , middleware.authenticateCompanyUser , async (req , res , next
         return
     }
 
+
+    
+
+
     let company = req.user.company;
     let companyUsersIds = await getCompanyUsersIdsArray(company.id);
     let referrals = await getJobReferrals(companyUsersIds);
@@ -62,10 +66,21 @@ app.get('/mobile' , middleware.authenticateCompanyUser , async (req , res , next
     let candidates = await getUserReferredCandidates(req.user.id);
     let rewards = await getCompanyRewards(company.id);
     let articles = await getCompanyArticles(company.id);
-    let quizzes = await getCompanyQuizzes();
+    let quizzes = await getCompanyQuizzes(req.user.id);
     let userTrainings = await getUserTrainings(req.user.id);
+
+    let userQuizStats = await getUserTrainigStatus(req.user.id);
+
+    console.log("userQuizStats = " , userQuizStats);
+
     let userTrainigsAvg = await getUserQuizAverage(req.user.id);
-    let companyQuizAvg = await await getCompanyQuizAvg(companyUsersIds) || 0
+    let companyQuizAvg = await getCompanyQuizAvg(companyUsersIds) || 0
+
+    let userArticlesViewCount = await getArticlesViewCounts(req.user.id) || 0;
+    let userArticleViewsPoints = await getArticlesClickPoints(req.user.id) || 0;
+
+    let companyTotalArticleViewCounts = await getArticlesViewCounts(companyUsersIds) || 0;
+    let activeArticlesCount = await getArticlesCount(req.user.companyId) || 0;
 
 
     var comp = {
@@ -77,23 +92,25 @@ app.get('/mobile' , middleware.authenticateCompanyUser , async (req , res , next
             name : company.name,
             logo : '',
             style : {primaryColor : '#1750A6'},
-            visitors : 111,
+            visitors : companyTotalArticleViewCounts,
+            activeArticlesCount : activeArticlesCount.active,
             candidates : referrals,
             jobs : jobslist,
             articles : articles,
             trainings : {
                 data : quizzes,
-                average: `${companyQuizAvg}%`
+                average: `${parseFloat(companyQuizAvg).toFixed(2)}%`
             },
-            rewards : rewards
+            rewards : rewards  
         },
         candidates : candidates,//list,
         articles : {
-            seen: 125,
-            points: 225,
+            seen: userArticlesViewCount,
+            points: userArticleViewsPoints,
         },
-        trainings : userTrainings,
-        trainingsAvg : userTrainigsAvg,
+        trainings : userTrainings, 
+        trainingsTaken : userQuizStats,
+        trainingsAvg : parseFloat(userTrainigsAvg).toFixed(2),
         app: {
             cguUrl:
               'https://medium.com/@numaparis/startups-pourquoi-r%C3%A9diger-vos-cgu-cgv-et-charte-de-confidentialit%C3%A9-e4f0d655b1e0',
@@ -102,18 +119,9 @@ app.get('/mobile' , middleware.authenticateCompanyUser , async (req , res , next
           }
     };
 
+
+    
     res.json(comp);
-
-    // res.json({
-    //     company : company,
-    //     jobs_count : jobs_count,
-    //     referrals : referrals,
-    //     balance : {
-    //         available : balance.points_balance,
-    //         total : totalBalance
-    //     },
-
-    // });
 
 })
 
@@ -200,7 +208,6 @@ getJobsCounts = async (companyId) =>{
         .then((count)=>{
             var inactive = 0 , active = 0;
             count.forEach(item =>{
-                console.log(item);
                 if(!item.is_active){
                     inactive = item.count
                 }else{
@@ -295,7 +302,6 @@ getArticlesCount = async (companyId) =>{
         .then((count)=>{
             var inactive = 0 , active = 0;
             count.forEach(item =>{
-                console.log(item);
                 if(!item.is_active){
                     inactive = item.count
                 }else{
@@ -501,7 +507,6 @@ getUserReferredCandidates = async (userId) => {
         .then(async (rawReferrals) =>{
             var referrals = [];
             for(const item of rawReferrals){
-                console.log("started");
                 let stepAndReward = await getStageNumber(item.job.id , item.stage);
                 referrals.push({
                     id : item.id,
@@ -526,7 +531,6 @@ getUserReferredCandidates = async (userId) => {
 
 
 getStageNumber = async (jobId , stage) => {
-    console.log(`jobId = ${jobId}`);
     return new Promise(async (resolve , reject) => {
         const pointsData = await pointsController.getPointsData();
         var currentStep , reward_value;
@@ -544,7 +548,6 @@ getStageNumber = async (jobId , stage) => {
             currentStep = 4;
             reward_value = job.referral_success_reward_value;
         }
-        console.log("done inside");
         resolve({
             currentStep : currentStep,
             reward_value : reward_value
@@ -566,8 +569,6 @@ getCompanyRewards = async (companyId) =>{
             }
         }) 
         .then(rawRewards => {
-            console.log("rawRewards");
-            console.log(JSON.parse(JSON.stringify(rawRewards)));
             var rewards = [];
             rawRewards.rows.forEach(item => {
                 rewards.push({
@@ -623,11 +624,30 @@ getUserTrainings = async (userId) =>{
             resolve(res);
         })
         .catch(err => {
-            console.log("avg err =");
-            console.log(err);
+            resolve([])
         })
     });
 };
+
+getUserTrainigStatus = (userId) => {
+    return new Promise((resolve , reject)=>{
+        db.quiz_test.count({
+            where : {
+                employeeId : userId,
+                stage : 'completed'
+            },
+            distinct : true,
+            col : 'quizId'
+        })
+        .then(res => {
+            resolve(res);
+        })
+        .catch(err => {
+            resolve([])
+        })
+    });
+};
+
 
 getUserQuizAverage = async (userId) =>{
     return new Promise((resolve , reject)=>{
@@ -652,8 +672,7 @@ getUserQuizAverage = async (userId) =>{
             resolve(avg);
         })
         .catch(err => {
-            console.log("avg err =");
-            console.log(err);
+            resolve(0);
         })
     });
 };
@@ -681,13 +700,12 @@ getCompanyQuizAvg = async (usersIds) => {
             resolve(avg);
         })
         .catch(err => {
-            console.log("avg err =");
-            console.log(err);
+            resolve(0)
         })
     });
 };
 
-getCompanyQuizzes = async () => {
+getCompanyQuizzes = async (employeeId) => {
     return new Promise((resolve , reject) => {
         db.quiz.findAll({
             where : {
@@ -708,14 +726,21 @@ getCompanyQuizzes = async () => {
         .then((rawQuizzes) => {
             var quizzes = [];
 
-            rawQuizzes.forEach(item => {
+            rawQuizzes.forEach(async item => {
+
+                let score = await getUsetLatestScoreForQuiz(employeeId , item.id);
+
                 var question = {
                     id : item.id,
                     name : item.title,
                     difficulty: item.level === 'easy' ? 0 : (item.level === 'medium' ? 1 : 2),
-                    type: '',
+                    type: item.description,
                     max: 24,
-                    questions : []
+                    questions : [],
+                    lastTest : {
+                        taken : score && score != -1,
+                        score : score
+                    }
                 };
 
                 item.questions.forEach(qnas => {
@@ -732,6 +757,14 @@ getCompanyQuizzes = async () => {
                 });
 
                 quizzes.push(question);
+
+                // db.quiz_test.findAll({
+                //     where : {
+                //         employeeId : employeeId,
+                //         stage : CONSTANTS.CONSTANTS.COMPLETED,
+
+                //     }
+                // })
             });
             resolve(quizzes);
         })
@@ -740,5 +773,90 @@ getCompanyQuizzes = async () => {
         });
     });
 };
+
+getArticlesViewCounts = (employeeId) => {
+    return new Promise((resolve , reject) => {
+        db.article_share.findAll({
+            where : {
+                employeeId : employeeId
+            },
+            attributes: [
+                [db.sequelize.fn('SUM', db.sequelize.col('view_count')), 'count'],
+            ],
+        })
+        .then(res => {
+            let data = JSON.parse(JSON.stringify(res[0]));
+            resolve(data.count || 0)
+        })
+        .catch(err => {
+            resolve(0)
+        });
+    });
+}
+
+getArticlesClickPoints = (employeeId) => {
+    return new Promise((resolve , reject) => {
+        db.wallet_transaction.findAll({
+            where : {
+                userId : employeeId,
+                transaction_type : CONSTANTS.CONSTANTS.INCOMING,
+                transaction_source : CONSTANTS.CONSTANTS.ARTICLE_CLICK,
+            },
+            attributes : [
+                [db.sequelize.fn('SUM' , db.sequelize.col('reward_value')) , 'totalPoints']
+            ]
+        })
+        .then(res => {
+            let data = JSON.parse(JSON.stringify(res[0]));
+            resolve(data.totalPoints || 0)
+        })
+        .catch(err => {
+            resolve(0)
+        });
+    });
+};
+
+getUsetLatestScoreForQuiz = (userId , quizId) => {
+    return new Promise(async (resolve , reject) => {
+        let completed = await db.quiz_test.findOne({
+            where : {
+                quizId : quizId,
+                employeeId : userId,
+                stage : CONSTANTS.CONSTANTS.COMPLETED
+            },
+            order: [ [ 'createdAt', 'DESC' ]]
+        });
+
+        if(completed){ // JUST RETURN THE SCORE OF THE LA
+            resolve(completed.score)
+        }else{
+            resolve(-1)
+        }
+
+        // let inProgress = await db.quiz_test.findOne({
+        //     where : {
+        //         quizId : quizId,
+        //         employeeId : userId,
+        //         stage : CONSTANTS.CONSTANTS.IN_PROGRESS
+        //     },
+        //     order: [ [ 'createdAt', 'DESC' ]]
+        // });
+
+        // resolve({
+        //     inProgress : inProgress,
+        //     completed : completed
+        // })
+
+
+        // .then(res => {
+        //     console.log(res);
+        //     resolve(res)
+        // })
+        // .catch(err => {
+        //     console.log(err);
+        //     resolve([])
+        // })
+    });
+}
 
 module.exports = app;
