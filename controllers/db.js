@@ -48,6 +48,8 @@ let company = sequelize.import('../models/company.js');
 db.company = company;
 
 db.user = sequelize.import('../models/user/user.js');
+db.token = sequelize.import('../models/user/token.js');
+db.token.belongsTo(db.user);
 db.user.belongsTo(db.company);
 db.company.hasMany(db.user , { as : 'users'});
 
