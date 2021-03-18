@@ -132,8 +132,7 @@ module.exports = function(db) {
                 });
                 return;
             }
-            db.super_admin
-                .findOne({
+            db.super_admin.findOne({
                     where: {
                         tokenHash: cryptojs.MD5(token).toString()
                     }

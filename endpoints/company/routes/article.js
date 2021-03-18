@@ -81,6 +81,7 @@ app.post('/create' , middleware.authenticate , async (req , res , next)=>{
 
     db.article.create(data)
     .then((createdArticle)=>{
+        
         createdArticle.saveInternalUrl()
         .then((internalUrl)=>{
             createdArticle.internal_url = internalUrl;  
@@ -88,6 +89,9 @@ app.post('/create' , middleware.authenticate , async (req , res , next)=>{
                 message : res.__('article_created_successfully'),
                 article : createdArticle
             });
+        })
+        .catch((err)=>{
+            next(err);
         });
         
     })
