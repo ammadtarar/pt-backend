@@ -29,7 +29,7 @@ app.get('' , middleware.authenticateCompanyUser , async (req , res , next)=>{
         },
         article : {
             count : await getArticlesCount(req.user.companyId),
-            views_counts : await getArticlesViewsCount(req.user.companyId)
+            views_counts : await getArticlesViewCounts(companyUsersIds) || 0
         },
         reward : {
             count : await getRewardsCount(req.user.companyId),
@@ -37,9 +37,9 @@ app.get('' , middleware.authenticateCompanyUser , async (req , res , next)=>{
         },
         quiz :{
             total : await getQuizCount(),
-            average_score : await getQuizTestsCount(companyUsersIds).average_score || 0
+            average_score : parseFloat(await getCompanyQuizAvg(companyUsersIds)).toFixed(2) || 0
         } 
-        
+    
     });
 
 
@@ -71,8 +71,6 @@ app.get('/mobile' , middleware.authenticateCompanyUser , async (req , res , next
 
     let userQuizStats = await getUserTrainigStatus(req.user.id);
 
-    console.log("userQuizStats = " , userQuizStats);
-
     let userTrainigsAvg = await getUserQuizAverage(req.user.id);
     let companyQuizAvg = await getCompanyQuizAvg(companyUsersIds) || 0
 
@@ -99,7 +97,7 @@ app.get('/mobile' , middleware.authenticateCompanyUser , async (req , res , next
             articles : articles,
             trainings : {
                 data : quizzes,
-                average: `${parseFloat(companyQuizAvg).toFixed(2)}%`
+                average: `${parseFloat(companyQuizAvg).toFixed(0)}%`
             },
             rewards : rewards  
         },
@@ -110,12 +108,11 @@ app.get('/mobile' , middleware.authenticateCompanyUser , async (req , res , next
         },
         trainings : userTrainings, 
         trainingsTaken : userQuizStats,
-        trainingsAvg : parseFloat(userTrainigsAvg).toFixed(2),
+        trainingsAvg : parseFloat(userTrainigsAvg).toFixed(0),
         app: {
-            cguUrl:
-              'https://medium.com/@numaparis/startups-pourquoi-r%C3%A9diger-vos-cgu-cgv-et-charte-de-confidentialit%C3%A9-e4f0d655b1e0',
-            contactUsEmail: 'sebastien.aumaitre@pushtalents.com',
-            contactUsSubject: 'Sujet de Contactez-nous',
+            cguUrl:'www.pushtalents.com',
+            contactUsEmail: 'contact@pushtalents.com',
+            contactUsSubject: "Demande d'informations Pushtalents",
           }
     };
 
@@ -388,23 +385,17 @@ getQuizTestsCount = async (usersIds) =>{
         db.quiz_test.count({
             where : {
                 employeeId : usersIds
-            },
-            group : ['stage']
+            }
         })
         .then((counts)=>{
 
-            let completed = counts[0] ? counts[0].count : 0;
-            let in_progress = counts[1] ? counts[1].count : 0;
             var data = {
-                total : completed + in_progress,
-                completed : completed,
-                in_progress : in_progress
+                total : counts
             }
 
             db.quiz_test.findAll({
                 where : {
-                    employeeId : usersIds,
-                    stage : 'completed'
+                    employeeId : usersIds
                 },
                 attributes: [[db.sequelize.fn('AVG', db.sequelize.col('score')), 'avg']],
             })
@@ -507,9 +498,13 @@ getUserReferredCandidates = async (userId) => {
             ]
         })
         .then(async (rawReferrals) =>{
+            
+            const pointsData = await pointsController.getPointsData();
+
             var referrals = [];
             for(const item of rawReferrals){
                 let stepAndReward = await getStageNumber(item.job.id , item.stage);
+                
                 referrals.push({
                     id : item.id,
                     name : `${item.candidate.first_name} ${item.candidate.last_name}`,
@@ -520,9 +515,15 @@ getUserReferredCandidates = async (userId) => {
                         value: item.job.referral_success_reward_value,
                         currency: '€',
                         type: item.job.referral_success_reward_type,
+                    },
+                    points : {
+                        step1 : pointsData.points_for_job_referral,
+                        step2 : pointsData.points_for_job_application_received,
+                        step3 : pointsData.points_for_job_candidate_interview_inprogress
                     }
                 });
             }
+
             resolve(referrals);
         })
         .catch(err => {
@@ -618,8 +619,7 @@ getUserTrainings = async (userId) =>{
     return new Promise((resolve , reject)=>{
         db.quiz_test.findAll({
             where : {
-                employeeId : userId,
-                stage : 'completed'
+                employeeId : userId
             }
         })
         .then(res => {
@@ -635,8 +635,7 @@ getUserTrainigStatus = (userId) => {
     return new Promise((resolve , reject)=>{
         db.quiz_test.count({
             where : {
-                employeeId : userId,
-                stage : 'completed'
+                employeeId : userId
             },
             distinct : true,
             col : 'quizId'
@@ -655,8 +654,7 @@ getUserQuizAverage = async (userId) =>{
     return new Promise((resolve , reject)=>{
         db.quiz_test.findAll({
             where : {
-                employeeId : userId,
-                stage : 'completed'
+                employeeId : userId
             },
             attributes: [[db.sequelize.fn('AVG', db.sequelize.col('score')), 'avg']],
         })
@@ -683,8 +681,7 @@ getCompanyQuizAvg = async (usersIds) => {
     return new Promise((resolve , reject)=>{
         db.quiz_test.findAll({
             where : {
-                employeeId : usersIds,
-                stage : 'completed'
+                employeeId : usersIds
             },
             attributes: [[db.sequelize.fn('AVG', db.sequelize.col('score')), 'avg']],
         })
@@ -730,7 +727,8 @@ getCompanyQuizzes = async (employeeId) => {
 
             rawQuizzes.forEach(async item => {
 
-                let score = await getUsetLatestScoreForQuiz(employeeId , item.id);
+                let score = await getUserHightestScoreForQuiz(employeeId , item.id);
+
 
                 var question = {
                     id : item.id,
@@ -744,6 +742,8 @@ getCompanyQuizzes = async (employeeId) => {
                         score : score
                     }
                 };
+
+
 
                 item.questions.forEach(qnas => {
                     question.questions.push({
@@ -818,19 +818,28 @@ getArticlesClickPoints = (employeeId) => {
     });
 };
 
-getUsetLatestScoreForQuiz = (userId , quizId) => {
+getUserHightestScoreForQuiz = (userId , quizId) => {
     return new Promise(async (resolve , reject) => {
         let completed = await db.quiz_test.findOne({
             where : {
                 quizId : quizId,
-                employeeId : userId,
-                stage : CONSTANTS.CONSTANTS.COMPLETED
+                employeeId : userId
             },
-            order: [ [ 'createdAt', 'DESC' ]]
+            attributes:[
+                [db.sequelize.fn('max', db.sequelize.col('score')),'max']
+            ]
         });
 
         if(completed){ // JUST RETURN THE SCORE OF THE LA
-            resolve(completed.score)
+            let data = JSON.parse(JSON.stringify(completed)).max;
+            console.log("data");
+            console.log(data);
+            if(data){
+                resolve(String(data))
+            }else{
+                resolve(-1)
+            }
+            
         }else{
             resolve(-1)
         }

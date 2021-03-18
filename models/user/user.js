@@ -74,19 +74,6 @@ module.exports = function(sequelize, DataTypes) {
                 this.setDataValue('salt', salt);
                 this.setDataValue('password_hash', hashedPassword);
             }
-        },
-        token: {
-            type: DataTypes.VIRTUAL,
-            allowNull: true,
-            set: function(value) {
-                var hash = cryptojs.MD5(value).toString();
-                this.setDataValue('token', value);
-                this.setDataValue('tokenHash', hash);
-            }
-        },
-        tokenHash: {
-            type: DataTypes.STRING,
-            allowNull: true
         }
     }, {
         hooks: {
@@ -201,33 +188,33 @@ module.exports = function(sequelize, DataTypes) {
     };
 
 
-    user.findByToken = function(token) {
-        return new Promise(function(resolve, reject) {
-            try {
-                const decodedJWT = jwt.verify(token, process.env.TOKEN_SECRET);
-                const bytes = cryptojs.AES.decrypt(decodedJWT.token, process.env.CRYPTO_SECRET);
-                const tokenData = JSON.parse(bytes.toString(cryptojs.enc.Utf8));
+    // user.findByToken = function(token) {
+    //     return new Promise(function(resolve, reject) {
+    //         try {
+    //             const decodedJWT = jwt.verify(token, process.env.TOKEN_SECRET);
+    //             const bytes = cryptojs.AES.decrypt(decodedJWT.token, process.env.CRYPTO_SECRET);
+    //             const tokenData = JSON.parse(bytes.toString(cryptojs.enc.Utf8));
 
-                user.findById(tokenData.id).then(function(user) {
-                    if (user) {
-                        resolve(user);
-                    } else {
-                        reject({
-                            status: 401,
-                            message: "user not found. Please make sure the token is valid and user exists"
-                        });
-                    }
-                }, function(e) {
-                    reject(e);
-                });
-            } catch (e) {
-                reject(e);
-            }
-        });
-    };
+    //             user.findById(tokenData.id).then(function(user) {
+    //                 if (user) {
+    //                     resolve(user);
+    //                 } else {
+    //                     reject({
+    //                         status: 401,
+    //                         message: "user not found. Please make sure the token is valid and user exists"
+    //                     });
+    //                 }
+    //             }, function(e) {
+    //                 reject(e);
+    //             });
+    //         } catch (e) {
+    //             reject(e);
+    //         }
+    //     });
+    // };
 
 
-    user.prototype.generateToken = function(type) {
+    user.prototype.generateToken = function(type , userType) {
         try {
             var stringData = JSON.stringify({
                 id: this.get('id'),

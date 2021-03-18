@@ -163,36 +163,40 @@ module.exports = function(db) {
                 });
                 return;
             }
-            db.user.findOne({
+
+            
+            db.token.findOne({
                 where : {
-                    tokenHash: cryptojs.MD5(token).toString()
+                    tokenHash : cryptojs.MD5(token).toString()
                 },
-                include : [
-                    {
+                include : [{
+                    model : db.user,
+                    as : 'user',
+                    include : [{
                         model : db.company,
                         as : 'company'
-                    }
-                ]
+                    }]
+                }]
             })
-            .then(function(user){
-                if(!user){
+            .then(token => {
+                if(!token){
                     res.status(409).send({
-                        message: res.__('user_logged_in_elsewhere')
+                        message: res.__('user_token_not_found')
                     });
                     return;
-                }else if(user.status === 'archived'){
+                }else if(token.user.status === 'archived'){
                     res.status(408).send({
                         message: res.__('user_archived')
                     });
                     return;
-                }else if(moment(new Date().toISOString()).diff(moment(user.last_active_time || new Date().toISOString()) , 'days') > 30){
+                }else if(moment(new Date().toISOString()).diff(moment(token.user.last_active_time || new Date().toISOString()) , 'days') > 30){
                     res.status(406).send({
                         message: res.__('session_time_out')
                     });
                     return;
                 }
-                req.user = user;
-                setUserLastActiveTime(db , user.id)
+                req.user = token.user;
+                setUserLastActiveTime(db , token.user.id)
                 next();
             })
             .catch(function() {
@@ -207,13 +211,28 @@ module.exports = function(db) {
                 });
                 return;
             }
-            db.user.findOne({
+
+            console.log("token string");
+            console.log(token);
+            
+
+            db.token.findOne({
                 where : {
-                    tokenHash: cryptojs.MD5(token).toString()
-                }
+                    tokenHash : cryptojs.MD5(token).toString()
+                },
+                include : [{
+                    model : db.user,
+                    as : 'user',
+                    include : [{
+                        model : db.company,
+                        as : 'company'
+                    }]
+                }]
             })
-            .then(function(user){
-                if(!user){
+            .then(userTokenObject => {
+
+                if(!userTokenObject){
+                    console.log("HEllo");
                     db.super_admin
                     .findOne({
                         where: {
@@ -221,6 +240,8 @@ module.exports = function(db) {
                         }
                     })
                     .then(function(companyUser) {
+                        console.log("companyUser");
+                        console.log(companyUser);
                         
                         if (!companyUser) {
                             res.status(401).send({
@@ -236,26 +257,24 @@ module.exports = function(db) {
                         res.status(401).send();
                     });
                     return;
-                }else if(user.status === 'archived'){
+                }else if(userTokenObject.user.status === 'archived'){
                     res.status(408).send({
                         message: res.__('user_archived')
                     });
                     return;
-                }else if(moment(new Date().toISOString()).diff(moment(user.last_active_time || new Date().toISOString()) , 'days') > 30){
+                }else if(moment(new Date().toISOString()).diff(moment(userTokenObject.user.last_active_time || new Date().toISOString()) , 'days') > 30){
                     res.status(406).send({
                         message: res.__('session_time_out')
                     });
                     return;
                 }
-                setUserLastActiveTime(db , user.id)
-                req.user = user;
-                req.isSuperAdmin = false;
+                req.user = userTokenObject.user;
+                setUserLastActiveTime(db , userTokenObject.user.id)
                 next();
             })
             .catch(function() {
                 res.status(401).send();
             });
-            
         }
     };
 

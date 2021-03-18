@@ -212,8 +212,9 @@ app.patch("/:id/update/status" , middleware.authenticate , (req , res , next)=>{
         });
         return;
     }
-    
-    if(!req.isSuperAdmin && (req.user.user_type != CONSTANTS.CONSTANTS.HR_ADMIN || req.user_type != CONSTANTS.CONSTANTS.BOTH)){
+
+
+    if(!req.isSuperAdmin && req.user.user_type === CONSTANTS.CONSTANTS.EMPLOYEE){
         res.status(422).send({
             message: res.__('employee_not_allowed')
         });
@@ -255,7 +256,6 @@ app.post('/:id/generate/share/link' , middleware.authenticateCompanyUser , (req 
         return;
     }
 
-    console.log(req.user);
 
     db.article_share.findOne({
         where : {

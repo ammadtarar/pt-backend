@@ -489,8 +489,6 @@ app.post('/:id/generate/referral' , middleware.authenticateCompanyUser , (req , 
 
 app.get('/referral/list/all' , middleware.authenticateCompanyUser , (req , res , next)=>{
 
-    console.log(`req.user.user_type = ${req.user.user_type}`);
-    console.log(`CONSTANTS.CONSTANTS.HR_ADMIN = ${CONSTANTS.CONSTANTS.HR_ADMIN}`);
     if(!req.isSuperAdmin && req.user.user_type === CONSTANTS.CONSTANTS.EMPLOYEE){
         res.status(422).send({
             message: res.__('employee_not_allowed')

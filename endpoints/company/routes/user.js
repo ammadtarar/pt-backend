@@ -154,7 +154,7 @@ app.get('/list/all' , middleware.authenticateSuperAdmin , (req , res , next)=>{
                 ['createdAt', 'DESC']
             ],
             attributes: {
-                exclude: ['salt', 'password_hash', 'tokenHash' , 'companyId']
+                exclude: ['salt', 'password_hash' , 'companyId']
             },
             include: [{
                 model: db.company,
@@ -175,7 +175,7 @@ app.get('/:id' , middleware.authenticateSuperAdmin , (req , res , next) => {
             id : req.params.id
         },
         attributes: {
-            exclude: ['salt', 'password_hash', 'tokenHash' , 'companyId']
+            exclude: ['salt', 'password_hash' , 'companyId']
         },
         include: [{
             model: db.company,
@@ -278,13 +278,17 @@ app.post('/login', (req, res, next) => {
         .then((userRes) => {
             userInstance = userRes;
             token = userRes.generateToken('authentication');
-            return db.user.update({
-                token: token
-            }, {
-                where: {
-                    id: userRes.id
-                }
+            return db.token.create({
+                token : token,
+                userId : userRes.id
             });
+            // return db.user.update({
+            //     token: token
+            // }, {
+            //     where: {
+            //         id: userRes.id
+            //     }
+            // });
         })
         .then((u) => {
             res.header('Authentication', token)
@@ -346,7 +350,7 @@ app.get('/my/profile' , middleware.authenticateCompanyUser , (req , res , next)=
             id : req.user.id
         },
         attributes: {
-            exclude: ['salt', 'password_hash', 'tokenHash' , 'companyId']
+            exclude: ['salt', 'password_hash' , 'companyId']
         },
         include: [{
             model: db.company,

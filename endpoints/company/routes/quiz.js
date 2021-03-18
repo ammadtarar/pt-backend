@@ -283,60 +283,82 @@ app.get('/list/all' , middleware.authenticate , (req , res , next)=>{
     });
 });
 
-app.post('/:id/take/test' , middleware.authenticateCompanyUser , (req , res , next)=>{
+// app.post('/:id/take/test' , middleware.authenticateCompanyUser , (req , res , next)=>{
 
-    var id = parseInt(req.params.id);
-    if (id === undefined || id === null || id <= 0) {
-        res.status(422).send({
-            message: res.__('quiz_id_missing')
-        });
-        return;
-    }
+//     var id = parseInt(req.params.id);
+//     if (id === undefined || id === null || id <= 0) {
+//         res.status(422).send({
+//             message: res.__('quiz_id_missing')
+//         });
+//         return;
+//     }
 
-    if(req.user.user_type === CONSTANTS.CONSTANTS.HR_ADMIN){
-        res.status(422).send({
-            message: res.__('only_user_can_take_test')
-        });
-        return;
-    }
+//     if(req.user.user_type === CONSTANTS.CONSTANTS.HR_ADMIN){
+//         res.status(422).send({
+//             message: res.__('only_user_can_take_test')
+//         });
+//         return;
+//     }
 
-    db.quiz_test.findOne({
-        where : {
-            quizId : id,
-            employeeId : req.user.id,
-            stage : 'in_progress'
-        }
-    })
-    .then(async (existingQuiz)=>{
-        let questions = await getQuizQuestionsInRandomOrder(id);
 
-        if(existingQuiz){
-            res.status(201).json({
-                message : res.__('quiz_already_started'),
-                quiz_test_id : existingQuiz.id,
-                questions : questions
-            });
-        }else{
-            db.quiz_test.create({
-                quizId : id,
-                employeeId : req.user.id
-            })
-            .then((quizTest)=>{
-                res.json({
-                    message : res.__('quiz_test_stared'),
-                    quiz_test : quizTest,
-                    questions : questions
-                });
-            });
-        }
-    })
-    .catch((err)=>{
-        next(err);
-    });
+//     db.quiz_test.findOrCreate({
+//         where : {
+//             quizId : id,
+//             employeeId : req.user.id,
+//         }
+//     })
+//     .then(async quizTest => {
 
-});
+//         let questions = await getQuizQuestionsInRandomOrder(id);
+//         res.status(201).json({
+//             message : res.__('quiz_test_stared'),
+//             quiz_test : quizTest,
+//             questions : questions
+//         });
 
-app.post('/test/:id/update/score' , middleware.authenticateCompanyUser , (req , res , next)=>{
+//     })
+//     .catch(err => {
+//         next(err);
+//     })
+
+//     // db.quiz_test.findOne({
+//     //     where : {
+//     //         quizId : id,
+//     //         employeeId : req.user.id,
+//     //         stage : 'in_progress'
+//     //     }
+//     // })
+//     // .then(async (existingQuiz)=>{
+//     //     let questions = await getQuizQuestionsInRandomOrder(id);
+
+//     //     if(existingQuiz){
+//     //         res.status(201).json({
+//     //             message : res.__('quiz_already_started'),
+//     //             quiz_test_id : existingQuiz.id,
+//     //             questions : questions
+//     //         });
+//     //     }else{
+//     //         db.quiz_test.create({
+//     //             quizId : id,
+//     //             employeeId : req.user.id
+//     //         })
+//     //         .then((quizTest)=>{
+//     //             res.json({
+//     //                 message : res.__('quiz_test_stared'),
+//     //                 quiz_test : quizTest,
+//     //                 questions : questions
+//     //             });
+//     //         });
+//     //     }
+//     // })
+//     // .catch((err)=>{
+//     //     next(err);
+//     // });
+
+// });
+
+app.post('/:id/test/update/score' , middleware.authenticateCompanyUser , (req , res , next)=>{
+    console.log("HELLO");
     var id = parseInt(req.params.id);
     if (id === undefined || id === null || id <= 0) {
         res.status(422).send({
@@ -359,56 +381,39 @@ app.post('/test/:id/update/score' , middleware.authenticateCompanyUser , (req , 
         });
         return;
     }
-    
-    var score  = parseFloat(body.score);
-    // console.log("score = " , score);
-    // console.log("score = " , !score);
-    // if(!score){
-    //     res.status(402).json({
-    //         message : res.__('invalid_score' , {score : body.score})
-    //     });
-    //     return
-    // }
-   
-    db.quiz_test.findOne({
+
+    db.quiz_test.findOrCreate({
         where : {
-            id : id,
+            quizId : id,
             employeeId : req.user.id
         }
     })
     .then((existingTest)=>{
-        if(!existingTest){
-            res.status(404).json({
-                message : res.__('quiz_test_not_found')
+
+        let existing = existingTest[0];
+        if(existing.score > body.score){
+            res.json({
+                message : res.__('quiz_update_successful')
             });
+            return
         }
-        // else if(existingTest.stage === CONSTANTS.CONSTANTS.COMPLETED){
-        //     res.status(404).json({
-        //         message : res.__('quiz_alread_completed')
-        //     });
-        // }
-        else{
-            db.quiz_test.update({
-                stage : CONSTANTS.CONSTANTS.COMPLETED,
-                score : body.score
-            } , {
-                where : {
-                    id : id
-                }
-            })
-            .then((updateResponse)=>{
-                if(updateResponse){
-                    res.json({
-                        message : res.__('quiz_update_successful')
-                    });
-                }else{
-                    res.status(422).json({
-                        message : res.__('quiz_update_failed')
-                    });
-                }
-                
+
+        db.quiz_test.update({
+            score : parseFloat(body.score).toFixed(2)
+        }, {
+            where : {
+                id : existing.id
+            }
+        })
+        .then(response => {
+            res.json({
+                message : res.__('quiz_update_successful')
             });
-        }
+        })
+        .catch(err => {
+            next(err);
+        });
+
     })
     .catch((err)=>{
         next(err);
