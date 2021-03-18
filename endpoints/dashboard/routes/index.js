@@ -149,7 +149,9 @@ getUsersCount = async (companyId) =>{
         db.user.findAll({
             where : {
                 companyId : companyId,
-                user_type : 'employee'
+                user_type: {
+                    [db.Op.not]: CONSTANTS.CONSTANTS.HR_ADMIN
+                }
             }
         })
         .then((usersCount)=>{
