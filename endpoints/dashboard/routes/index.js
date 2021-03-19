@@ -64,8 +64,6 @@ app.get('/mobile' , middleware.authenticateCompanyUser , async (req , res , next
     let balance = await getUserBalance(req.user.id)
     let jobslist = await getCompanyJobs(company.id);
     let candidates = await getUserReferredCandidates(req.user.id);
-    console.log("candidates");
-    console.log(JSON.parse(JSON.stringify(candidates)));
     let rewards = await getCompanyRewards(company.id);
     let articles = await getCompanyArticles(company.id);
     let quizzes = await getCompanyQuizzes(req.user.id);
@@ -506,8 +504,6 @@ getUserReferredCandidates = async (userId) => {
 
             var referrals = [];
             for(const item of rawReferrals){
-                console.log("item");
-                console.log(JSON.parse(JSON.stringify(item)));
                 let stepAndReward = await getStageNumber(item.job.id , item.stage);
                 
                 referrals.push({
@@ -746,7 +742,7 @@ getCompanyQuizzes = async (employeeId) => {
                     questions : [],
                     lastTest : {
                         taken : score && score != -1,
-                        score : score.toFixed(0)
+                        score : score
                     }
                 };
 
@@ -840,7 +836,7 @@ getUserHightestScoreForQuiz = (userId , quizId) => {
         if(completed){ // JUST RETURN THE SCORE OF THE LA
             let data = JSON.parse(JSON.stringify(completed)).max;
             if(data){
-                resolve(String(data))
+                resolve(String(data.toFixed(0)))
             }else{
                 resolve(-1)
             }
