@@ -746,7 +746,7 @@ getCompanyQuizzes = async (employeeId) => {
                     questions : [],
                     lastTest : {
                         taken : score && score != -1,
-                        score : score
+                        score : score.toFixed(0)
                     }
                 };
 
