@@ -194,8 +194,15 @@ module.exports = function(db) {
                     });
                     return;
                 }
+
+
+
+                var origin = req.get("client-name") || "hr_admin";
+                if(origin != "hr_admin"){
+                    console.log(" ORIGIN IN NOT HR ADMIN < UPDATING LAST ACTIVE TIME");
+                    setUserLastActiveTime(db , token.user.id)
+                }
                 req.user = token.user;
-                setUserLastActiveTime(db , token.user.id)
                 next();
             })
             .catch(function() {
@@ -268,7 +275,11 @@ module.exports = function(db) {
                     return;
                 }
                 req.user = userTokenObject.user;
-                setUserLastActiveTime(db , userTokenObject.user.id)
+                var origin = req.get("client-name") || "hr_admin";
+                if(origin != "hr_admin"){
+                    console.log(" 1 - ORIGIN IN NOT HR ADMIN < UPDATING LAST ACTIVE TIME");
+                    setUserLastActiveTime(db , userTokenObject.user.id)
+                }
                 next();
             })
             .catch(function() {

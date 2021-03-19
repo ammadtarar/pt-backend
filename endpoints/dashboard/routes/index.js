@@ -37,7 +37,7 @@ app.get('' , middleware.authenticateCompanyUser , async (req , res , next)=>{
         },
         quiz :{
             total : await getQuizCount(),
-            average_score : parseFloat(await getCompanyQuizAvg(companyUsersIds)).toFixed(2) || 0
+            average_score : parseFloat(await getCompanyQuizAvg(companyUsersIds)).toFixed(0) || 0
         } 
     
     });
@@ -64,6 +64,8 @@ app.get('/mobile' , middleware.authenticateCompanyUser , async (req , res , next
     let balance = await getUserBalance(req.user.id)
     let jobslist = await getCompanyJobs(company.id);
     let candidates = await getUserReferredCandidates(req.user.id);
+    console.log("candidates");
+    console.log(JSON.parse(JSON.stringify(candidates)));
     let rewards = await getCompanyRewards(company.id);
     let articles = await getCompanyArticles(company.id);
     let quizzes = await getCompanyQuizzes(req.user.id);
@@ -79,7 +81,7 @@ app.get('/mobile' , middleware.authenticateCompanyUser , async (req , res , next
 
     let companyTotalArticleViewCounts = await getArticlesViewCounts(companyUsersIds) || 0;
     let activeArticlesCount = await getArticlesCount(req.user.companyId) || 0;
-
+    let candidatesPoints = await getAccumatedPointsFromReferrals(req.user.id) || 0;
 
     var comp = {
         username : `${req.user.first_name} ${req.user.last_name}`,
@@ -102,6 +104,7 @@ app.get('/mobile' , middleware.authenticateCompanyUser , async (req , res , next
             rewards : rewards  
         },
         candidates : candidates,//list,
+        candidatesPoints : candidatesPoints,
         articles : {
             seen: userArticlesViewCount,
             points: userArticleViewsPoints,
@@ -110,7 +113,7 @@ app.get('/mobile' , middleware.authenticateCompanyUser , async (req , res , next
         trainingsTaken : userQuizStats,
         trainingsAvg : parseFloat(userTrainigsAvg).toFixed(0),
         app: {
-            cguUrl:'www.pushtalents.com',
+            cguUrl:'https://www.pushtalents.com',
             contactUsEmail: 'contact@pushtalents.com',
             contactUsSubject: "Demande d'informations Pushtalents",
           }
@@ -503,6 +506,8 @@ getUserReferredCandidates = async (userId) => {
 
             var referrals = [];
             for(const item of rawReferrals){
+                console.log("item");
+                console.log(JSON.parse(JSON.stringify(item)));
                 let stepAndReward = await getStageNumber(item.job.id , item.stage);
                 
                 referrals.push({
@@ -520,7 +525,8 @@ getUserReferredCandidates = async (userId) => {
                         step1 : pointsData.points_for_job_referral,
                         step2 : pointsData.points_for_job_application_received,
                         step3 : pointsData.points_for_job_candidate_interview_inprogress
-                    }
+                    },
+                    archived : item.archive
                 });
             }
 
@@ -832,8 +838,6 @@ getUserHightestScoreForQuiz = (userId , quizId) => {
 
         if(completed){ // JUST RETURN THE SCORE OF THE LA
             let data = JSON.parse(JSON.stringify(completed)).max;
-            console.log("data");
-            console.log(data);
             if(data){
                 resolve(String(data))
             }else{
@@ -869,5 +873,27 @@ getUserHightestScoreForQuiz = (userId , quizId) => {
         // })
     });
 }
+
+getAccumatedPointsFromReferrals = (userId) => {
+    return new Promise((resolve , reject)=>{
+        db.wallet_transaction.findAll({
+            attributes: [
+                [db.sequelize.fn('SUM', db.sequelize.col('reward_value')), 'count'],
+            ],
+            where : {
+                userId : userId,
+                transaction_type : 'incoming',
+                reward_type : 'points',
+                transaction_source : CONSTANTS.CONSTANTS.JOB_REFERRAL
+            }
+        })
+        .then((response)=>{
+            resolve(JSON.parse(JSON.stringify(response))[0].count || 0);
+        }).
+        catch((err)=>{
+            reject(err);
+        });
+    });
+};
 
 module.exports = app;
