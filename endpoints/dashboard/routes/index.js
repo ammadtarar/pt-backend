@@ -568,7 +568,8 @@ getCompanyRewards = async (companyId) =>{
     return new Promise((resolve , reject)=>{
         db.reward.findAndCountAll({
             where : {
-                companyId : companyId
+                companyId : companyId,
+                is_active : true
             },
             order: [
                 ['createdAt', 'DESC']
