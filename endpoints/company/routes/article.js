@@ -320,11 +320,6 @@ app.get('/share/:id' , (req , res , next)=>{
     })
     .then(async (response)=>{
         if(response){
-            response.updateViewCount();
-            res.statusCode = 302;
-            res.setHeader("Location", response.article.original_url);
-            res.end();
-
 
             const pointsData = await require('../../../controllers/pointsController').getPointsData();
             db.wallet_transaction.create({
@@ -344,6 +339,14 @@ app.get('/share/:id' , (req , res , next)=>{
                 console.log();
                 console.log();
             });
+
+            response.updateViewCount();
+            res.statusCode = 302;
+            res.setHeader("Location", response.article.original_url);
+            res.end();
+
+
+            
 
         }else{
             res.status(404).json({
