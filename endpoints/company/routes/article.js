@@ -328,22 +328,35 @@ app.get('/share/:id' , (req , res , next)=>{
                 transaction_type : CONSTANTS.CONSTANTS.INCOMING,
                 userId : response.employeeId,
                 transaction_source : CONSTANTS.CONSTANTS.ARTICLE_CLICK,
-                articleShareId : response.article.id
+                articleShareId : response.id
             })
             .then((walletTransaction)=>{
-                console.log();
-                console.log();
-                console.log("======");
-                console.log("Article share click points added to user wallet");
-                console.log(walletTransaction);
-                console.log();
-                console.log();
-            });
+                console.log(`*** Article share (ID = ${response.id}) click points added to the wallet of user (ID = ${response.employeeId}. Transaction ID = ${walletTransaction.id})`);
+                response.updateViewCount();
+                res.statusCode = 302;
+                res.setHeader("Location", response.article.original_url);
+                res.end();
+            })
+            .catch(err => {
+                console.log(`Unable to add article share click points to the waller. Redirecting to the article URL.`)
+                console.log(`Wallet Transaciton Object =`);
+                console.log({
+                    reward_type : CONSTANTS.CONSTANTS.POINTS,
+                    reward_value : pointsData.points_for_article_view,
+                    transaction_type : CONSTANTS.CONSTANTS.INCOMING,
+                    userId : response.employeeId,
+                    transaction_source : CONSTANTS.CONSTANTS.ARTICLE_CLICK,
+                    articleShareId : response.id
+                });
+                console.log('Transaction Error = ');
+                console.log(err);
+                response.updateViewCount();
+                res.statusCode = 302;
+                res.setHeader("Location", response.article.original_url);
+                res.end();
+            })
 
-            response.updateViewCount();
-            res.statusCode = 302;
-            res.setHeader("Location", response.article.original_url);
-            res.end();
+            
 
 
             
