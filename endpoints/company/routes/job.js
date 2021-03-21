@@ -37,16 +37,29 @@ app.post('/create' , middleware.authenticateSuperAdmin , async (req , res , next
 
 
     if(!req.body.hasOwnProperty("custom") || req.body.custom == false){
-        var data = underscore.pick(body , 'url' , 'title' , 'location' , 'companyId' , 'referral_success_reward_type' , 'referral_success_reward_value');
-        if(data === null || data === undefined  || Object.keys(data).length != 6){
-            res.status(422).send({
+        var data = underscore.pick(body , 'url' , 'title' , 'location' , 'companyId' , 'referral_success_reward_type' , 'referral_success_reward_value' , 'cash_reward_currency');
+        if(data === null || data === undefined  || Object.keys(data).length < 6 ){
+            res.status(413).send({
                 message: res.__('job_missing_data')
             });
             return;
         }
+
+        if(data.type === CONSTANTS.CONSTANTS.CASH && !data.cash_reward_currency){
+            res.status(411).send({
+                message: res.__('cash_reward_currency_missing')
+            });
+            return
+        }
         job = data;
     }else{
-        var data = underscore.pick(body , 'url' , 'location' , 'companyId' , 'referral_success_reward_type' , 'referral_success_reward_value');
+        var data = underscore.pick(body , 'url' , 'location' , 'companyId' , 'referral_success_reward_type' , 'referral_success_reward_value' , 'cash_reward_currency');
+        if(data.type === CONSTANTS.CONSTANTS.CASH && !data.cash_reward_currency){
+            res.status(431).send({
+                message: res.__('cash_reward_currency_missing')
+            });
+            return
+        }
         try{
             const { body: html, url } = await got(data.url);
             const metadata = await metascraper({ html, url });

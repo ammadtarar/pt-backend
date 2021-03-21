@@ -459,7 +459,7 @@ getCompanyJobs = async (companyId) => {
                     reward : {
                         value : item.referral_success_reward_value,
                         type : item.referral_success_reward_type,
-                        currency: '€'
+                        currency: item.cash_reward_currency
                     }
                 })
             });
@@ -514,7 +514,7 @@ getUserReferredCandidates = async (userId) => {
                     currentPoint : stepAndReward.reward_value,
                     step4 : {
                         value: item.job.referral_success_reward_value,
-                        currency: '€',
+                        currency: item.job.cash_reward_currency,
                         type: item.job.referral_success_reward_type,
                     },
                     points : {

@@ -20,6 +20,7 @@
     "email_not_found" : "Utilisateur avec e-mail = {{email}} introuvable. Veuillez vous assurer que l'e-mail est correct. Veuillez contacter l'administration de votre entreprise pour enregistrer votre e-mail si ce n'est toujours pas le cas",
     "email_otp_missing" : "Veuillez envoyer un e-mail et un otp dans le corps de la demande",
     "incorrect_email_otp" : "votre code d'activation à 6 chiffres est incorrect",
+    "cash_reward_currency_missing" : "Veuillez envoyer la devise de récompense en espèces dans le corps de la demande",
     "otp_expired" : "OTP a expiré. Veuillez demander un nouvel OTP et réessayer",
     "token_missing" : "Veuillez inclure le jeton dans l'en-tête comme Authentication",
     "user_token_not_found" : "Utilisateur introuvable, veuillez vous assurer que le jeton est valide. Reconnectez-vous et réessayez",

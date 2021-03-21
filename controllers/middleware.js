@@ -246,9 +246,6 @@ module.exports = function(db) {
                         }
                     })
                     .then(function(companyUser) {
-                        console.log("companyUser");
-                        console.log(companyUser);
-                        
                         if (!companyUser) {
                             res.status(401).send({
                                 message: res.__('user_token_not_found')

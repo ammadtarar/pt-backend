@@ -31,6 +31,9 @@ module.exports = function(sequelize , DataTypes){
             type : DataTypes.DOUBLE,
             defaultValue : 0
         },
+        cash_reward_currency : {
+            type : DataTypes.STRING
+        },
         is_active : {
             type : DataTypes.BOOLEAN,
             defaultValue : true
