@@ -38,6 +38,7 @@ module.exports = function(sequelize , DataTypes){
     });
 
     article.prototype.updateViewCount = function() {
+        console.log("updating article view count");
         article.update({
             view_count: (this.getDataValue('view_count') || 0) + 1
         }, {

@@ -1,0 +1,18 @@
+{
+  "development": {
+    "username": "mybarre_backend",
+    "password": "mybarre-x-sawatechnologies-2020",
+    "database": "local",
+    "host": "localhost",
+    "dialect": "sqlite",
+    "storage": "./data/db.sqlite"
+  },
+  "staging": {
+    "username": "doadmin",
+    "password": "cjo5srrjltacxhfs",
+    "database": "pt-staging",
+    "host": "pt-db-prod-mysql-do-user-8858925-0.b.db.ondigitalocean.com",
+    "dialect": "mysql",
+    "port": 25060
+  }
+}

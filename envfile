@@ -1,0 +1,23 @@
+APP PORT
+PORT=3001
+DB_NAME=pt-staging
+DB_USERNAME=doadmin
+DB_PASSWORD=cjo5srrjltacxhfs
+DB_DIALECT=mysql
+DB_HOST=pt-db-prod-mysql-do-user-8858925-0.b.db.ondigitalocean.com
+DB_PORT=25060
+TOKEN_SECRET=abcd1234
+CRYPTO_SECRET=abcd1234
+BASE_URL=http://localhost:3001/
+
+
+APP PORT
+PORT=3001
+DB_NAME=pushtalents
+DB_USERNAME=root
+DB_PASSWORD=abcd1234
+DB_DIALECT=sqlite
+DB_FILE_PATH=./data/db.sqlite
+TOKEN_SECRET=abcd1234
+CRYPTO_SECRET=abcd1234
+BASE_URL=http://localhost:3001/
