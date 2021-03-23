@@ -159,7 +159,8 @@ app.get('/list/all' , middleware.authenticateSuperAdmin , (req , res , next)=>{
             include: [{
                 model: db.company,
                 as: "company"
-            }]
+            }],
+            distinct:true
         })
         .then((users) => {
             res.json(users);

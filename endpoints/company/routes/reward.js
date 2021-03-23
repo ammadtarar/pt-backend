@@ -168,7 +168,8 @@ app.get('/list/all' , middleware.authenticate , (req , res , next)=>{
         }],
         attributes : {
             exclude : ['hrId' , 'companyId']
-        }
+        },
+        distinct:true
     })
     .then((rewards) => {
         res.json(rewards);
@@ -224,7 +225,8 @@ app.get('/redeem/requests/list/all' , middleware.authenticate , (req , res , nex
                     exclude : ['hrId', 'companyId']
                 }
             }
-        ]
+        ],
+        distinct:true
     })
     .then((requests)=>{
         res.json(requests);

@@ -47,7 +47,8 @@ app.get('/list/all', middleware.authenticateSuperAdmin, (req, res, next) => {
             order: [
                 ['createdAt', 'DESC']
             ],
-            where : where
+            where : where,
+            distinct:true
         })
         .then((companoies) => {
             res.json(companoies);

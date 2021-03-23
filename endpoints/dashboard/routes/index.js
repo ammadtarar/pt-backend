@@ -229,29 +229,58 @@ getJobsCounts = async (companyId) =>{
 
 getCandidatesCounts = async(companyId) =>{
     return new Promise((resolve , reject)=>{
-        db.job_referral.count({
+        db.job_referral.findAll({
             where : {
                 companyId : companyId
             }
         })
-        .then((totalsCandidates)=>{
+        .then(referrals => {
+            var archived = 0 ;
+            var selected = 0;
+            var others = 0
 
-            db.job_referral.count({
-                where : {
-                    companyId : companyId,
-                    stage : 'candidate_referred'
+            referrals.forEach(referral => {
+                if(referral.archive){
+                    archived++;
+                }else if(referral.stage === CONSTANTS.CONSTANTS.CANDIDATE_SELECTED){
+                    selected++;
+                }else{
+                    others++;
                 }
+            });
+            resolve({
+                archived : archived,
+                selected : selected,
+                under_review : others,
+                total : referrals.length
             })
-            .then(referredCount =>{
-                resolve({
-                    total : totalsCandidates,
-                    referred_count : referredCount
-                })
-            })
-        }).
-        catch((err)=>{
+        })
+        .catch(err => {
             reject(err);
         });
+        // db.job_referral.count({
+        //     where : {
+        //         companyId : companyId
+        //     }
+        // })
+        // .then((totalsCandidates)=>{
+
+        //     db.job_referral.count({
+        //         where : {
+        //             companyId : companyId,
+        //             stage : 'candidate_referred'
+        //         }
+        //     })
+        //     .then(referredCount =>{
+        //         resolve({
+        //             total : totalsCandidates,
+        //             referred_count : referredCount
+        //         })
+        //     })
+        // }).
+        // catch((err)=>{
+        //     reject(err);
+        // });
     });
 }
 
@@ -572,7 +601,8 @@ getCompanyRewards = async (companyId) =>{
             ],
             attributes : {
                 exclude : ['hrId' , 'companyId']
-            }
+            },
+            distinct:true
         }) 
         .then(rawRewards => {
             var rewards = [];

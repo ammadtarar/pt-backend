@@ -155,10 +155,11 @@ app.get('/list/all' , middleware.authenticate , (req , res , next)=>{
             } , {
                 model : db.job_referral,
                 as : 'referrals'
-            }]
+            }],
+            distinct:true
         })
-        .then((companies) => {
-            res.json(companies);
+        .then((jobs) => {
+            res.json(jobs);
         })
         .catch((err) => {
             next(err);

@@ -218,6 +218,7 @@ getUserWalletTransactions = (userId , query)=>{
         }
     
         db.wallet_transaction.findAndCountAll({
+            distinct:true,
             where : where,
             limit: limit,
             offset: limit * page,

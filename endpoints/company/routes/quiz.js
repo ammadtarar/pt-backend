@@ -458,7 +458,8 @@ app.get('/my/tests/list/all' , middleware.authenticateCompanyUser , (req , res ,
                 model : db.quiz,
                 as : 'quiz'
             }
-        ]
+        ],
+        distinct:true
     })
     .then((tests)=>{
         res.json(tests);

@@ -164,7 +164,8 @@ app.get('/list/all' , middleware.authenticate , (req , res , next)=>{
         }],
         attributes : {
             exclude : ['companyId']
-        }
+        },
+        distinct:true
     })
     .then((articles) => {
         res.json(articles);
@@ -333,6 +334,7 @@ app.get('/share/:id' , (req , res , next)=>{
             .then((walletTransaction)=>{
                 console.log(`*** Article share (ID = ${response.id}) click points added to the wallet of user (ID = ${response.employeeId}. Transaction ID = ${walletTransaction.id})`);
                 response.updateViewCount();
+                response.article.updateViewCount();
                 res.statusCode = 302;
                 res.setHeader("Location", response.article.original_url);
                 res.end();
@@ -351,6 +353,7 @@ app.get('/share/:id' , (req , res , next)=>{
                 console.log('Transaction Error = ');
                 console.log(err);
                 response.updateViewCount();
+                response.article.updateViewCount();
                 res.statusCode = 302;
                 res.setHeader("Location", response.article.original_url);
                 res.end();
