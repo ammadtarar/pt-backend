@@ -475,7 +475,10 @@ getCompanyJobs = async (companyId) => {
             where : {
                 companyId : companyId,
                 is_active : true
-            }
+            },
+            order: [
+                ['createdAt', 'DESC']
+            ],
         })
         .then(rawJobs => {
             var jobs = [];
@@ -627,7 +630,10 @@ getCompanyArticles = async (companyId) => {
             where : {
                 companyId : companyId,
                 is_active : true
-            }
+            },
+            order: [
+                ['createdAt', 'DESC']
+            ],
         })
         .then(rawArticles => {
             var articles = [];
