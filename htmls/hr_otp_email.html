@@ -1,73 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PushTalents - OTP</title>
 
-    <link rel="preconnect" href="https://fonts.gstatic.com"> 
-<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
-</head>
-<body>
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
     <div>
-        <ul style="list-style-type: none;">
+      <ul style="list-style-type: none">
+        <li style="margin-top: 10px">
+          <label> Bonjour {{user}}</label>
+        </li>
 
-            <li style="margin-top : 10px ">
-                <label>
-                    Bonjour {{user}}
-                </label>
-            </li>
+        <li style="margin-top: 10px">
+          <label>
+            Voici votre code personnel et confidentiel pour vous connecter à
+            votre compte d'Administration PUSHTALENTS :
+          </label>
+        </li>
 
-            <li style="margin-top : 10px ">
-                <label>
-                    Voici votre code personnel et confidentiel pour vous connecter à votre compte d'Administration PUSHTALENTS :
-                    <b>{{code}}</b>
-                </label>
-            </li>
+        <li
+          style="
+            margin-top: 10px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          "
+        >
+          <label style="text-align: center; font-size: 20px; font-weight: bold">
+            {{code}}
+          </label>
+        </li>
 
-            <li style="margin-top : 10px ">
-                <label>
-                    Une fois votre code saisi, vous serez automatiquement connecté(e) à la plateforme
-                </label>
-            </li>
+        <li style="margin-top: 10px">
+          <label>
+            Une fois votre code saisi, vous serez automatiquement connecté(e) à
+            la plateforme
+          </label>
+        </li>
 
-            <li style="margin-top : 10px ">
-                <label>
-                    Précision : ce code est valable pour une durée de 5 minutes. Passé ce délai, nous vous invitons à renouveler la procédure d'activation de votre compte.
-                </label>
-            </li>
+        <li style="margin-top: 10px">
+          <label>
+            Précision : ce code est valable pour une durée de 5 minutes. Passé
+            ce délai, nous vous invitons à renouveler la procédure d'activation
+            de votre compte.
+          </label>
+        </li>
 
-            <li style="margin-top : 10px ">
-                <label>
-                    Une question ?
-                </label>
-            </li>
+        <li style="margin-top: 10px">
+          <label> Une question ? </label>
+        </li>
 
-            <li style="margin-top : 2px ">
-                <label>
-                    Ecrivez-nous à : contact@pushtalents.com
-                </label>
-            </li>
+        <li style="margin-top: 2px">
+          <label> Ecrivez-nous à : contact@pushtalents.com </label>
+        </li>
 
+        <li style="margin-top: 10px">
+          <label> A bientôt, </label>
+        </li>
 
+        <li style="margin-top: 2px">
+          <label> L'équipe PUSHTALENTS </label>
+        </li>
 
-            <li style="margin-top : 10px ">
-                <label>
-                    A bientôt, 
-                </label>
-            </li>
-
-            <li style="margin-top : 2px ">
-                <label>
-                    L'équipe PUSHTALENTS
-                </label>
-            </li>
-
-
-
-            <li style="margin-bottom : 10px; margin-top : 10px ; width: 250px;"><img src="cid:logo" class="logo"></li>
-        </ul>
+        <li style="margin-bottom: 10px; margin-top: 10px; width: 250px">
+          <img src="cid:logo" class="logo" />
+        </li>
+      </ul>
     </div>
-    
-</body>
+  </body>
 </html>

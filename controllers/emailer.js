@@ -5,9 +5,7 @@ var handlebars = require("handlebars");
 var fs = require("fs");
 const { mode } = require("crypto-js");
 
-const fetch = require('node-fetch');
-
-
+const fetch = require("node-fetch");
 
 var readHTMLFile = function (path, callback) {
   fs.readFile(path, { encoding: "utf-8" }, function (err, html) {
@@ -32,16 +30,18 @@ var readHTMLFile = function (path, callback) {
 // });
 
 let transporter = nodemailer.createTransport({
-  host: "smtp-relay.sendinblue.com",
-  port: 587,
-  secure: false,
+  host: "email-smtp.eu-west-1.amazonaws.com",
+  port: 465,
+  secure: true,
   auth: {
-    user: "sebastien.aumaitre@pushtalents.com",
-    pass:"Fqz5JtKgwyHx7j6n",
+    user: "AKIASJLIZV4CMY6KHZFY",
+    pass: "BEjLg3R+mxfDBlu89vsU3rmuAgNWzMrBpL0kIa19FzWe",
   },
 });
 
-async function sendCompanyUserOtp(otp , user) {
+async function sendCompanyUserOtp(otp, user) {
+  console.log("OTP = ", otp);
+  console.log("USER = ", user);
   new Promise((resolve, reject) => {
     readHTMLFile(__dirname + "/../htmls/otp_email.html", function (err, html) {
       transporter
@@ -57,15 +57,19 @@ async function sendCompanyUserOtp(otp , user) {
             },
           ],
           html: handlebars.compile(html)({
-            otp: otp,
+            code: otp,
             candidate: `${user.first_name} ${user.last_name}`,
-            company: user.company.name
+            company: user.company.name,
           }),
         })
         .then((success) => {
+          console.log("email send success");
+          console.log(success);
           resolve(success);
         })
         .catch((err) => {
+          console.log("email send fail");
+          console.log(err);
           reject(err);
         });
     });
@@ -73,36 +77,45 @@ async function sendCompanyUserOtp(otp , user) {
 }
 
 async function sendHrOtp(otp, user) {
+  console.log("OTP = ", otp);
+  console.log("USER = ", user);
   new Promise((resolve, reject) => {
-    readHTMLFile(__dirname + "/../htmls/hr_otp_email.html", function (err, html) {
-      transporter
-        .sendMail({
-          from: '"PushTalents" <no-reply@pushtalents.com>',
-          to: user.email,
-          subject: "Votre code personnel d'Administration PUSHTALENTS",
-          attachments: [
-            {
-              filename: "logo.png",
-              path: __dirname + "/logo.png",
-              cid: "logo",
-            },
-          ],
-          html: handlebars.compile(html)({
-            code: otp,
-            user: `${user.first_name} ${user.last_name}`,
-          }),
-        })
-        .then((success) => {
-          resolve(success);
-        })
-        .catch((err) => {
-          reject(err);
-        });
-    });
+    readHTMLFile(
+      __dirname + "/../htmls/hr_otp_email.html",
+      function (err, html) {
+        transporter
+          .sendMail({
+            from: '"PushTalents" <no-reply@pushtalents.com>',
+            to: user.email,
+            subject: "Votre code personnel d'Administration PUSHTALENTS",
+            attachments: [
+              {
+                filename: "logo.png",
+                path: __dirname + "/logo.png",
+                cid: "logo",
+              },
+            ],
+            html: handlebars.compile(html)({
+              code: otp,
+              user: `${user.first_name} ${user.last_name}`,
+            }),
+          })
+          .then((success) => {
+            console.log("email send success");
+            console.log(success);
+            resolve(success);
+          })
+          .catch((err) => {
+            console.log("email send fail");
+            console.log(err);
+            reject(err);
+          });
+      }
+    );
   });
 }
 
-async function sendJobReferral(candidate , employee, referralUrl) {
+async function sendJobReferral(candidate, employee, referralUrl) {
   new Promise((resolve, reject) => {
     readHTMLFile(
       __dirname + "/../htmls/referral_email.html",
@@ -123,7 +136,7 @@ async function sendJobReferral(candidate , employee, referralUrl) {
               url: referralUrl,
               company: employee.company.name,
               employee: `${employee.first_name} ${employee.last_name}`,
-              candidate : candidate.first_name
+              candidate: candidate.first_name,
             }),
           })
           .then((success) => {
@@ -148,12 +161,12 @@ async function sendRedeemApprovalEmailToEmployee(employee, reward) {
             to: employee.email,
             subject: "Your reward request has been approved",
             attachments: [
-                {
-                  filename: "logo.png",
-                  path: __dirname + "/logo.png",
-                  cid: "logo",
-                },
-              ],
+              {
+                filename: "logo.png",
+                path: __dirname + "/logo.png",
+                cid: "logo",
+              },
+            ],
             html: handlebars.compile(html)({
               employee: employee.first_name,
               reward: reward.title,
@@ -181,12 +194,12 @@ async function sendRewardRequestToHR(employee, reward, hr) {
             to: hr.email,
             subject: "Reward redeeem request",
             attachments: [
-                {
-                  filename: "logo.png",
-                  path: __dirname + "/logo.png",
-                  cid: "logo",
-                },
-              ],
+              {
+                filename: "logo.png",
+                path: __dirname + "/logo.png",
+                cid: "logo",
+              },
+            ],
             html: handlebars.compile(html)({
               hr: hr.first_name,
               reward: reward.title,
@@ -227,9 +240,15 @@ async function sendHrAccountCreationEmail(user, company) {
             }),
           })
           .then((success) => {
-            saveUserToSendInBlueContactsList(user.email , user.first_name , user.last_name , 'Hr Admin' , company.name , user.position);
+            saveUserToSendInBlueContactsList(
+              user.email,
+              user.first_name,
+              user.last_name,
+              "Hr Admin",
+              company.name,
+              user.position
+            );
             resolve(success);
-            
           })
           .catch((err) => {
             reject(err);
@@ -250,21 +269,27 @@ async function sendUserAccountCreationEmail(user, company) {
             to: user.email,
             subject: "Activez votre compte mobile PUSHTALENTS",
             attachments: [
-                {
-                  filename: "logo.png",
-                  path: __dirname + "/logo.png",
-                  cid: "logo",
-                },
-              ],
+              {
+                filename: "logo.png",
+                path: __dirname + "/logo.png",
+                cid: "logo",
+              },
+            ],
             html: handlebars.compile(html)({
               user: user.first_name,
               company: company.name,
             }),
           })
           .then((success) => {
-            saveUserToSendInBlueContactsList(user.email , user.first_name , user.last_name , 'Employee' , company.name , user.position);
+            saveUserToSendInBlueContactsList(
+              user.email,
+              user.first_name,
+              user.last_name,
+              "Employee",
+              company.name,
+              user.position
+            );
             resolve(success);
-            
           })
           .catch((err) => {
             reject(err);
@@ -274,41 +299,51 @@ async function sendUserAccountCreationEmail(user, company) {
   });
 }
 
-async function saveUserToSendInBlueContactsList (email , fname , lname , type , company , position){
+async function saveUserToSendInBlueContactsList(
+  email,
+  fname,
+  lname,
+  type,
+  company,
+  position
+) {
   console.log();
   console.log();
-  console.log(`Trying to add ${fname} ${lname} (${email}) to SendInBlue contacts list`);
+  console.log(
+    `Trying to add ${fname} ${lname} (${email}) to SendInBlue contacts list`
+  );
   console.log();
   console.log();
-  return new Promise((resolve , reject)=>{
-    fetch('https://api.sendinblue.com/v3/contacts', {
-      method: 'POST',
+  return new Promise((resolve, reject) => {
+    fetch("https://api.sendinblue.com/v3/contacts", {
+      method: "POST",
       headers: {
-        Accept: 'application/json', 
-        'Content-Type': 'application/json',
-        'api-key' : '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'
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        "api-key":
+          "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",
       },
       body: JSON.stringify({
         attributes: {
-          NOM: fname, 
-          PRENOM: lname , 
-          TYPE : type,
-          COMPANY : company,
-          POSITION : position
+          NOM: fname,
+          PRENOM: lname,
+          TYPE: type,
+          COMPANY: company,
+          POSITION: position,
         },
         updateEnabled: false,
-        email: email
-      })
+        email: email,
+      }),
     })
-      .then(res => res.json())
-      .then(json => {
+      .then((res) => res.json())
+      .then((json) => {
         console.log("SEND-IN-BLUE ADD TO CONTACT RESPONE");
-        console.log(json)
-        resolve(json)
+        console.log(json);
+        resolve(json);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log("SEND-IN-BLUE ADD TO CONTACT ERROR");
-        console.error('error:' + err)
+        console.error("error:" + err);
       });
   });
 }
