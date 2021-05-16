@@ -271,17 +271,6 @@ app.post("/send/otp", (req, res, next) => {
                   (user.user_type === CONSTANTS.CONSTANTS.BOTH ||
                     user.user_type === CONSTANTS.CONSTANTS.HR_ADMIN)
                 ) {
-                  console.log("");
-                  console.log("");
-                  console.log("");
-                  console.log("");
-                  console.log("");
-                  console.log("sendikng hr otp, otp = ", otpRes.code);
-                  console.log("");
-                  console.log("");
-                  console.log("");
-                  console.log("");
-                  console.log("");
                   emailer
                     .sendHrOtp(otpRes.code, user)
                     .then(function () {
@@ -295,17 +284,6 @@ app.post("/send/otp", (req, res, next) => {
                       next(err);
                     });
                 } else {
-                  console.log("");
-                  console.log("");
-                  console.log("");
-                  console.log("");
-                  console.log("");
-                  console.log("sendikng user otp, otp = ", otpRes.code);
-                  console.log("");
-                  console.log("");
-                  console.log("");
-                  console.log("");
-                  console.log("");
                   emailer
                     .sendCompanyUserOtp(otpRes.code, user)
                     .then(function () {

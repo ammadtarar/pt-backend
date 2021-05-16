@@ -146,9 +146,12 @@ getUsersCount = async (companyId) => {
           user_type: {
             [db.Op.not]: CONSTANTS.CONSTANTS.HR_ADMIN,
           },
+          status: "active",
         },
       })
       .then((usersCount) => {
+        console.log("user count");
+        console.log(JSON.parse(JSON.stringify(usersCount)));
         var active = 0;
         var inactive = 0;
         usersCount.forEach((user) => {
@@ -391,15 +394,22 @@ getRewardsCount = async (companyId) => {
 getRewardRedeemCounts = async (usersIdsArray) => {
   return new Promise((resolve, reject) => {
     db.reward_redemption_request
-      .count({
+      .findAll({
         where: {
           employeeId: usersIdsArray,
         },
-        group: ["status"],
       })
       .then((redeems) => {
-        let requested = redeems[0] ? redeems[0].count : 0;
-        let approved = redeems[1] ? redeems[1].count : 0;
+        var requested = 0;
+        var approved = 0;
+
+        redeems.forEach((item) => {
+          if (item.status === "approved") {
+            approved++;
+          } else {
+            requested++;
+          }
+        });
         resolve({
           total: requested + approved,
           requested: requested,

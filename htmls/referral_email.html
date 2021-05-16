@@ -1,74 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PushTalents - Job Referral</title>
 
-    <link rel="preconnect" href="https://fonts.gstatic.com"> 
-<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
-</head>
-<body>
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
     <div>
-        <ul style="list-style-type: none;">
+      <ul style="list-style-type: none">
+        <li style="margin-top: 10px">
+          <label> Bonjour {{candidate}}, </label>
+        </li>
 
-            <li style="margin-top : 10px ">
-                <label>
-                    Bonjour {{candidate}}, 
-                </label>
-            </li>
+        <li style="margin-top: 10px">
+          <label>
+            {{employee}} vous a recommandé pour une offre d'emploi au sein de
+            {{company}}.
+          </label>
+        </li>
 
+        <li style="margin-top: 10px">
+          <label>
+            Il pense que vous avez les qualités requises pour rejoindre son
+            entreprise et vous propose de consulter l'annonce ici :
+          </label>
+        </li>
 
-            <li style="margin-top : 10px ">
-                <label>
-                    {{employee}} vous a recommandé pour une offre d'emploi au sein de {{company}}. 
-                </label>
-            </li>
+        <li style="margin-top: 10px">
+          <a href="{{url}}">découvrez l'annonce en cliquant ici</a>
+        </li>
 
-            <li style="margin-top : 10px ">
-                <label>
-                    Il pense que vous avez les qualités requises pour rejoindre son entreprise et vous propose de consulter l'annonce ici :
-                </label>
-            </li>
+        <li style="margin-top: 10px">
+          <label> Une question ? </label>
+        </li>
 
-            <li style="margin-top : 10px ">
-                <label>
-                    {{url}}
-                </label>
-            </li>
+        <li style="margin-top: 2px">
+          <label> Ecrivez-nous à : contact@pushtalents.com </label>
+        </li>
 
+        <li style="margin-top: 10px">
+          <label> A bientôt, </label>
+        </li>
 
+        <li style="margin-top: 2px">
+          <label> L'équipe PUSHTALENTS pour le compte de {{company}} </label>
+        </li>
 
-            <li style="margin-top : 10px ">
-                <label>
-                    Une question ?
-                </label>
-            </li>
-
-            <li style="margin-top : 2px ">
-                <label>
-                    Ecrivez-nous à : contact@pushtalents.com
-                </label>
-            </li>
-
-
-
-            <li style="margin-top : 10px ">
-                <label>
-                    A bientôt, 
-                </label>
-            </li>
-
-            <li style="margin-top : 2px ">
-                <label>
-                    L'équipe PUSHTALENTS pour le compte de {{company}}
-                </label>
-            </li>
-
-
-            <li style="margin-bottom : 10px; margin-top : 10px ; width: 250px;"><img src="cid:logo" class="logo"></li>
-        </ul>
+        <li style="margin-bottom: 10px; margin-top: 10px; width: 250px">
+          <img src="cid:logo" class="logo" />
+        </li>
+      </ul>
     </div>
-    
-</body>
+  </body>
 </html>
