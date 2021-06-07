@@ -192,7 +192,7 @@ async function sendRewardRequestToHR(employee, reward, hr) {
           .sendMail({
             from: '"PushTalents" <no-reply@pushtalents.com>',
             to: hr.email,
-            subject: "Reward redeeem request",
+            subject: "Nouvelle demande de récompense Pushtalents !",
             attachments: [
               {
                 filename: "logo.png",
@@ -350,7 +350,8 @@ async function saveUserToSendInBlueContactsList(
 
 module.exports.sendCompanyUserOtp = sendCompanyUserOtp;
 module.exports.sendJobReferral = sendJobReferral;
-module.exports.sendRedeemApprovalEmailToEmployee = sendRedeemApprovalEmailToEmployee;
+module.exports.sendRedeemApprovalEmailToEmployee =
+  sendRedeemApprovalEmailToEmployee;
 module.exports.sendRewardRequestToHR = sendRewardRequestToHR;
 module.exports.sendUserAccountCreationEmail = sendUserAccountCreationEmail;
 module.exports.sendHrAccountCreationEmail = sendHrAccountCreationEmail;

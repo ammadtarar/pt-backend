@@ -1,77 +1,58 @@
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PushTalents - Job Referral</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PushTalents - Reward Redeem Request</title>
+    <meta http-equiv="Content-Type" content="text/html charset=UTF-8" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <style>
+      table {
+        width: 100vw;
+        font-size: 18px;
+        border-collapse: separate;
+      }
 
-    <link rel="preconnect" href="https://fonts.gstatic.com"> 
-<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
+      h2 {
+        width: 100vw;
+      }
+    </style>
 
-</head>
-<body>
+    <table cellpadding="4" cellspacing="4" border="0">
+      <tr>
+        <td><b>{{hr}}</b>,</td>
+      </tr>
 
-    <div>
-        <ul style="list-style-type: none;">
+      <tr>
+        <td>
+          <b>{{employee}}</b> souhaite collecter la récompense suivante :
+          <b>{{reward}}</b>.
+        </td>
+      </tr>
 
-            <li style="margin-top : 10px ">
-                <label>
-                    Dear {{hr}},
-                </label>
-            </li>
+      <tr>
+        <td>Connectez-vous à la plateforme afin de consulter la demande.</td>
+      </tr>
 
-            <li style="margin-top : 10px ">
-                <label>
-                    {{employee}} from your company has requested to redeem {{reward}}. Please login to PUshTalents platform to review the request.
-                </label>
-            </li>
+      <tr>
+        <td>A bientôt,</td>
+      </tr>
 
+      <tr>
+        <td>L'équipe PUSHTALENTS</td>
+      </tr>
 
-            <li style="margin-top : 10px ">
-                <label>
-
-                </label>
-            </li>
-
-            <li style="margin-top : 10px ">
-                <label>
-
-                </label>
-            </li>
-
-
-
-
-            <li style="margin-top : 10px ">
-                <label>
-                    Une question ?
-                </label>
-            </li>
-
-            <li style="margin-top : 2px ">
-                <label>
-                    Ecrivez-nous à : contact@pushtalents.com
-                </label>
-            </li>
-
-
-
-            <li style="margin-top : 10px ">
-                <label>
-                    A bientôt, 
-                </label>
-            </li>
-
-            <li style="margin-top : 2px ">
-                <label>
-                    L'équipe PUSHTALENTS 
-                </label>
-            </li>
-
-
-            <li style="margin-bottom : 10px; margin-top : 10px ; width: 250px;"><img src="cid:logo" class="logo"></li>
-        </ul>
-    </div>
-    
-</body>
+      <tr>
+        <td style="width: 50px !important">
+          <img width="50%" style="display: block" src="cid:logo" class="logo" />
+        </td>
+      </tr>
+    </table>
+  </body>
 </html>
