@@ -245,7 +245,26 @@ app.post("/send/otp", (req, res, next) => {
       ],
     })
     .then((user) => {
+      console.log("");
+      console.log("");
+      console.log("");
+      console.log("");
+      console.log("");
+      console.log("====Hello");
+      console.log(JSON.parse(JSON.stringify(user)));
+      console.log("");
+      console.log("");
+      console.log("");
+      console.log("");
+      console.log("");
+
       if (user) {
+        if (user.status === CONSTANTS.CONSTANTS.ARCHIVED) {
+          res.status(408).send({
+            message: res.__("user_archived"),
+          });
+          return;
+        }
         db.otp
           .update(
             { already_used: true },
