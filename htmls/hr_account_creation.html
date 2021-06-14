@@ -1,96 +1,100 @@
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PushTalents - Account Created</title>
+    <meta http-equiv="Content-Type" content="text/html charset=UTF-8" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <style>
+      table {
+        padding: 10px;
+        width: 100vw;
+      }
 
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
+      td {
+        font-size: 18px;
+      }
+    </style>
 
+    <table cellpadding="4" cellspacing="10" border="0">
+      <tr>
+        <td>Bonjour <b>{{user}}</b></td>
+      </tr>
 
-</head>
+      <tr>
+        <td>
+          Votre compte d'administration PUSHTALENTS pour
+          <b>{{company}}</b> vient d'être créé !
+        </td>
+      </tr>
 
-<body>
+      <tr>
+        <td>
+          Voici la procédure afin d'activer votre compte et vous connecter à la
+          plateforme :
+        </td>
+      </tr>
 
-    <div>
-        <ul style="list-style-type: none;">
+      <tr>
+        <td>
+          <b>Etape 1.</b> Accédez à la plateforme d'administration ici :
+          https://www.admin.rh.pushtalents.com/
+        </td>
+      </tr>
 
+      <tr>
+        <td>
+          <b>Etape 2.</b> Saisissez votre adresse email afin de recevoir votre
+          code d'activation. <br />
+          Vous recevrez unemail contenant un code personnel et confidentiel à 6
+          chiffres.<br />
+          nb : si vous ne recevez pas d'email, pensez à regarder dans votre
+          courrier indésirable.
+        </td>
+      </tr>
 
-            <li style="margin-top : 10px ">
-                <label>
-                    Bonjour <b>{{user}}</b>
-                </label>
-            </li>
+      <tr>
+        <td>
+          <b>Etape 3.</b> Saisissez ce code puis validez.<br />
+          C'est fait ! Votre compte est activé et vous êtes automatiquement
+          connecté(e) à la plateforme<br />
+          d'administration PUSHTALENTS.
+        </td>
+      </tr>
 
+      <tr>
+        <td>Une question ?</td>
+      </tr>
 
-            <li style="margin-top : 10px ">
-                <label>
-                    Votre compte d'administration PUSHTALENTS pour <b>{{company}}</b> vient d'être créé !
-                </label>
-            </li>
+      <tr>
+        <td>Ecrivez-nous à : contact@pushtalents.com</td>
+      </tr>
 
+      <tr>
+        <td>A vous de jouer !</td>
+      </tr>
 
-            <li style="margin-top : 10px ">
-                <label>
-                    Voici la procédure afin d'activer votre compte et vous connecter à la plateforme :
-                </label>
-            </li>
+      <tr>
+        <td>L'équipe PUSHTALENTS pour {{company}}</td>
+      </tr>
 
-
-            <li style="margin-top : 10px ">
-                <label>
-                    Etape 1. Accédez à la plateforme d'administration ici : https://www.admin.rh.pushtalents.com/
-                </label>
-            </li>
-
-
-            <li style="margin-top : 10px ">
-                <label>
-                    Etape 2. Saisissez votre adresse email afin de recevoir votre code d'activation. Vous recevrez un
-                    email contenant un code personnel et confidentiel à 6 chiffres.
-                    nb : si vous ne recevez pas d'email, pensez à regarder dans votre courrier indésirable.
-                </label>
-            </li>
-
-            <li style="margin-top : 10px ">
-                <label>
-                    Etape 3. Saisissez ce code puis validez.
-                    C'est fait ! Votre compte est activé et vous êtes automatiquement connecté(e) à la plateforme
-                    d'administration PUSHTALENTS.
-                </label>
-            </li>
-
-            <li style="margin-top : 10px ">
-                <label>
-                    Une question ?
-                </label>
-            </li>
-
-            <li style="margin-top : 2px ">
-                <label>
-                    Ecrivez-nous à : contact@pushtalents.com
-                </label>
-            </li>
-
-            <li style="margin-top : 10px ">
-                <label>
-                    A vous de jouer !
-                </label>
-            </li>
-
-            <li style="margin-top : 2px ">
-                <label>
-                    L'équipe PUSHTALENTS pour {{company}}
-                </label>
-            </li>
-
-
-            <li style="margin-bottom : 10px; margin-top : 10px ; width: 250px;"><img src="cid:logo" class="logo"></li>
-        </ul>
-    </div>
-
-</body>
-
+      <tr>
+        <td>
+          <img
+            style="margin-top: 10px"
+            width="175px"
+            src="cid:logo"
+            class="logo"
+          />
+        </td>
+      </tr>
+    </table>
+  </body>
 </html>

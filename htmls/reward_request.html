@@ -14,21 +14,19 @@
   <body>
     <style>
       table {
+        padding: 10px;
         width: 100vw;
-        font-size: 18px;
-        border-collapse: separate;
       }
 
-      h2 {
-        width: 100vw;
+      td {
+        font-size: 18px;
       }
     </style>
 
-    <table cellpadding="4" cellspacing="4" border="0">
+    <table cellpadding="4" cellspacing="10" border="0">
       <tr>
-        <td><b>{{hr}}</b>,</td>
+        <td>Bonjour <b>{{hr}}</b></td>
       </tr>
-
       <tr>
         <td>
           <b>{{employee}}</b> souhaite collecter la récompense suivante :
@@ -49,8 +47,13 @@
       </tr>
 
       <tr>
-        <td style="width: 50px !important">
-          <img width="50%" style="display: block" src="cid:logo" class="logo" />
+        <td>
+          <img
+            style="margin-top: 10px"
+            width="175px"
+            src="cid:logo"
+            class="logo"
+          />
         </td>
       </tr>
     </table>

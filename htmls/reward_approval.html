@@ -1,104 +1,65 @@
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PushTalents - Job Referral</title>
-
-    <link rel="preconnect" href="https://fonts.gstatic.com"> 
-<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
-
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PushTalents - Reward Request Approval</title>
+    <meta http-equiv="Content-Type" content="text/html charset=UTF-8" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
     <style>
+      table {
+        padding: 10px;
+        width: 100vw;
+      }
 
-        body{
-            padding: 10px;
-        }
-
-        .container{
-            border-radius: 10px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .logo{
-            width: 40vw;
-            margin-top: 30px;
-            margin-bottom: 50px;
-        }
-
-    
-
-        .text-container{
-            display: flex;
-            flex-direction: column;
-            font-family: Arial, Helvetica, sans-serif;
-            padding: 20px;
-            font-size: 14px;
-        }
-
-       
+      td {
+        font-size: 18px;
+      }
     </style>
-</head>
-<body>
-    <div>
-        <ul style="list-style-type: none;">
-            <li style="margin-top : 10px ">
-                <label>Dear {{employee}},</label>
-            </li>
 
-            <li style="margin-top : 10px ">
-                <label>Congratulations , your reward redeem request for {{reward}} has been approved by the company HR.</label>
-            </li>
+    <table cellpadding="4" cellspacing="10" border="0">
+      <tr>
+        <td>Bonjour <b>{{employee}}</b></td>
+      </tr>
+      <tr>
+        <td>
+          Félicitations , votre demande d'échange de récompense pour
+          <b>{{reward}}</b> a été approuvée par les RH de l'entreprise.
+        </td>
+      </tr>
 
+      <tr>
+        <td>Une question ?</td>
+      </tr>
 
-            <li style="margin-top : 10px ">
-                <label>
+      <tr>
+        <td>Ecrivez-nous à : contact@pushtalents.com</td>
+      </tr>
 
-                </label>
-            </li>
+      <tr>
+        <td>A bientôt,</td>
+      </tr>
 
-            <li style="margin-top : 10px ">
-                <label>
-                    
-                </label>
-            </li>
+      <tr>
+        <td>L'équipe PUSHTALENTS</td>
+      </tr>
 
-
-
-
-
-            <li style="margin-top : 10px ">
-                <label>
-                    Une question ?
-                </label>
-            </li>
-
-            <li style="margin-top : 2px ">
-                <label>
-                    Ecrivez-nous à : contact@pushtalents.com
-                </label>
-            </li>
-
-
-
-            <li style="margin-top : 10px ">
-                <label>
-                    A bientôt, 
-                </label>
-            </li>
-
-            <li style="margin-top : 2px ">
-                <label>
-                    L'équipe PUSHTALENTS 
-                </label>
-            </li>
-
-            <li style="margin-bottom : 10px; margin-top : 10px ; width: 250px;"><img src="cid:logo" class="logo"></li>
-        </ul>
-    </div>
-    
-</body>
+      <tr>
+        <td>
+          <img
+            style="margin-top: 10px"
+            width="175px"
+            src="cid:logo"
+            class="logo"
+          />
+        </td>
+      </tr>
+    </table>
+  </body>
 </html>

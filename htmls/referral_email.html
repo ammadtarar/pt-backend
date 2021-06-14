@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PushTalents - Job Referral</title>
-
+    <meta http-equiv="Content-Type" content="text/html charset=UTF-8" />
     <link rel="preconnect" href="https://fonts.gstatic.com" />
     <link
       href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap"
@@ -12,50 +12,67 @@
     />
   </head>
   <body>
-    <div>
-      <ul style="list-style-type: none">
-        <li style="margin-top: 10px">
-          <label> Bonjour {{candidate}}, </label>
-        </li>
+    <style>
+      table {
+        padding: 10px;
+        width: 100vw;
+      }
 
-        <li style="margin-top: 10px">
-          <label>
-            {{employee}} vous a recommandé pour une offre d'emploi au sein de
-            {{company}}.
-          </label>
-        </li>
+      td {
+        font-size: 18px;
+      }
+    </style>
 
-        <li style="margin-top: 10px">
-          <label>
-            Il pense que vous avez les qualités requises pour rejoindre son
-            entreprise et vous propose de consulter l'annonce ici :
-          </label>
-        </li>
+    <table cellpadding="4" cellspacing="10" border="0">
+      <tr>
+        <td>Bonjour <b>{{candidate}}</b></td>
+      </tr>
+      <tr>
+        <td>
+          <b>{{employee}}</b> vous a recommandé pour une offre d'emploi au sein
+          de <b>{{company}}</b>.
+        </td>
+      </tr>
 
-        <li style="margin-top: 10px">
+      <tr>
+        <td>
+          Il pense que vous avez les qualités requises pour rejoindre son
+          entreprise et vous propose de consulter l'annonce ici :
+        </td>
+      </tr>
+
+      <tr onclick="window.location.href = '{{url}}';">
+        <td>
           <a href="{{url}}">découvrez l'annonce en cliquant ici</a>
-        </li>
+        </td>
+      </tr>
 
-        <li style="margin-top: 10px">
-          <label> Une question ? </label>
-        </li>
+      <tr>
+        <td>Une question ?</td>
+      </tr>
 
-        <li style="margin-top: 2px">
-          <label> Ecrivez-nous à : contact@pushtalents.com </label>
-        </li>
+      <tr>
+        <td>Ecrivez-nous à : contact@pushtalents.com</td>
+      </tr>
 
-        <li style="margin-top: 10px">
-          <label> A bientôt, </label>
-        </li>
+      <tr>
+        <td>A bientôt,</td>
+      </tr>
 
-        <li style="margin-top: 2px">
-          <label> L'équipe PUSHTALENTS pour le compte de {{company}} </label>
-        </li>
+      <tr>
+        <td>L'équipe PUSHTALENTS pour le compte de <b>{{company}}</b></td>
+      </tr>
 
-        <li style="margin-bottom: 10px; margin-top: 10px; width: 250px">
-          <img src="cid:logo" class="logo" />
-        </li>
-      </ul>
-    </div>
+      <tr>
+        <td>
+          <img
+            style="margin-top: 10px"
+            width="175px"
+            src="cid:logo"
+            class="logo"
+          />
+        </td>
+      </tr>
+    </table>
   </body>
 </html>

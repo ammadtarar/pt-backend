@@ -14,17 +14,16 @@
   <body>
     <style>
       table {
+        padding: 10px;
         width: 100vw;
-        font-size: 18px;
-        border-collapse: separate;
       }
 
-      h2 {
-        width: 100vw;
+      td {
+        font-size: 18px;
       }
     </style>
 
-    <table cellpadding="4" cellspacing="4" border="0">
+    <table cellpadding="4" cellspacing="10" border="0">
       <tr>
         <td>Bonjour <b>{{candidate}}</b></td>
       </tr>
@@ -36,11 +35,9 @@
         </td>
       </tr>
 
-      <tr>
-        <td style="text-align: center">
-          <h2>{{code}}</h2>
-        </td>
-      </tr>
+      <td style="text-align: center; font-size: 22px">
+        <h2>{{code}}</h2>
+      </td>
 
       <tr>
         <td>
@@ -67,8 +64,13 @@
       </tr>
 
       <tr>
-        <td style="width: 50px !important">
-          <img width="50%" style="display: block" src="cid:logo" class="logo" />
+        <td>
+          <img
+            style="margin-top: 10px"
+            width="175px"
+            src="cid:logo"
+            class="logo"
+          />
         </td>
       </tr>
     </table>

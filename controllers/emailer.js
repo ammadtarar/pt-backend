@@ -159,7 +159,7 @@ async function sendRedeemApprovalEmailToEmployee(employee, reward) {
           .sendMail({
             from: '"PushTalents" <no-reply@pushtalents.com>',
             to: employee.email,
-            subject: "Your reward request has been approved",
+            subject: "Votre demande de récompense a été approuvée",
             attachments: [
               {
                 filename: "logo.png",
@@ -240,14 +240,6 @@ async function sendHrAccountCreationEmail(user, company) {
             }),
           })
           .then((success) => {
-            saveUserToSendInBlueContactsList(
-              user.email,
-              user.first_name,
-              user.last_name,
-              "Hr Admin",
-              company.name,
-              user.position
-            );
             resolve(success);
           })
           .catch((err) => {

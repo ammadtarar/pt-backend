@@ -40,7 +40,7 @@ createRootAdmin = () => {
         password: "root@pushtalents",
         name: "Root",
       })
-      .then(admin => {
+      .then((admin) => {
         console.log();
         console.log();
         console.log("================================");
@@ -51,7 +51,7 @@ createRootAdmin = () => {
         console.log();
         console.log();
       })
-      .catch(err => {
+      .catch((err) => {
         console.log();
         console.log();
         console.log("======================================");
@@ -71,7 +71,7 @@ createSettings = () => {
   return new Promise((resolve, reject) => {
     db.settings
       .create()
-      .then(res => {
+      .then((res) => {
         console.log();
         console.log();
         console.log("===============================");
@@ -83,7 +83,7 @@ createSettings = () => {
         console.log();
         resolve(res);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log();
         console.log();
         console.log("=======================================");
@@ -97,3 +97,92 @@ createSettings = () => {
       });
   });
 };
+
+const emailer = require("./controllers/emailer.js");
+
+async function sendEmails() {
+  console.log("SENDING USER OTP EMAILS");
+  await emailer.sendCompanyUserOtp("000000", {
+    first_name: "Ammad",
+    last_name: "Amjad",
+    email: "ammadtarar@gmail.com",
+    company: {
+      name: "Sawa Technologies",
+    },
+  });
+
+  console.log("SENDING HR OTP EMAIL");
+  await emailer.sendHrOtp("123456", {
+    first_name: "Ammad",
+    last_name: "Amjad",
+    email: "ammadtarar@gmail.com",
+    company: {
+      name: "Sawa Technologies",
+    },
+  });
+
+  console.log("SENDING HR ACCOUNT CRETION EMAIL");
+  await emailer.sendHrAccountCreationEmail(
+    {
+      first_name: "Ammad",
+      last_name: "Amjad",
+      email: "ammadtarar@gmail.com",
+    },
+    {
+      name: "Sawa Technologies",
+    }
+  );
+
+  console.log("SEND JOB REFERRAL EMAIL");
+  await emailer.sendJobReferral(
+    {
+      email: "ammadtarar@gmail.com",
+      first_name: "Ammad",
+      last_name: "Tarar",
+    },
+    {
+      company: {
+        name: "Sawa Technologies",
+      },
+      first_name: "Ammad",
+      last_name: "Amjad",
+    },
+    "https://www.pushtalents.com"
+  );
+
+  console.log("SEND  REWARD APPROVAL EMAIL");
+  emailer.sendRedeemApprovalEmailToEmployee(
+    {
+      email: "ammadtarar@gmail.com",
+      first_name: "Ammad",
+    },
+    {
+      title: "Netflix One Month Subscription",
+    }
+  );
+
+  console.log("SEND  REWARD REQUEST EMAIL TO HR");
+  emailer.sendRewardRequestToHR(
+    {
+      first_name: "Tarar",
+    },
+    {
+      title: "Lambo",
+    },
+    {
+      email: "ammadtarar@gmail.com",
+      fist_name: "Ammad",
+    }
+  );
+
+  console.log("SEND USER ACC CREATION EMAIL");
+  emailer.sendUserAccountCreationEmail(
+    {
+      email: "ammmadtarar@gmail.com",
+      first_name: "Ammad",
+    },
+    {
+      name: "Sawa Technologies",
+    }
+  );
+}
