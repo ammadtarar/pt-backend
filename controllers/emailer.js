@@ -273,14 +273,6 @@ async function sendUserAccountCreationEmail(user, company) {
             }),
           })
           .then((success) => {
-            saveUserToSendInBlueContactsList(
-              user.email,
-              user.first_name,
-              user.last_name,
-              "Employee",
-              company.name,
-              user.position
-            );
             resolve(success);
           })
           .catch((err) => {
@@ -288,55 +280,6 @@ async function sendUserAccountCreationEmail(user, company) {
           });
       }
     );
-  });
-}
-
-async function saveUserToSendInBlueContactsList(
-  email,
-  fname,
-  lname,
-  type,
-  company,
-  position
-) {
-  console.log();
-  console.log();
-  console.log(
-    `Trying to add ${fname} ${lname} (${email}) to SendInBlue contacts list`
-  );
-  console.log();
-  console.log();
-  return new Promise((resolve, reject) => {
-    fetch("https://api.sendinblue.com/v3/contacts", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        "api-key":
-          "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",
-      },
-      body: JSON.stringify({
-        attributes: {
-          NOM: fname,
-          PRENOM: lname,
-          TYPE: type,
-          COMPANY: company,
-          POSITION: position,
-        },
-        updateEnabled: false,
-        email: email,
-      }),
-    })
-      .then((res) => res.json())
-      .then((json) => {
-        console.log("SEND-IN-BLUE ADD TO CONTACT RESPONE");
-        console.log(json);
-        resolve(json);
-      })
-      .catch((err) => {
-        console.log("SEND-IN-BLUE ADD TO CONTACT ERROR");
-        console.error("error:" + err);
-      });
   });
 }
 
