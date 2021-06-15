@@ -14,7 +14,7 @@ const db = require("./controllers/db.js");
 console.log("FOCE = ", force);
 db.sequelize
   .sync({
-    force: force,
+    force: process.env.NODE_ENV === "production" ? false : force,
   })
   .then(() => {
     app.listen(PORT, () => {

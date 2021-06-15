@@ -237,6 +237,7 @@ async function sendHrAccountCreationEmail(user, company) {
             html: handlebars.compile(html)({
               user: `${user.first_name} ${user.last_name}`,
               company: company.name,
+              hr_admin_url: process.env.HR_ADMIN_URL,
             }),
           })
           .then((success) => {
@@ -270,6 +271,8 @@ async function sendUserAccountCreationEmail(user, company) {
             html: handlebars.compile(html)({
               user: user.first_name,
               company: company.name,
+              ios_url: process.env.IOS_URL,
+              android_url: process.env.ANDROID_URL,
             }),
           })
           .then((success) => {
