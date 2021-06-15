@@ -11,6 +11,7 @@ const force = process.env.FORCE || false;
 const app = require("./server");
 const db = require("./controllers/db.js");
 
+console.log("FOCE = ", force);
 db.sequelize
   .sync({
     force: force,

@@ -14,5 +14,13 @@
     "host": "pt-db-prod-mysql-do-user-8858925-0.b.db.ondigitalocean.com",
     "dialect": "mysql",
     "port": 25060
+  },
+  "production": {
+    "username": "doadmin",
+    "password": "cjo5srrjltacxhfs",
+    "database": "pt-production",
+    "host": "pt-db-prod-mysql-do-user-8858925-0.b.db.ondigitalocean.com",
+    "dialect": "mysql",
+    "port": 25060
   }
 }
